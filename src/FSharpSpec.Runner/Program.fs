@@ -35,20 +35,20 @@ module main =
                       specDelegate.Invoke() |> ignore
                       if verbose then printf "\n\t -> %s" specName 
                     with   
-                      | ex -> printf "\n\t ~ %s (Failed)" specName 
-                              errorReports.Add(String.Format("concern: {0} Context: {1} \n  -> {2}", concern, cleanContext, specName), ex)
+                      | ex -> printf "\n\t -> %s (Failed)" specName 
+                              errorReports.Add(String.Format("Concern: \"{0}\"\nContext: \"{1}\" \n  -> {2}", concern, cleanContext, specName), ex)
                 printfn ""
                 
         printfn "\n____________________________________________________________" 
         for entry in errorReports do
-            printfn "\n\n%s:\n%s" entry.Key (entry.Value.ToString())
+            printfn "\n\n%s: \n%A\n\nFull Stacktrace: \n%s" entry.Key entry.Value (entry.Value.ToString())
             printfn "==========================================================="
         
         match errorReports.Count with
         | 0         -> printfn "No Failures found -> GREEN"
         | _         -> printfn "\n\nFound the following errors (full stacktraces above):\n"
                        for entry in errorReports do
-                           printfn "%s: %A" entry.Key entry.Value
+                           printfn "%s: %A\n" entry.Key entry.Value
                             
         let key = Console.ReadLine()
         0

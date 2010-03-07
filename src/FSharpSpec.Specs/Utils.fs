@@ -8,9 +8,8 @@ module Utils =
     
     exception DidNotFailException
    
-    [<NoEquality>] [<NoComparison>]
-    type SpecAssertionConstraints() = 
-        member x.fail(spec :(string * SpecDelegate)) =
+    type will () = 
+        static member fail(spec :(string * SpecDelegate)) =
             try
                (snd (spec)).Invoke() |> ignore
                
@@ -21,8 +20,6 @@ module Utils =
                         |> ExceptionNotRaisedException
                         |> raise
               | _    -> Passed   
-    
-    let will = new SpecAssertionConstraints()
     
     let ass (specName:string) actual assertion = 
         let specDelegate = new SpecDelegate(fun () -> assertion (actual))
