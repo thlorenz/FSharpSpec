@@ -17,26 +17,26 @@ module main =
         let errorReports = new Dictionary<string, Exception>() 
         
         printf "Testing: %s" dllPath
-        let allSpecs = allConcernsSorted dllPath
+        let allSpecs = allContextsSorted dllPath
           
-        for fixture in allSpecs.Keys do
-            printfn "\n\n%s" fixture
-            for _ in 1 .. fixture.Length do printf "--"
+        for concern in allSpecs.Keys do
+            printfn "\n\n%s" concern
+            for _ in 1 .. concern.Length do printf "--"
             printfn ""
-            for (concern, specifications) in allSpecs.[fixture] do
-                let cleanConcern = 
-                    match concern with
+            for (context, specifications) in allSpecs.[concern] do
+                let cleanContext = 
+                    match context with
                     | s when s.StartsWith("get_")  -> s.Substring(4)
                     | s                            -> s
                     
-                printf "\n  %s:" cleanConcern
+                printf "\n  %s:" cleanContext
                 for(specName, specDelegate) in specifications do 
                     try  
                       specDelegate.Invoke() |> ignore
                       if verbose then printf "\n\t -> %s" specName 
                     with   
                       | ex -> printf "\n\t ~ %s (Failed)" specName 
-                              errorReports.Add(String.Format("Fixture: {0} Concern: {1} \n  -> {2}", fixture, cleanConcern, specName), ex)
+                              errorReports.Add(String.Format("concern: {0} Context: {1} \n  -> {2}", concern, cleanContext, specName), ex)
                 printfn ""
                 
         printfn "\n____________________________________________________________" 
