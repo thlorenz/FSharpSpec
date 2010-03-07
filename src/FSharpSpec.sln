@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 10.00
+# Visual Studio 2008
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec", "FSharpSpec\FSharpSpec.fsproj", "{12D7B460-5020-4D49-8FC0-11692A5E32E3}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.Runner", "FSharpSpec.Runner\FSharpSpec.Runner.fsproj", "{60BBF812-F0FD-4C33-B1A5-B4A164AC6AF3}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.Specs", "FSharpSpec.Specs\FSharpSpec.Specs.fsproj", "{807CFBD4-E1FD-4369-9639-436A582A93EB}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60BBF812-F0FD-4C33-B1A5-B4A164AC6AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60BBF812-F0FD-4C33-B1A5-B4A164AC6AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60BBF812-F0FD-4C33-B1A5-B4A164AC6AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60BBF812-F0FD-4C33-B1A5-B4A164AC6AF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
