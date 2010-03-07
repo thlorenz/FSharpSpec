@@ -1,0 +1,1 @@
+A lot of should and shouldn't methods like should.be (type) need to check for null values before executing

@@ -23,6 +23,14 @@ type should() =
         | a, e                                      -> String.Format("Expected [{1}] to be the same as [{0}], but it wasn't.", e, a) 
                                                        |> SpecFailedException 
                                                        |> raise
+    
+    static member beGreaterThan<'a when 'a : comparison>(actual : 'a, smaller : 'a) =
+        match (actual, smaller) with
+        | a, s when a > s -> Passed
+        | a, s            -> String.Format("Expected [{1}] to be greater than [{0}], but it wasn't.", s, a) 
+                            |> SpecFailedException 
+                            |> raise
+                                                          
    
     static member failWith(codeBlock : (unit -> unit), expectedType : Type) =
         try 
