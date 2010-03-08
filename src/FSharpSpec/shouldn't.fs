@@ -12,7 +12,7 @@ type shouldn't() =
        
     static member be (actual:bool, expected:bool) = shouldn't.equal (actual, expected)
     
-    static member be<'a when 'a : not struct and 'a : equality> (actual : 'a , expected : 'a) = shouldn't.equal (actual, expected)
+    static member be(actual, expectedType : Type) = shouldn't.equal (actual.GetType(), expectedType)
     
     static member beSameAs<'a when 'a : not struct>(actual : 'a, expected : 'a) =
         match (actual, expected) with
