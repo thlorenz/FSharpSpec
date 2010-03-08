@@ -4,7 +4,7 @@ open System
 open FSharpSpec
 
 type Contains () =
-    member x.Strings = 
+    member x.``Valid Strings`` = 
         let hello = "hello"
         let hel = "hel"
         [
@@ -14,6 +14,10 @@ type Contains () =
             ass "\"hel should.contain hello\" will fail" (it "" hel should.contain hello) will.fail
             ass "\"helllo shouldn't.contain hel\" will fail" (it "" hello shouldn't.contain hel) will.fail
         ]
+    member x.``Invalid Strings`` = [
+          //  it "null should.contain \"some string\"" null should.contain "some string"
+        ]
+             
     
     member x.``list containing single values`` =
         let ``1; 2; 3`` = [1; 2; 3]

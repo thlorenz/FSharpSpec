@@ -41,12 +41,42 @@ type should() =
           |> raise
         with 
           | ex  when (ex.GetType() <> expectedType) -> 
-                String.Format("Expected exception of type {0}, but instead exception of type {1} was raised!", 
+                String.Format("Expected exception of type {0}, but instead exception of type {1} was raised.", 
                                expectedType, ex.GetType())
                 |> ExceptionNotRaisedException 
                 |> raise
           | _                                       -> Passed
    
+    static member failWithMessage(codeBlock : (unit -> unit), expectedMessage : string) =
+        try 
+          (new ThrowDelegate(codeBlock)).Invoke()
+         
+          String.Format("Expected exception with message {0}, but was never raised!", expectedMessage)
+          |> ExceptionNotRaisedException 
+          |> raise
+        with 
+          | ex  when (ex.Message <> expectedMessage) -> 
+                String.Format("Expected exception with message [{0}], but instead exception with message [{1}] was raised.", 
+                               expectedMessage, ex.Message)
+                |> ExceptionNotRaisedException 
+                |> raise
+          | _                                       -> Passed
+          
+    static member failWithMessageContaining(codeBlock : (unit -> unit), containedMessage : string) =
+        try 
+          (new ThrowDelegate(codeBlock)).Invoke()
+         
+          String.Format("Expected exception with message {0}, but was never raised!", containedMessage)
+          |> ExceptionNotRaisedException 
+          |> raise
+        with 
+          | ex  when (ex.Message.Contains containedMessage) -> Passed
+          | ex                                              -> 
+                String.Format("Expected exception with message containing [{0}], but instead exception with message [{1}] was raised.", 
+                               containedMessage, ex.Message)
+                |> ExceptionNotRaisedException 
+                |> raise
+                
     static member contain (container:string, contained:string) =
         match container, contained with
         |  cr, cd when cr.Contains(cd)  -> Passed

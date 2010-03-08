@@ -29,10 +29,8 @@ Thumbs.db
 [Ll]ib/
 [Rr]elease*/
 [Dd]ebug*/
-UMM/UMM448/IActivaplanner.h
 [Tt]est[Rr]esults/
 *.orig
-_UpgradeReport_Files/
 _ReSharper.*/
 
 bin/
@@ -41,6 +39,7 @@ obj/
 [Bb]uild.[Ss]pecs/
 *.fsproj
 *.resharper.user
+*.db*
 
 
 
