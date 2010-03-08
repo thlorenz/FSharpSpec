@@ -13,8 +13,6 @@ type should() =
        
     static member be (actual:bool, expected:bool) = should.equal (actual, expected)
     
-    static member be<'a when 'a : not struct and 'a : equality> (actual : 'a , expected : 'a) = should.equal (actual, expected)
-        
     static member be(actual, expectedType : Type) = should.equal (actual.GetType(), expectedType)
     
     static member beSameAs<'a when 'a : not struct>(actual : 'a, expected : 'a) =

@@ -28,5 +28,15 @@ type Exceptions () =
            (it "" (fun () -> failwith "Exact Message" |> ignore) should.failWithMessageContaining "Different") will.fail 
      ]
      
+     member x.UsingCatch = 
+        let thrownException = catch (fun () -> new ArgumentException("Exact Message") |> raise)
+        [
+            it "thrownException should.be typeof<ArgumentException>" thrownException should.be typeof<ArgumentException>
+            
+            it "thrownException.Message should.equal 'Exact Message'" thrownException.Message should.equal "Exact Message"
+            
+            it "thrownException.Message should.contain 'Mess'" thrownException.Message should.contain "Mess"
+        ]
+     
    
    
