@@ -17,13 +17,14 @@ type Equality () =
         ass "\"false shouldn't.be false\" will fail " (it "" false shouldn't.be false) will.fail
      ]  
     
-     member x.beNull = 
+     member x.equalNull = 
          let initializedObject = new Object()
          let (nullObject : Object) = null
-         [
+         [   
             it "null should.equal null" null should.equal null
             it "nullObject should.equal null" nullObject should.equal null
-            it "initializedObject shouldn't.be null" initializedObject shouldn't.be null
+            it "initializedObject shouldn't.equal null" initializedObject shouldn't.be null
+            it "null shouldn't.equal initializedObject" null should.equal initializedObject
             
             ass "initializedObject should.equal null will fail" (it "" initializedObject should.equal null) will.fail
             ass "nullObject shouldn't.be null will fail" (it "" nullObject shouldn't.be null) will.fail

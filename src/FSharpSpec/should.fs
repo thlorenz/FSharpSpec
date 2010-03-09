@@ -10,10 +10,10 @@ type should() =
                                |> SpecFailedException 
                                |> raise
         | _, _              -> Passed
-       
+        
     static member be (actual:bool, expected:bool) = should.equal (actual, expected)
     
-    static member be(actual, expectedType : Type) = should.equal (actual.GetType(), expectedType)
+    static member be(actual : 'a, expectedType : Type) = should.equal (actual.GetType(), expectedType)
     
     static member beSameAs<'a when 'a : not struct>(actual : 'a, expected : 'a) =
         match (actual, expected) with
