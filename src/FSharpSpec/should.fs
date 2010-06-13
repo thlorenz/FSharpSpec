@@ -4,13 +4,26 @@ open System
 
 type should() = 
     
-    static member equal<'a when 'a : equality>(actual : 'a, expected : 'a) = 
+    static member equal(actual : obj, expected : obj) = 
         match (actual, expected) with
-        | a, e when a <> e  -> String.Format("Expected [{0}], but was [{1}]!", e, a) 
+        | a, e when a = e   -> Passed
+        | null, e           -> String.Format("Expected [{0}], but was [null]!", e) 
+                               |> SpecFailedException 
+                               |> raise   
+        | a, null           -> String.Format("Expected [null], but was [{0}]!", a) 
+                               |> SpecFailedException 
+                               |> raise                          
+        | a, e              -> String.Format("Expected [{0}], but was [{1}]!", e, a) 
                                |> SpecFailedException 
                                |> raise
-        | _, _              -> Passed
-        
+            
+    static member equal<'a when 'a : equality>(actual : 'a, expected : 'a) = 
+        match (actual, expected) with
+        | a, e when a = e   -> Passed
+        | a, e              -> String.Format("Expected [{0}], but was [{1}]!", e, a) 
+                               |> SpecFailedException 
+                               |> raise
+         
     static member be (actual:bool, expected:bool) = should.equal (actual, expected)
     
     static member be(actual : 'a, expectedType : Type) = should.equal (actual.GetType(), expectedType)
@@ -75,7 +88,7 @@ type should() =
                 |> ExceptionNotRaisedException 
                 |> raise
                 
-    static member contain (container:string, contained:string) =
+    static member contain (container : string, contained : string) =
         match container, contained with
         |  cr, cd when cr.Contains(cd)  -> Passed
         |  cr, cd                       -> String.Format("[{0}] was expected to contain [{1}] but didn't.", cr, cd)
@@ -85,7 +98,7 @@ type should() =
     static member contain<'a when 'a: equality>(items : 'a seq, item : 'a) =
         match items, item with
         | xs, x when xs |> Seq.exists (fun i -> i = x) -> Passed
-        | xs, x                                         -> String.Format("[{0}] was expected to contain [{1}] but didn't.", items, item)
+        | xs, x                                        -> String.Format("[{0}] was expected to contain [{1}] but didn't.", items, item)
                                                            |> SpecFailedException
                                                            |> raise
   

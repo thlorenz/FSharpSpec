@@ -17,7 +17,6 @@ type ``Spec Independence`` () =
         let sut() = new TestType(0)
         [
           it "Incrementing sut() with 1 returns 1" (sut().IncrementValue()) should.equal 1  
-              
           it "Incrementing sut() with 1 again returns 1"  (sut().IncrementValue()) should.equal 1  
         ]
         
