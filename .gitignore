@@ -37,7 +37,6 @@ bin/
 obj/
 [Bb]uild/
 [Bb]uild.[Ss]pecs/
-*.fsproj
 *.resharper.user
 *.db*
 
