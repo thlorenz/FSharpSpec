@@ -41,10 +41,6 @@ module Utils =
                       and  set value      = x._name <- value  
                       
         member public x.IncrementValue () =
-            if  x._value > 1
-            then 
-                raise (new ArgumentException("too big"))
-            else    
                 x._value <- x._value + 1
                 x._value
             

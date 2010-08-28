@@ -13,7 +13,7 @@ module main =
     [<EntryPoint>]
     let main(args:string[]) =
         
-        //let args = [ @"C:\Users\TLorenz\Documents\Visual Studio 2008\Projects\FSharp\FSharpSpec\src\FSharpSpec.Specs\obj\Debug\FSharpSpec.Specs.dll"; "-verbose" ].ToArray()
+        let args = [ @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"; "-verbose" ].ToArray()
         
         if args.Length = 0 
         then 
