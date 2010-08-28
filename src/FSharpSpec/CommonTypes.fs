@@ -1,6 +1,7 @@
 ﻿namespace FSharpSpec
 
 open System
+open System.Reflection
 
 type AssertionResult = | Passed | Failed | Inconclusive
 
