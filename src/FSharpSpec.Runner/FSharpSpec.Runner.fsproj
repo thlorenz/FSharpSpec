@@ -45,7 +45,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SpecsExtractor.fs" />
+    <Compile Include="SpecsExtractorLegacy.fs" />
+    <Compile Include="ProgramLegacy.fs" />
+    <Compile Include="SpecExtractor.fs" />
     <Compile Include="Program.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll')" />

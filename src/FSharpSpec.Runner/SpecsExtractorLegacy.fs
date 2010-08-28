@@ -6,7 +6,7 @@ open System.Collections.Generic
 
 open FSharpSpec
 
-module SpecsExtractor =
+module SpecsExtractorLegacy =
     type TestClassInfo = { Namespace : string; Hierarchy : string list }
     
     let loadAssembly fullPath = Reflection.Assembly.LoadFile fullPath
