@@ -7,6 +7,64 @@ open FSharpSpec
 
 [<AutoOpen>]
 module ContextTree = 
+   type FailureInfo = { FullSpecName : string; Exception : Exception; }
+    
+   let instantiate (ty : Type) =  Activator.CreateInstance(ty)
+  
+   let removeLeadingGet (propertyName : string) = 
+        match propertyName with
+        | pn when pn.StartsWith("get_")  -> pn.Substring(4)
+        | pn                                        -> pn
+
+   let getFullSpecName context specName = 
+     let toInheritanceChain (parentClasses : Type list) = 
+        parentClasses
+        |> List.fold (fun acc clazz -> acc + clazz.Name + ", ")  ("")  
+     
+     context.Clazz.Namespace + "\n" + 
+     (context.ParentContexts |> toInheritanceChain) + 
+     context.Clazz.Name + "  » " + specName
+   
+   let runContainedSpecs context (specMethod : MethodInfo) isFirstMethod instantiatedContext (indent : string) = 
+        let results = new StringBuilder()
+        let mutable failures : FailureInfo list = []
+        let specs = specMethod.Invoke(instantiatedContext, null) :?> list<(string * SpecDelegate)>
+        
+        if isFirstMethod then 
+           results.AppendLine(indent + "+ " + context.Clazz.Name).AppendLine(indent + "|") |> ignore
+       
+        results.AppendLine(indent  + "   - " + (specMethod.Name |> removeLeadingGet) ) |> ignore   
+        
+        for (specName, specDelegate)  in specs do
+            results.Append(indent  + "      »  "  + specName) |> ignore 
+            try
+                specDelegate.Method.Invoke(specDelegate.Target, null) |> ignore
+                results.AppendLine() |> ignore
+            with
+            | ex -> do 
+                     failures <- failures @  
+                        [{ FullSpecName = (getFullSpecName context specName); Exception = ex } ]  
+                     results.AppendLine(" - FAILED") |> ignore 
+        
+        (results.ToString(), failures)
+   
+   let unableToSetupContextResult context ex (indent :string) =
+      let sb = new StringBuilder()
+      let mutable failures : FailureInfo list = []
+
+      sb.AppendLine(indent + "+ " + context.Clazz.Name)
+        .AppendLine(indent + "Unable to setup context !!!") |> ignore
+      
+      (sb.ToString(), [{ FullSpecName = (getFullSpecName context "Exception while setting up context"); Exception = ex } ]  )  
+
+   let getContextInfoForEmptyContext context (indent :string) = 
+      (indent + "+ " + context.Clazz.Name, [])
+ 
+   let typeWasNotAddedBefore (ty :Type) (typesAddedBefore : Type list) = 
+     typesAddedBefore
+     |> List.exists (fun t -> t = ty)
+     |> not
+        
   type Node (context : Context, ply : int) =
      let _context = context
      let  _ply = ply
@@ -14,57 +72,42 @@ module ContextTree =
      let mutable _children : Node list = []
      let mutable _contexts : Context list = []
 
-     let instantiate (ty : Type) =  Activator.CreateInstance(ty)
-  
-     let removeLeadingGet (propertyName : string) = 
-        match propertyName with
-        | pn when pn.StartsWith("get_")  -> pn.Substring(4)
-        | pn                                        -> pn
-     
      member x.Context with get() = _context
      member x.Ply with get() = _ply
      member x.Children with get() = _children
         
      member x.getContextNode(context : Context) = x.addToChildrenIfNotFoundAndReturnReference context
      
-     member x.RunSpecs() : string =
+     member x.RunSpecs() : (string * FailureInfo list) list =
         let sb = new StringBuilder()
-        sb.AppendLine(x.Indent + "+ " + x.Context.Clazz.Name) |> ignore
-           
-        let runContainedSpecs (specMethod : MethodInfo, instantiatedContext : obj) = 
-           let specs = specMethod.Invoke(instantiatedContext, null) :?> list<(string * SpecDelegate)>
-           
-           for (specName, specDelegate)  in specs do
-               sb.Append(x.Indent + "|      »  "  + specName) |> ignore
-               try
-                 specDelegate.Method.Invoke(specDelegate.Target, null) |> ignore
-                 sb.AppendLine() |> ignore
-               with
-                | ex -> sb.AppendLine(" - FAILED") |> ignore
-    
-        try
+        let mutable results : (string * FailureInfo list) list = []
+        let mutable addedType = []
+        
+        if context.SpecLists.Length = 0 then
+          let contextInfoForEmptyContext = getContextInfoForEmptyContext context x.Indent
+          results <- [contextInfoForEmptyContext]
+        else
+          try
             let instantiatedContext = context.Clazz |> instantiate
-            for specMethod in x.Context.SpecLists do 
-                sb.AppendLine(x.Indent + "|") |> ignore
-                sb.AppendLine(x.Indent + "| - " + (specMethod.Name |> removeLeadingGet) ) |> ignore
-                runContainedSpecs (specMethod, instantiatedContext)
-        with
-            | ex -> sb.Append(x.Indent)
-                          .AppendLine("    Unable to setup context !!!") |> ignore 
+            let specMethods = x.Context.SpecLists
+            for specMethod in specMethods do 
+                let isFirstMethod = Array.IndexOf(specMethods, specMethod) = 0
+                let result = runContainedSpecs context specMethod isFirstMethod instantiatedContext x.Indent
+                results <- results @ [result]
+          with
+            | ex -> results <- results @ [unableToSetupContextResult context ex x.Indent]
         
         for childNode in x.Children do
-            sb.AppendLine(x.Indent + "|") |> ignore
-            sb.Append(childNode.RunSpecs()) |> ignore
-        
-        sb.ToString()
-        
+            results <- results @ childNode.RunSpecs()
+       
+        results
 
      member private x.hasNodeWith(contextToFind : Context) : Option<Node> =
         let rec foundIn (nodes : Node list) = 
             match nodes with
             | x::xs when (x.Context = contextToFind) -> Some(x)
             | x::xs                                                 -> foundIn xs
-            | []                                                     -> None
+            | []                                                    -> None
         
         foundIn _children
         
@@ -81,7 +124,7 @@ module ContextTree =
      member private x.Indent =
           let rec getIndentFor = function
                 | 0   -> ""
-                | ply -> "|   " + getIndentFor (ply - 1)
+                | ply -> "|      " + getIndentFor (ply - 1)
           getIndentFor _ply   
 
      override x.ToString() = 

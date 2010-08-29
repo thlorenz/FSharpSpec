@@ -54,7 +54,6 @@
     <Compile Include="BeSameAsSpecs.fs" />
     <Compile Include="BeGreaterThan.fs" />
     <Compile Include="BDD.fs" />
-    <Compile Include="Extract.fs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition="Exists('$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll')" />

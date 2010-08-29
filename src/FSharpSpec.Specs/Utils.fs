@@ -41,7 +41,7 @@ module Utils =
                       and  set value      = x._name <- value  
                       
         member public x.IncrementValue () =
-                new ArgumentException ("Hello Exception") |> raise
+                
                 x._value <- x._value + 1
                 x._value
             

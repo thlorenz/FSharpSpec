@@ -23,7 +23,7 @@ module SpecsExtractor =
         let isSpecList (mi : MethodInfo) = 
             match mi.ReturnType with
             |ty when ty  = typeof<list<(string * SpecDelegate)>> -> true
-            | _                                                                      -> false 
+            | _                                                  -> false 
         
         let isDeclaredDirectlyOnThisType(mi : MethodInfo) = mi.DeclaringType = ty
        
@@ -35,7 +35,7 @@ module SpecsExtractor =
         let rec getInheritanceChain (ty : Type) =
             match ty with
             | t when t = typeof<Object>      -> []
-            | t                                          -> getInheritanceChain t.BaseType @ [t]
+            | t                              -> getInheritanceChain t.BaseType @ [t]
         ty.BaseType
         |> getInheritanceChain 
 
