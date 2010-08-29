@@ -10,11 +10,12 @@ open System.Reflection
 open System.Collections.Generic 
 
 open FSharpSpec
+open FSharpSpec.Runner
 
 module SpecsExtractor =
-    let specsPath = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
+    type ContextWithParents  =  { Clazz : Type; SpecLists : MethodInfo[]; ParentContexts : Type list }
 
-    let assemblyFor fullPath = 
+    let getAssembly fullPath = 
         let loadAssembly fullPath = Reflection.Assembly.LoadFile fullPath
         loadAssembly fullPath  
     
@@ -24,7 +25,7 @@ module SpecsExtractor =
         let isSpecList (mi : MethodInfo) = 
             match mi.ReturnType with
             |ty when ty  = typeof<list<(string * SpecDelegate)>> -> true
-            | _                                                  -> false 
+            | _                                                                      -> false 
         
         let isDeclaredDirectlyOnThisType(mi : MethodInfo) = mi.DeclaringType = ty
        
@@ -32,19 +33,42 @@ module SpecsExtractor =
         |> Array.filter isSpecList
         |> Array.filter isDeclaredDirectlyOnThisType
 
-    let instantiated (ty : Type) =  Activator.CreateInstance(ty)
+    let getParentContexts (ty : Type) = 
+        let rec getInheritanceChain (ty : Type) =
+            match ty with
+            | t when t = typeof<Object>      -> []
+            | t                                          -> getInheritanceChain t.BaseType @ [t]
+        ty.BaseType
+        |> getInheritanceChain 
 
-    let asm  = assemblyFor specsPath
-    let allPublicTypes = getAllPublicTypes asm
+    let toPotentialContextWithParents (ty : Type) =
+        { Clazz = ty; SpecLists = ty |> getSpecLists; ParentContexts = ty |> getParentContexts }
+
+    let isContext (ctx : ContextWithParents) = ctx.SpecLists.Length > 0
+
+    let instantiate (ty : Type) =  Activator.CreateInstance(ty)
+
+    let getAllContextsWithParents specsDllPath  = 
+        specsDllPath 
+        |> getAssembly
+        |> getAllPublicTypes
+        |> Array.map toPotentialContextWithParents
+        |> Array.filter isContext
  
-    let ctx0 = allPublicTypes |> Array.find(fun ty -> ty.FullName.Equals("FSharpSpec.Specs.ctx0"))
-    let ctx1 = allPublicTypes |> Array.find(fun ty -> ty.FullName.Equals("FSharpSpec.Specs.ctx1"))
-    let ctx2 = allPublicTypes |> Array.find(fun ty -> ty.FullName.Equals("FSharpSpec.Specs.ctx2"))
+    let getContextTree specsPath =
+        let emptySpecLists :  MethodInfo[] = getSpecLists typeof<obj>
+        let rootNode = new Node( {Clazz = typeof<obj>; SpecLists = emptySpecLists; ParentContexts = [] }, 0)
 
-    let ctx0SpecLists = ctx0 |> getSpecLists
-    let ctx1SpecLists = ctx1 |> getSpecLists
-    let ctx2SpecLists = ctx2 |> getSpecLists
+        for context in  specsPath |> getAllContextsWithParents do
+            let mutable lastNode : Node =  rootNode
+        
+            for parentType in context.ParentContexts do
+                let parentContext =  { Context.Clazz = parentType; Context.SpecLists = emptySpecLists; ParentContexts = []  } 
+                let newNode = lastNode.getContextNode(parentContext)
+                lastNode <- newNode
+      
+            lastNode.getContextNode({ Context.Clazz = context.Clazz; Context.SpecLists = context.SpecLists; Context.ParentContexts = context.ParentContexts }) |> ignore
+         
+        rootNode    
 
-    let c0 = instantiated ctx0
-    let c1 = instantiated ctx1
-    let c2 = instantiated ctx2
+    

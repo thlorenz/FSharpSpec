@@ -34,8 +34,8 @@
   <ItemGroup>
     <Compile Include="SpecsExtractorLegacy.fs" />
     <Compile Include="ProgramLegacy.fs" />
-    <Compile Include="SpecExtractor.fs" />
     <Compile Include="ContextTree.fs" />
+    <Compile Include="SpecExtractor.fs" />
     <None Include="Extractor.fsx" />
     <Compile Include="Program.fs" />
   </ItemGroup>
