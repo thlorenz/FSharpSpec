@@ -7,8 +7,6 @@ open FSharpSpec
 
 [<AutoOpen>]
 module ContextTree = 
-  type Context  =  { Clazz : Type; SpecLists : MethodInfo[]; ParentContexts : Type list  }
-
   type Node (context : Context, ply : int) =
      let _context = context
      let  _ply = ply
@@ -17,6 +15,11 @@ module ContextTree =
      let mutable _contexts : Context list = []
 
      let instantiate (ty : Type) =  Activator.CreateInstance(ty)
+  
+     let removeLeadingGet (propertyName : string) = 
+        match propertyName with
+        | pn when pn.StartsWith("get_")  -> pn.Substring(4)
+        | pn                                        -> pn
      
      member x.Context with get() = _context
      member x.Ply with get() = _ply
@@ -43,7 +46,7 @@ module ContextTree =
             let instantiatedContext = context.Clazz |> instantiate
             for specMethod in x.Context.SpecLists do 
                 sb.AppendLine(x.Indent + "|") |> ignore
-                sb.AppendLine(x.Indent + "| - " + specMethod.Name) |> ignore
+                sb.AppendLine(x.Indent + "| - " + (specMethod.Name |> removeLeadingGet) ) |> ignore
                 runContainedSpecs (specMethod, instantiatedContext)
         with
             | ex -> sb.Append(x.Indent)

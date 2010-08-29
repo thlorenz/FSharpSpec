@@ -13,8 +13,6 @@ open FSharpSpec
 open FSharpSpec.Runner
 
 module SpecsExtractor =
-    type ContextWithParents  =  { Clazz : Type; SpecLists : MethodInfo[]; ParentContexts : Type list }
-
     let getAssembly fullPath = 
         let loadAssembly fullPath = Reflection.Assembly.LoadFile fullPath
         loadAssembly fullPath  
@@ -44,11 +42,9 @@ module SpecsExtractor =
     let toPotentialContextWithParents (ty : Type) =
         { Clazz = ty; SpecLists = ty |> getSpecLists; ParentContexts = ty |> getParentContexts }
 
-    let isContext (ctx : ContextWithParents) = ctx.SpecLists.Length > 0
+    let isContext (ctx : Context) = ctx.SpecLists.Length > 0
 
-    let instantiate (ty : Type) =  Activator.CreateInstance(ty)
-
-    let getAllContextsWithParents specsDllPath  = 
+    let getAllContexts specsDllPath  = 
         specsDllPath 
         |> getAssembly
         |> getAllPublicTypes
@@ -59,15 +55,15 @@ module SpecsExtractor =
         let emptySpecLists :  MethodInfo[] = getSpecLists typeof<obj>
         let rootNode = new Node( {Clazz = typeof<obj>; SpecLists = emptySpecLists; ParentContexts = [] }, 0)
 
-        for context in  specsPath |> getAllContextsWithParents do
+        for context in  specsPath |> getAllContexts do
             let mutable lastNode : Node =  rootNode
         
             for parentType in context.ParentContexts do
-                let parentContext =  { Context.Clazz = parentType; Context.SpecLists = emptySpecLists; ParentContexts = []  } 
+                let parentContext =  { Clazz = parentType; SpecLists = emptySpecLists; ParentContexts = []  } 
                 let newNode = lastNode.getContextNode(parentContext)
                 lastNode <- newNode
       
-            lastNode.getContextNode({ Context.Clazz = context.Clazz; Context.SpecLists = context.SpecLists; Context.ParentContexts = context.ParentContexts }) |> ignore
+            lastNode.getContextNode(context) |> ignore
          
         rootNode    
 
