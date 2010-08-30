@@ -88,9 +88,9 @@ module ContextTree =
           results <- [contextInfoForEmptyContext]
         else
           try
-            let instantiatedContext = context.Clazz |> instantiate
             let specMethods = x.Context.SpecLists
             for specMethod in specMethods do 
+                let instantiatedContext = context.Clazz |> instantiate
                 let isFirstMethod = Array.IndexOf(specMethods, specMethod) = 0
                 let result = runContainedSpecs context specMethod isFirstMethod instantiatedContext x.Indent
                 results <- results @ [result]
