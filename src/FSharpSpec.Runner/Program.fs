@@ -5,6 +5,7 @@ open System.Collections.Generic
 open System.Linq
 open System.Reflection
 open System.Diagnostics
+open System.Text
 open SpecsExtractor
 open FSharpSpec
 
@@ -18,7 +19,8 @@ module main =
           |> List.iter (fun r -> Debug.WriteLine((fst r)))
           results
 
-        let printSingleFailureSummary failure =
+        let getSingleFailureSummary failure =
+            let sb = new StringBuilder()
             let getSpecFailedException (ex : Exception) =
                 let innerEx = ex.InnerException
                 let assertionEx = 
@@ -26,13 +28,17 @@ module main =
                     | ty when ty = typeof<SpecFailedException> -> Some(innerEx :?> SpecFailedException)
                     | _                                        ->  None
                 assertionEx
-            Debug.WriteLine("\n" + failure.FullSpecName)           
+            sb.AppendLine()
+              .AppendLine(failure.FullSpecName) |> ignore
+                        
             let ex = failure.Exception
             let specFailedException = ex |> getSpecFailedException
             if specFailedException.IsSome then
-                Debug.WriteLine("\t\t" + specFailedException.Value.Data0)
+                sb.AppendLine("\t\t" + specFailedException.Value.Data0) |> ignore
             else
-                Debug.WriteLine("\t\t" + ex.InnerException.Message)
+                sb.AppendLine("\t\t" + ex.InnerException.Message) |> ignore
+            
+            sb.ToString()
 
         let printFailureDetails results = 
             Debug.WriteLine("\n------------------------ Failure Details -------------------------------------\n")
@@ -40,18 +46,34 @@ module main =
                 let failures = snd result     
                 failures 
                 |> List.iter (fun failure -> 
-                                    printSingleFailureSummary failure
+                                    Debug.WriteLine(getSingleFailureSummary failure)
                                     Debug.WriteLine("\n" + failure.Exception.ToString() + "\n\n" ))
             results
 
-        let printFailureSummary results =
-            Debug.WriteLine("\n------------------------ Failure Summary -------------------------------------\n")
-            for result in results do
-               let failures = snd result     
-               failures 
-               |> List.iter printSingleFailureSummary
+        let getFailureSummary (results : (string * FailureInfo list) list) =
+
+            let rec failuresToString failures = 
+                match failures with
+                | []             -> ""
+                | x::xs          -> (getSingleFailureSummary x) + "\n" + (failuresToString xs)
+
+            let rec resultsToSummary (results : (string * FailureInfo list) list) = 
+                match results with
+                | []             -> ""
+                | x::xs          -> (failuresToString (snd x)) + (resultsToSummary xs)
+            
             results
+            |> resultsToSummary
+          
         
+        let printFailureSummary results =
+            let header =  "\n------------------------ Failure Summary -------------------------------------\n" 
+            let failureSummary = getFailureSummary results
+            if (failureSummary.Length > 0 ) then
+                Debug.Write(header + failureSummary)
+
+            results
+
         let specsPath = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
         let tree = specsPath |> getContextTree
 
