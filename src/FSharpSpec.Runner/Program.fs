@@ -28,6 +28,7 @@ module main =
                     | ty when ty = typeof<SpecFailedException> -> Some(innerEx :?> SpecFailedException)
                     | _                                        ->  None
                 assertionEx
+            
             sb.AppendLine()
               .AppendLine(failure.FullSpecName) |> ignore
                         
@@ -40,16 +41,26 @@ module main =
             
             sb.ToString()
 
-        let printFailureDetails results = 
-            Debug.WriteLine("\n------------------------ Failure Details -------------------------------------\n")
-            for result in results do
-                let failures = snd result     
-                failures 
-                |> List.iter (fun failure -> 
-                                    Debug.WriteLine(getSingleFailureSummary failure)
-                                    Debug.WriteLine("\n" + failure.Exception.ToString() + "\n\n" ))
-            results
+        let getFailureDetails results = 
+            let rec failureDetailsToString failures =
+                match failures with
+                | []        -> ""
+                | x::xs     -> (getSingleFailureSummary x) + "\n" + 
+                               x.Exception.ToString() + "\n\n" + 
+                               (failureDetailsToString xs)
+             
+            let rec extractFailureDetails results =
+                match results with
+                | []                        -> ""
+                | (output, failure)::xs     -> (failureDetailsToString failure) + extractFailureDetails xs
 
+            let header = "\n------------------------ Failure Details -------------------------------------\n"
+
+            match results |> extractFailureDetails with
+            | ""        -> ""
+            | details   -> header + details
+
+       
         let getFailureSummary (results : (string * FailureInfo list) list) =
 
             let rec failuresToString failures = 
@@ -62,16 +73,18 @@ module main =
                 | []             -> ""
                 | x::xs          -> (failuresToString (snd x)) + (resultsToSummary xs)
             
+            let header =  "\n------------------------ Failure Summary -------------------------------------\n" 
+            match results|> resultsToSummary with
+            | ""        -> ""
+            | summary   -> header + summary
+
+            
+        let printFailureDetails results =     
+            Debug.Write(results |> getFailureDetails)
             results
-            |> resultsToSummary
-          
         
         let printFailureSummary results =
-            let header =  "\n------------------------ Failure Summary -------------------------------------\n" 
-            let failureSummary = getFailureSummary results
-            if (failureSummary.Length > 0 ) then
-                Debug.Write(header + failureSummary)
-
+            Debug.Write(results |> getFailureSummary)
             results
 
         let specsPath = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
