@@ -14,16 +14,17 @@ module ContextTree =
    let removeLeadingGet (propertyName : string) = 
         match propertyName with
         | pn when pn.StartsWith("get_")  -> pn.Substring(4)
-        | pn                                        -> pn
+        | pn                             -> pn
 
    let getFullSpecName context specName = 
      let toInheritanceChain (parentClasses : Type list) = 
         parentClasses
         |> List.fold (fun acc clazz -> acc + clazz.Name + ", ")  ("")  
-     
-     context.Clazz.Namespace + "\n" + 
-     (context.ParentContexts |> toInheritanceChain) + 
-     context.Clazz.Name + "  » " + specName
+    
+     (new StringBuilder())
+      .AppendLine(context.Clazz.Namespace)
+      .AppendLine((context.ParentContexts |> toInheritanceChain) + context.Clazz.Name + "  » " + specName)
+      .ToString()
    
    let runContainedSpecs context (specMethod : MethodInfo) isFirstMethod instantiatedContext (indent : string) = 
         let results = new StringBuilder()
@@ -46,7 +47,7 @@ module ContextTree =
                         [{ FullSpecName = (getFullSpecName context specName); Exception = ex } ]  
                      results.AppendLine(" - FAILED") |> ignore 
         
-        (results.ToString(), failures)
+        (results.ToString() + "\n", failures)
    
    let unableToSetupContextResult context ex (indent :string) =
       let sb = new StringBuilder()
@@ -58,7 +59,7 @@ module ContextTree =
       (sb.ToString(), [{ FullSpecName = (getFullSpecName context "Exception while setting up context"); Exception = ex } ]  )  
 
    let getContextInfoForEmptyContext context (indent :string) = 
-      (indent + "+ " + context.Clazz.Name, [])
+      (indent + "+ " + context.Clazz.Name + "\n", [])
  
    let typeWasNotAddedBefore (ty :Type) (typesAddedBefore : Type list) = 
      typesAddedBefore
@@ -84,8 +85,12 @@ module ContextTree =
         let mutable addedType = []
         
         if context.SpecLists.Length = 0 then
-          let contextInfoForEmptyContext = getContextInfoForEmptyContext context x.Indent
-          results <- [contextInfoForEmptyContext]
+            let addEmptyContextToResults = function
+              | ctx when ctx.Clazz = typeof<obj>  -> []
+              | ctx                               -> [getContextInfoForEmptyContext ctx x.Indent]
+            
+            results <- (addEmptyContextToResults context)
+
         else
           try
             let specMethods = x.Context.SpecLists

@@ -53,9 +53,9 @@ module SpecsExtractor =
  
     let getContextTree specsPath =
         let emptySpecLists :  MethodInfo[] = getSpecLists typeof<obj>
-        let rootNode = new Node( {Clazz = typeof<obj>; SpecLists = emptySpecLists; ParentContexts = [] }, 0)
+        let rootNode = new Node( {Clazz = typeof<obj>; SpecLists = emptySpecLists; ParentContexts = [] }, -1)
 
-        for context in  specsPath |> getAllContexts do
+        for context in specsPath |> getAllContexts do
             let mutable lastNode : Node =  rootNode
         
             for parentType in context.ParentContexts do

@@ -14,43 +14,34 @@ module main =
     [<EntryPoint>]
     let main(args:string[]) =
         
-        let printResultTree results =
-          results
-          |> List.iter (fun r -> Debug.WriteLine((fst r)))
-          results
-
         let getSingleFailureSummary failure =
-            let sb = new StringBuilder()
+           
             let getSpecFailedException (ex : Exception) =
                 let innerEx = ex.InnerException
                 let assertionEx = 
                     match innerEx.GetType() with
-                    | ty when ty = typeof<SpecFailedException> -> Some(innerEx :?> SpecFailedException)
+                    | ty when ty = typeof<SpecFailedException> ->  Some(innerEx :?> SpecFailedException)
                     | _                                        ->  None
                 assertionEx
             
-            sb.AppendLine()
-              .AppendLine(failure.FullSpecName) |> ignore
-                        
-            let ex = failure.Exception
-            let specFailedException = ex |> getSpecFailedException
-            if specFailedException.IsSome then
-                sb.AppendLine("\t\t" + specFailedException.Value.Data0) |> ignore
-            else
-                sb.AppendLine("\t\t" + ex.InnerException.Message) |> ignore
+            let extractException failure = 
+                let specFailedException = failure.Exception |> getSpecFailedException
+                match specFailedException with
+                | excep when excep.IsSome -> "\t\t" + specFailedException.Value.Data0
+                | _                       -> "\t\t" + failure.Exception.InnerException.Message     
             
-            sb.ToString()
-
+            failure.FullSpecName + (extractException failure) + "\n"  
+            
         let getFailureDetails results = 
-            let rec failureDetailsToString failures =
-                match failures with
+            let rec failureDetailsToString = function
                 | []        -> ""
-                | x::xs     -> (getSingleFailureSummary x) + "\n" + 
-                               x.Exception.ToString() + "\n\n" + 
-                               (failureDetailsToString xs)
+                | x::xs     -> (new StringBuilder())
+                                .AppendLine("\n" + getSingleFailureSummary x + "\n")
+                                .AppendLine(x.Exception.ToString() + "\n\n")
+                                .ToString() + failureDetailsToString xs
+                                
              
-            let rec extractFailureDetails results =
-                match results with
+            let rec extractFailureDetails = function
                 | []                        -> ""
                 | (output, failure)::xs     -> (failureDetailsToString failure) + extractFailureDetails xs
 
@@ -61,35 +52,49 @@ module main =
             | details   -> header + details
 
        
-        let getFailureSummary (results : (string * FailureInfo list) list) =
+        let getFailureSummary results =
 
-            let rec failuresToString failures = 
-                match failures with
+            let rec failuresToString = function
                 | []             -> ""
                 | x::xs          -> (getSingleFailureSummary x) + "\n" + (failuresToString xs)
 
-            let rec resultsToSummary (results : (string * FailureInfo list) list) = 
-                match results with
+            let rec resultsToSummary = function
                 | []             -> ""
                 | x::xs          -> (failuresToString (snd x)) + (resultsToSummary xs)
             
-            let header =  "\n------------------------ Failure Summary -------------------------------------\n" 
+            let header =  "\n------------------------ Failure Summary -------------------------------------\n\n" 
+           
             match results|> resultsToSummary with
             | ""        -> ""
             | summary   -> header + summary
 
-            
-        let printFailureDetails results =     
-            Debug.Write(results |> getFailureDetails)
+        let writeToDebug    = function | content -> Debug.Write content
+        let writeToConsole  = function | content -> printf "%s" content
+        
+        let print = writeToDebug    
+
+        let printResultTree results =
+          print "\n------------------------ Specifications -------------------------------------\n\n" 
+          results
+          |> List.iter (fun r -> fst r |> print)
+          results
+
+        let printFailureDetails results = 
+            results
+            |> getFailureDetails
+            |> print
             results
         
         let printFailureSummary results =
-            Debug.Write(results |> getFailureSummary)
             results
+            |> getFailureSummary
+            |> print
+            results
+         
 
         let specsPath = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
         let tree = specsPath |> getContextTree
-
+        
         tree.RunSpecs() 
         |> printResultTree
         |> printFailureDetails
