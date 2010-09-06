@@ -40,7 +40,6 @@
     <Reference Include="System.Numerics" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="SpecHelpers.fs" />
     <Compile Include="RowTests.fs" />
   </ItemGroup>
   <ItemGroup>
