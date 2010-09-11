@@ -39,13 +39,18 @@ module ContextTree =
         for (specName, specDelegate)  in specs do
             results.Append(indent  + "      »  "  + specName) |> ignore 
             try
-                specDelegate.Method.Invoke(specDelegate.Target, null) |> ignore
-                results.AppendLine() |> ignore
+                let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
+                
+                if outcome = Pending then 
+                    results.AppendLine("  -  <<< Pending >>>")
+                else
+                    results.AppendLine() 
+                |> ignore
             with
             | ex -> do 
                      failures <- failures @  
                         [{ FullSpecName = (getFullSpecName context specName); Exception = ex } ]  
-                     results.AppendLine(" - FAILED") |> ignore 
+                     results.AppendLine(" - <<< Failed >>>") |> ignore 
         
         (results.ToString() + "\n", failures)
    

@@ -4,21 +4,23 @@ open System
 open FSharpSpec
 
 type ``when applying Math_Abs`` () =
-    
     member x.``to positive numbers`` =
-        let rec getAbsForPositiveNumbersSpecs (numbers : int list) = 
-            match numbers with
-            | []        -> []
-            | x::xs     -> it (sprintf "Abs(%d) returns %d" x x) (Math.Abs(x)) should.equal x 
-                           :: getAbsForPositiveNumbersSpecs xs
-
-        getAbsForPositiveNumbersSpecs [1; 2; 3; 4; 11; 111]
+         
+        [1; 2; 3; 4; 11; 111]
+        |> List.map (fun x ->
+            it (sprintf "Abs(%d) returns %d" x x) (Math.Abs x) should.equal x)
 
     member x.``to negative numbers`` =
-        let rec getAbsForNegativeNumbersSpecs (numbers : int list) = 
-            match numbers with
-            | []        -> []
-            | x::xs     -> it (sprintf "Abs(%d) returns %d"  x (-x)) (Math.Abs(x)) should.equal (-x) 
-                           :: getAbsForNegativeNumbersSpecs xs
+        
+        [-1; -2; -3; -4; -11; -111]
+        |> List.map (fun x ->
+            it (sprintf "Abs(%d) returns %d"  x (-x)) (Math.Abs x) should.equal (-x)) 
 
-        getAbsForNegativeNumbersSpecs [-1; -2; -3; -4; -11; -111]
+type ``when calculating Math_Sqrt`` () =  
+    member x.``of positive numbers`` =
+        
+        [1.0, 1.0; 
+         4.0, 2.0;
+         9.0, 3.0 ]
+        |> List.map (fun (square, expectedRoot) ->
+            it (sprintf "Sqrt(%f) returns %f" square expectedRoot) (Math.Sqrt square) should.equal expectedRoot)

@@ -33,13 +33,13 @@ module main =
             failure.FullSpecName + (extractException failure) + "\n"  
             
         let getFailureDetails results = 
+
             let rec failureDetailsToString = function
                 | []        -> ""
                 | x::xs     -> (new StringBuilder())
                                 .AppendLine("\n" + getSingleFailureSummary x + "\n")
                                 .AppendLine(x.Exception.ToString() + "\n\n")
                                 .ToString() + failureDetailsToString xs
-                                
              
             let rec extractFailureDetails = function
                 | []                        -> ""
@@ -68,6 +68,7 @@ module main =
             | ""        -> ""
             | summary   -> header + summary
 
+
         let writeToDebug    = function | content -> Debug.Write content
         let writeToConsole  = function | content -> printf "%s" content
         
@@ -90,7 +91,7 @@ module main =
             |> getFailureSummary
             |> print
             results
-         
+        
 
        // let specsPath = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
         let specsPath = @"C:\dev\FSharp\FSharpSpec\src\Samples\FSharpSpec.FSharpSampleSpecs\bin\Debug\FSharpSpec.FSharpSampleSpecs.dll"
