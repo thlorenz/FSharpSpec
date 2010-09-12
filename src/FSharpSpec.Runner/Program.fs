@@ -43,7 +43,7 @@ module main =
              
             let rec extractFailureDetails = function
                 | []                        -> ""
-                | (output, failure)::xs     -> (failureDetailsToString failure) + extractFailureDetails xs
+                | (m, f, p)::xs     -> (failureDetailsToString f) + extractFailureDetails xs
 
             let header = "\n------------------------ Failure Details -------------------------------------\n"
 
@@ -60,7 +60,7 @@ module main =
 
             let rec resultsToSummary = function
                 | []             -> ""
-                | x::xs          -> (failuresToString (snd x)) + (resultsToSummary xs)
+                | (m,f,p)::xs    -> (failuresToString f) + (resultsToSummary xs)
             
             let header =  "\n------------------------ Failure Summary -------------------------------------\n\n" 
            
@@ -77,12 +77,29 @@ module main =
         let printResultTree results =
           print "\n------------------------ Specifications -------------------------------------\n\n" 
           results
-          |> List.iter (fun r -> fst r |> print)
+          |> List.iter (fun (m,f,p) -> m |> print)
           results
 
         let printFailureDetails results = 
             results
             |> getFailureDetails
+            |> print
+            results
+        
+        let getPendingSummary (results : ('a *'b * string list) list) =
+            let pendings = results |> List.map (fun (m,f,p) ->  
+                match p with
+                | []    -> ""
+                | ps    -> ps |> List.reduce (fun acc pp -> acc + pp + "\n"))
+            
+            match pendings with
+            | []    -> ""
+            | ps    -> "\n------------------------ Pending -------------------------------------\n\n" +
+                        (ps |>  List.reduce (fun acc p -> acc + p))
+
+        let printPendingSummary results =
+            results
+            |> getPendingSummary
             |> print
             results
         
@@ -93,13 +110,14 @@ module main =
             results
         
 
-       // let specsPath = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
+        let specsPath = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
         let specsPath = @"C:\dev\FSharp\FSharpSpec\src\Samples\FSharpSpec.FSharpSampleSpecs\bin\Debug\FSharpSpec.FSharpSampleSpecs.dll"
         let tree = specsPath |> getContextTree
         
         tree.RunSpecs() 
         |> printResultTree
         |> printFailureDetails
+        |> printPendingSummary
         |> printFailureSummary
         |> ignore
         

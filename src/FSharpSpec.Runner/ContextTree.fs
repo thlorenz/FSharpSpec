@@ -11,19 +11,17 @@ module ContextTree =
     
    let instantiate (ty : Type) =  Activator.CreateInstance(ty)
   
-   let removeLeadingGet (propertyName : string) = 
-        match propertyName with
-        | pn when pn.StartsWith("get_")  -> pn.Substring(4)
-        | pn                             -> pn
+   let removeLeadingGet = function
+        | (pn : string) when pn.StartsWith("get_")  -> pn.Substring(4)
+        | pn                                        -> pn
 
-   let getFullSpecName context specName = 
-     let toInheritanceChain (parentClasses : Type list) = 
-        parentClasses
-        |> List.fold (fun acc clazz -> acc + clazz.Name + ", ")  ("")  
+   let getFullSpecName context specMethodName specName = 
+     let toInheritanceChain = 
+         List.fold (fun acc (clazz : Type) -> acc + clazz.Name + ", ")  ("")  
     
      (new StringBuilder())
       .AppendLine(context.Clazz.Namespace)
-      .AppendLine((context.ParentContexts |> toInheritanceChain) + context.Clazz.Name + "  » " + specName)
+      .AppendLine((context.ParentContexts |> toInheritanceChain) + context.Clazz.Name + ": " + specMethodName + "  » " + specName)
       .ToString()
    
    let runContainedSpecs context (specMethod : MethodInfo) isFirstMethod instantiatedContext (indent : string) = 
@@ -36,23 +34,46 @@ module ContextTree =
        
         results.AppendLine(indent  + "   - " + (specMethod.Name |> removeLeadingGet) ) |> ignore   
         
-        for (specName, specDelegate)  in specs do
-            results.Append(indent  + "      »  "  + specName) |> ignore 
-            try
-                let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
-                
-                if outcome = Pending then 
-                    results.AppendLine("  -  <<< Pending >>>")
-                else
-                    results.AppendLine() 
-                |> ignore
-            with
-            | ex -> do 
-                     failures <- failures @  
-                        [{ FullSpecName = (getFullSpecName context specName); Exception = ex } ]  
-                     results.AppendLine(" - <<< Failed >>>") |> ignore 
+
+        let rec getSpecResults (specs : (string * SpecDelegate) list) =
+            let runSpec specName (specDelegate : SpecDelegate) =
+                let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) specName
+                try
+                    let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
+                    match outcome with
+                    | Passed        ->    (fullSpecName, indent  + "      »  "  + specName + "\n",                          None, Passed)
+                    | Pending       ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",   None, Pending)
+                    | Failed        ->    (fullSpecName, "Should have thrown exception",                                    None, Failed)  
+                    | Inconclusive  ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",   None, Inconclusive) 
+                with
+                    ex              ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Failed >>>" + "\n",    Some({ FullSpecName = fullSpecName; Exception = ex }), Failed) 
+
+            match specs with
+            | []                    -> []
+            | (specName, specDelegate) :: xs    -> [(runSpec specName specDelegate)] @ getSpecResults xs
         
-        (results.ToString() + "\n", failures)
+        let specResults =         
+            specs
+            |> getSpecResults
+        
+        let rec getFailures = function
+            | []                                                        -> []
+            | (s, m, f : FailureInfo option, o) :: xs  when f.IsSome    -> [f.Value] @ getFailures xs
+            | _ :: xs                                                   -> getFailures xs
+        
+        let failures = specResults |> List.filter(fun (s,m,f,o) -> o = Failed) |> getFailures
+        let pending  = specResults |> List.filter(fun (s,m,f,o) -> o = Pending)|> List.map(fun (s,m,f,o) -> s + "\n")
+        let messages = specResults |> List.map(fun (s,m,f,o) -> m)
+        
+        let combinedMessage = messages |> List.reduce (fun acc s -> acc + s + "\n")
+        
+        let clazzName = indent + "+ " + context.Clazz.Name + "\n" + indent + "|"
+        let specMethodName = indent  + "   - " + (specMethod.Name |> removeLeadingGet) + "\n"
+
+        match isFirstMethod with
+        | true  -> (clazzName + specMethodName + combinedMessage, failures, pending)       
+        | false -> (specMethodName + combinedMessage, failures, pending)        
+
    
    let unableToSetupContextResult context ex (indent :string) =
       let sb = new StringBuilder()
@@ -61,10 +82,10 @@ module ContextTree =
       sb.AppendLine(indent + "+ " + context.Clazz.Name)
         .AppendLine(indent + "Unable to setup context !!!") |> ignore
       
-      (sb.ToString(), [{ FullSpecName = (getFullSpecName context "Exception while setting up context"); Exception = ex } ]  )  
+      (sb.ToString(), [{ FullSpecName = (getFullSpecName context "" "Exception while setting up context"); Exception = ex } ], [sprintf "%s inconclusive" context.Clazz.Name]  )  
 
    let getContextInfoForEmptyContext context (indent :string) = 
-      (indent + "+ " + context.Clazz.Name + "\n", [])
+      (indent + "+ " + context.Clazz.Name + "\n", [], [sprintf "%s inconclusive" context.Clazz.Name])
  
    let typeWasNotAddedBefore (ty :Type) (typesAddedBefore : Type list) = 
      typesAddedBefore
@@ -84,9 +105,9 @@ module ContextTree =
         
      member x.getContextNode(context : Context) = x.addToChildrenIfNotFoundAndReturnReference context
      
-     member x.RunSpecs() : (string * FailureInfo list) list =
+     member x.RunSpecs() =
         let sb = new StringBuilder()
-        let mutable results : (string * FailureInfo list) list = []
+        let mutable results = []
         let mutable addedType = []
         
         if context.SpecLists.Length = 0 then

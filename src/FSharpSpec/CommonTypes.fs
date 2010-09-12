@@ -3,7 +3,7 @@
 open System
 open System.Reflection
 
-type AssertionResult = | Passed | Failed | Inconclusive | Pending
+type AssertionResult = | Passed | Pending | Failed | Inconclusive
 
 type SpecDelegate = delegate of unit -> AssertionResult 
 type Context  =  { Clazz : Type; SpecLists : MethodInfo[]; ParentContexts : Type list  }
