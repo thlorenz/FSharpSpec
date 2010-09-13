@@ -25,28 +25,28 @@ module ContextTree =
       .ToString()
    
    let runContainedSpecs context (specMethod : MethodInfo) isFirstMethod instantiatedContext (indent : string) = 
-        let results = new StringBuilder()
-        let mutable failures : FailureInfo list = []
+        
         let specs = specMethod.Invoke(instantiatedContext, null) :?> list<(string * SpecDelegate)>
         
-        if isFirstMethod then 
-           results.AppendLine(indent + "+ " + context.Clazz.Name).AppendLine(indent + "|") |> ignore
-       
-        results.AppendLine(indent  + "   - " + (specMethod.Name |> removeLeadingGet) ) |> ignore   
-        
-
         let rec getSpecResults (specs : (string * SpecDelegate) list) =
             let runSpec specName (specDelegate : SpecDelegate) =
                 let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) specName
                 try
                     let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
                     match outcome with
-                    | Passed        ->    (fullSpecName, indent  + "      »  "  + specName + "\n",                          None, Passed)
-                    | Pending       ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",   None, Pending)
-                    | Failed        ->    (fullSpecName, "Should have thrown exception",                                    None, Failed)  
-                    | Inconclusive  ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",   None, Inconclusive) 
+                    | Passed        ->    (fullSpecName, indent  + "      »  "  + specName + "\n",
+                                                    None, Passed)
+
+                    | Pending       ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",
+                                                    None, Pending)
+
+                    | Failed        ->    (fullSpecName, "Should have thrown exception",
+                                                    None, Failed)  
+                    | Inconclusive  ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Inconclusive >>>" + "\n",
+                                                    None, Inconclusive) 
                 with
-                    ex              ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Failed >>>" + "\n",    Some({ FullSpecName = fullSpecName; Exception = ex }), Failed) 
+                    ex              ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Failed >>>" + "\n",
+                                                    Some({ FullSpecName = fullSpecName; Exception = ex }), Failed) 
 
             match specs with
             | []                    -> []
@@ -65,9 +65,9 @@ module ContextTree =
         let pending  = specResults |> List.filter(fun (s,m,f,o) -> o = Pending)|> List.map(fun (s,m,f,o) -> s + "\n")
         let messages = specResults |> List.map(fun (s,m,f,o) -> m)
         
-        let combinedMessage = messages |> List.reduce (fun acc s -> acc + s + "\n")
+        let combinedMessage = (messages |> List.reduce (fun acc s -> acc + s)) + "\n"
         
-        let clazzName = indent + "+ " + context.Clazz.Name + "\n" + indent + "|"
+        let clazzName = indent + "+ " + context.Clazz.Name + "\n" + indent + "|" + "\n"
         let specMethodName = indent  + "   - " + (specMethod.Name |> removeLeadingGet) + "\n"
 
         match isFirstMethod with
@@ -85,7 +85,7 @@ module ContextTree =
       (sb.ToString(), [{ FullSpecName = (getFullSpecName context "" "Exception while setting up context"); Exception = ex } ], [sprintf "%s inconclusive" context.Clazz.Name]  )  
 
    let getContextInfoForEmptyContext context (indent :string) = 
-      (indent + "+ " + context.Clazz.Name + "\n", [], [sprintf "%s inconclusive" context.Clazz.Name])
+      (indent + "+ " + context.Clazz.Name + "\n", [], [])
  
    let typeWasNotAddedBefore (ty :Type) (typesAddedBefore : Type list) = 
      typesAddedBefore
