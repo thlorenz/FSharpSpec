@@ -4,7 +4,7 @@ open System
 open FSharpSpec
 
 type ``when applying Math_Abs`` () =
-    member x.``to positive numbers`` =
+    member x.``to positive numbers``() =
          
         [1; 2; 3; 4; 11; 111]
         |> List.map (fun x ->

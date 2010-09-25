@@ -1,5 +1,5 @@
 ﻿<TestRunner>
   <FriendlyName>FSharpSpec {0}.{1}.{2}</FriendlyName>
   <AssemblyPath>FSharpSpec.TDNetRunner.dll</AssemblyPath>
-  <TypeName>FSharpSpec.TDNetRunner.SpecsRunner</TypeName>
+  <TypeName>FSharpSpec.TDNetRunner.SsRunner</TypeName>
 </TestRunner>

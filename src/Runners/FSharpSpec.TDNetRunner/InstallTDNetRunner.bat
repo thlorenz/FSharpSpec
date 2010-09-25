@@ -10,7 +10,7 @@ echo "Application"="" >> FSharpSpecTDNet.reg
 echo "AssemblyPath"="%LOCALDIR:\=\\%FSharpSpec.TDNetRunner.dll" >> FSharpSpecTDNet.reg
 echo "TargetFrameworkAssemblyName"=FSharpSpec" >> FSharpSpecTDNet.reg
 echo "TypeName"="FSharpSpec.TDNetRunner.SpecsRunner" >> FSharpSpecTDNet.reg
-echo @="5" >> FSharpSpecTDNet.reg
+echo @="6" >> FSharpSpecTDNet.reg
 
 regedit FSharpSpecTDNet.reg
 

@@ -68,8 +68,6 @@ module SpecsRunnerUtils =
 
     let writeToDebug    = function | content -> Debug.Write content
     let writeToConsole  = function | content -> printf "%s" content
-        
-       
 
     let printResultTree results print =
         print "\n------------------------ Specifications -------------------------------------\n\n" 
