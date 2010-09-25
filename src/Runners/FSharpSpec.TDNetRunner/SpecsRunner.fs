@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec.Runners
+﻿namespace FSharpSpec.TDNetRunner
 
 open System.Reflection
 open TestDriven.Framework;
