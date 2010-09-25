@@ -3,14 +3,11 @@
     #r "FSharpSpec.dll";;
 
 *)
-namespace FSharpSpec.Runner 
+namespace FSharpSpec 
 
 open System
 open System.Reflection
 open System.Collections.Generic 
-
-open FSharpSpec
-open FSharpSpec.Runner
 
 module SpecsExtractor =
     let getAssembly fullPath = 

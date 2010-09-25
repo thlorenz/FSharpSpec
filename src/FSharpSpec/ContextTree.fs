@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec.Runner 
+﻿namespace FSharpSpec
 open System
 open System.Text
 open System.Reflection

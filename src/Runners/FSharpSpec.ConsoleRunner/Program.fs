@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec.Runner
+﻿namespace FSharpSpec.ConsoleRunner
 
 open System
 open System.Collections.Generic
@@ -6,8 +6,8 @@ open System.Linq
 open System.Reflection
 open System.Diagnostics
 open System.Text
-open SpecsExtractor
 open FSharpSpec
+open SpecsExtractor
 
 module main = 
      

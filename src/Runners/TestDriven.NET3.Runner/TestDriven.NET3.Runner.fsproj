@@ -9,8 +9,9 @@
     <OutputType>Library</OutputType>
     <RootNamespace>TestDriven.NET3.Runner</RootNamespace>
     <AssemblyName>TestDriven.NET3.Runner</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <Name>TestDriven.NET3.Runner</Name>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -36,13 +37,19 @@
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Numerics" />
     <Reference Include="TestDriven.Framework">
       <HintPath>..\..\..\Lib\TestDriven.NET 3\TestDriven.Framework.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="TestDrivenNetRunner.fs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FSharpSpec\FSharpSpec.fsproj">
+      <Name>FSharpSpec</Name>
+      <Project>{12d7b460-5020-4d49-8fc0-11692a5e32e3}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
