@@ -11,6 +11,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAE6
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.FSharpSampleSpecs", "Samples\FSharpSpec.FSharpSampleSpecs\FSharpSpec.FSharpSampleSpecs.fsproj", "{52BDB8F4-B62F-4770-AF64-39DE88707280}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{E02FED6F-D842-44AF-BAB5-5D639C2DAB2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestDriven.NET 3", "TestDriven.NET 3", "{CDCAA051-8C72-4021-A16A-C7E02E9FFFA0}"
+	ProjectSection(SolutionItems) = preProject
+		..\Lib\TestDriven.NET 3\TestDriven.Framework.dll = ..\Lib\TestDriven.NET 3\TestDriven.Framework.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runners", "Runners", "{C676C969-C818-464A-B6A6-837A9DC44C0F}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "TestDriven.NET3.Runner", "Runners\TestDriven.NET3.Runner\TestDriven.NET3.Runner.fsproj", "{8F0B26F0-C646-4066-93F1-3DB7AF55DBA7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -33,11 +44,17 @@ Global
 		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F0B26F0-C646-4066-93F1-3DB7AF55DBA7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F0B26F0-C646-4066-93F1-3DB7AF55DBA7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F0B26F0-C646-4066-93F1-3DB7AF55DBA7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F0B26F0-C646-4066-93F1-3DB7AF55DBA7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{52BDB8F4-B62F-4770-AF64-39DE88707280} = {EAE67DBC-0E61-4BA2-BFD0-5EF9DD48390F}
+		{CDCAA051-8C72-4021-A16A-C7E02E9FFFA0} = {E02FED6F-D842-44AF-BAB5-5D639C2DAB2F}
+		{8F0B26F0-C646-4066-93F1-3DB7AF55DBA7} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
 	EndGlobalSection
 EndGlobal
