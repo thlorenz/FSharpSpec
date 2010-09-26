@@ -5,14 +5,26 @@ open TestDriven.Framework
 
 type TDNetLogger (listener : ITestListener) =
     let _listener = listener
-    
+    let testRunner = "FSharpSpec"
     interface ISpecsResultsLogger with
         member x.SpecPassed specName =
-            let testResult = new TestResult (Name = specName, State = TestState.Passed, TotalTests = 1)
+            let testResult = 
+                new TestResult (
+                    Name = specName, 
+                    State = TestState.Passed, 
+                    TotalTests = 1, 
+                    TestRunnerName = testRunner)
+            
             _listener.TestFinished testResult
       
-        member x.SpecIgnored specName =
-            let testResult = new TestResult (Name = specName, State = TestState.Ignored, TotalTests = 1)
+        member x.SpecPending specName =
+            let testResult = 
+                new TestResult (
+                    Name = specName, 
+                    State = TestState.Ignored, 
+                    TotalTests = 1, 
+                    TestRunnerName = testRunner)
+            
             _listener.TestFinished testResult
        
         member x.SpecFailed specName message stackTrace =
@@ -22,5 +34,7 @@ type TDNetLogger (listener : ITestListener) =
                     State = TestState.Failed, 
                     TotalTests = 1,
                     Message = message,
-                    StackTrace = stackTrace)
+                    StackTrace = stackTrace,
+                    TestRunnerName = testRunner)
+            
             _listener.TestFinished testResult

@@ -10,23 +10,29 @@ open FSharpSpec
 
 module SpecsRunnerUtils =
 
-    let getSingleFailureSummary failure =
-           
-        let getSpecFailedException (ex : Exception) =
+    let getSpecFailedException (ex : Exception) =
             let innerEx = ex.InnerException
             let assertionEx = 
                 match innerEx.GetType() with
                 | ty when ty = typeof<SpecFailedException> ->  Some(innerEx :?> SpecFailedException)
                 | _                                        ->  None
             assertionEx
+    
+    let getFailureMessage failure = 
+        let specFailedException = failure.Exception |> getSpecFailedException
+        match specFailedException with
+        | excep when excep.IsSome -> "\t\t" + specFailedException.Value.Data0
+        | _                       -> "\t\t" + failure.Exception.InnerException.Message   
+
+    let getFailureStackTrace failure = 
+        let specFailedException = failure.Exception |> getSpecFailedException
+        match specFailedException with
+        | excep when excep.IsSome -> "\t\t" + specFailedException.Value.StackTrace
+        | _                       -> "\t\t" + failure.Exception.InnerException.StackTrace   
+
+    let getSingleFailureSummary failure =
             
-        let extractException failure = 
-            let specFailedException = failure.Exception |> getSpecFailedException
-            match specFailedException with
-            | excep when excep.IsSome -> "\t\t" + specFailedException.Value.Data0
-            | _                       -> "\t\t" + failure.Exception.InnerException.Message     
-            
-        failure.FullSpecName + (extractException failure) + "\n"  
+        failure.FullSpecName + (getFailureMessage failure) + "\n"  
             
     let getFailureDetails results = 
 
