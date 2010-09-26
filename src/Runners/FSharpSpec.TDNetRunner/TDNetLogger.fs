@@ -5,7 +5,9 @@ open TestDriven.Framework
 
 type TDNetLogger (listener : ITestListener) =
     let _listener = listener
+   
     let testRunner = "FSharpSpec"
+    
     interface ISpecsResultsLogger with
         member x.SpecPassed specName =
             let testResult = 

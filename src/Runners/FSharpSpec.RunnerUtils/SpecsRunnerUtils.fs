@@ -89,10 +89,12 @@ module SpecsRunnerUtils =
     let getPendingSummary results =
         let pendings = results |> List.map (fun (msg, passes, failures, pendings) ->  
             match pendings with
-            | []    -> ""
+            | []    -> null
             | ps    -> ps |> List.reduce (fun acc pp -> acc + pp + "\n"))
             
-        match pendings with
+        let validPendings = pendings |> List.filter(fun p -> not (String.IsNullOrEmpty p))
+
+        match validPendings with
         | []    -> ""
         | ps    -> "\n------------------------ Pending -------------------------------------\n\n" +
                     (ps |>  List.reduce (fun acc p -> acc + p))

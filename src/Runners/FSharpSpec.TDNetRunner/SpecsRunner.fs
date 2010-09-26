@@ -17,7 +17,7 @@ type SpecsRunner() =
             printfn "RunAssembly\n Listener: %A\n Assembly: %A" listener assembly
 
             let runSpecs =
-                let printOutput = function | content -> listener.WriteLine(content, Category.Info)
+                let printOutput = function | content -> listener.WriteLine(content, Category.Output)
 
                 let tree = assembly |> getContextTreeOfAssembly
                 let results = tree.RunSpecs() 
