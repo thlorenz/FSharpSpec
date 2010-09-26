@@ -1,8 +1,9 @@
 ﻿namespace FSharpSpec.ConsoleRunner
 
 open FSharpSpec
-open SpecsRunnerUtils
+open FSharpSpec.RunnerUtils
 open SpecsExtractor
+open SpecsRunnerUtils
 
 module main = 
      

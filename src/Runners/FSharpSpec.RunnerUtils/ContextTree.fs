@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec
+﻿namespace FSharpSpec.RunnerUtils
 open System
 open System.Text
 open System.Reflection
@@ -61,6 +61,7 @@ module ContextTree =
             | (s, m, f : FailureInfo option, o) :: xs  when f.IsSome    -> [f.Value] @ getFailures xs
             | _ :: xs                                                   -> getFailures xs
         
+        let passes   = specResults |> List.filter(fun (s,m,f,o) -> o = Passed) |> List.map(fun (s,m,f,o) -> s + "\n")
         let failures = specResults |> List.filter(fun (s,m,f,o) -> o = Failed) |> getFailures
         let pending  = specResults |> List.filter(fun (s,m,f,o) -> o = Pending)|> List.map(fun (s,m,f,o) -> s + "\n")
         let messages = specResults |> List.map(fun (s,m,f,o) -> m)
@@ -71,8 +72,8 @@ module ContextTree =
         let specMethodName = indent  + "   - " + (specMethod.Name |> removeLeadingGet) + "\n"
 
         match isFirstMethod with
-        | true  -> (clazzName + specMethodName + combinedMessage, failures, pending)       
-        | false -> (specMethodName + combinedMessage, failures, pending)        
+        | true  -> (clazzName + specMethodName + combinedMessage, passes, failures, pending)       
+        | false -> (specMethodName + combinedMessage, passes, failures, pending)        
 
    
    let unableToSetupContextResult context ex (indent :string) =
@@ -82,10 +83,10 @@ module ContextTree =
       sb.AppendLine(indent + "+ " + context.Clazz.Name)
         .AppendLine(indent + "Unable to setup context !!!") |> ignore
       
-      (sb.ToString(), [{ FullSpecName = (getFullSpecName context "" "Exception while setting up context"); Exception = ex } ], [sprintf "%s inconclusive" context.Clazz.Name]  )  
+      (sb.ToString(), [], [{ FullSpecName = (getFullSpecName context "" "Exception while setting up context"); Exception = ex } ], [sprintf "%s inconclusive" context.Clazz.Name]  )  
 
    let getContextInfoForEmptyContext context (indent :string) = 
-      (indent + "+ " + context.Clazz.Name + "\n", [], [])
+      (indent + "+ " + context.Clazz.Name + "\n", [], [], [])
  
    let typeWasNotAddedBefore (ty :Type) (typesAddedBefore : Type list) = 
      typesAddedBefore

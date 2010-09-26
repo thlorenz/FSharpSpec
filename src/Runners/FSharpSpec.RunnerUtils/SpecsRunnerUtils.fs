@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec
+﻿namespace FSharpSpec.RunnerUtils
 
 open System
 open System.Collections.Generic
@@ -7,7 +7,6 @@ open System.Reflection
 open System.Diagnostics
 open System.Text
 open FSharpSpec
-open SpecsExtractor
 
 module SpecsRunnerUtils =
 
@@ -40,7 +39,7 @@ module SpecsRunnerUtils =
              
         let rec extractFailureDetails = function
             | []                        -> ""
-            | (m, f, p)::xs     -> (failureDetailsToString f) + extractFailureDetails xs
+            | (msg, passes, failures, pendings)::xs     -> (failureDetailsToString failures) + extractFailureDetails xs
 
         let header = "\n------------------------ Failure Details -------------------------------------\n"
 
@@ -57,7 +56,7 @@ module SpecsRunnerUtils =
 
         let rec resultsToSummary = function
             | []             -> ""
-            | (m,f,p)::xs    -> (failuresToString f) + (resultsToSummary xs)
+            | (msg, passes, failures, pendings)::xs    -> (failuresToString failures) + (resultsToSummary xs)
             
         let header =  "\n------------------------ Failure Summary -------------------------------------\n\n" 
            
@@ -72,7 +71,7 @@ module SpecsRunnerUtils =
     let printResultTree results print =
         print "\n------------------------ Specifications -------------------------------------\n\n" 
         results
-        |> List.iter (fun (m,f,p) -> m |> print)
+        |> List.iter (fun (msg, passes, failures, pendings) -> msg |> print)
          
 
     let printFailureDetails results print = 
@@ -81,9 +80,9 @@ module SpecsRunnerUtils =
         |> print
            
         
-    let getPendingSummary (results : ('a *'b * string list) list) =
-        let pendings = results |> List.map (fun (m,f,p) ->  
-            match p with
+    let getPendingSummary results =
+        let pendings = results |> List.map (fun (msg, passes, failures, pendings) ->  
+            match pendings with
             | []    -> ""
             | ps    -> ps |> List.reduce (fun acc pp -> acc + pp + "\n"))
             
