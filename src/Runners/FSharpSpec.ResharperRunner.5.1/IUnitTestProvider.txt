@@ -1,0 +1,36 @@
+﻿
+ public interface IUnitTestProvider
+    {
+        [NotNull]
+        string ID { get; }
+        [CanBeNull]
+        Image Icon { get; }
+        string Name { get; }
+
+        int CompareUnitTestElements(UnitTestElement x, UnitTestElement y);
+
+        UnitTestElement Deserialize(ISolution solution, string elementString);
+
+        void ExploreAssembly(IMetadataAssembly assembly, IProject project, UnitTestElementConsumer consumer);
+
+        void ExploreExternal(UnitTestElementConsumer consumer);
+
+        void ExploreFile(IFile psiFile, UnitTestElementLocationConsumer consumer, CheckForInterrupt interrupted);
+
+        void ExploreSolution(ISolution solution, UnitTestElementConsumer consumer);
+
+        [CanBeNull]
+        ProviderCustomOptionsControl GetCustomOptionsControl(ISolution solution);
+
+        RemoteTaskRunnerInfo GetTaskRunnerInfo();
+
+        IList<UnitTestTask> GetTaskSequence(UnitTestElement element, IList<UnitTestElement> explicitElements);
+
+        bool IsElementOfKind(IDeclaredElement declaredElement, UnitTestElementKind elementKind);
+
+        bool IsElementOfKind(UnitTestElement element, UnitTestElementKind elementKind);
+
+        void Present(UnitTestElement element, IPresentableItem item, TreeModelNode node, PresentationState state);
+
+        string Serialize(UnitTestElement element);
+    }

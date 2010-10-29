@@ -7,6 +7,9 @@ open FSharpSpec
 
 [<AutoOpen>]
 module ContextTree = 
+   
+   type Context  =  { Clazz : Type; SpecLists : MethodInfo[]; ParentContexts : Type list  }
+   type SpecInfo = { Name : string; Method : MethodInfo } 
    type FailureInfo = { FullSpecName : string; Exception : Exception; }
     
    let instantiate (ty : Type) =  Activator.CreateInstance(ty)

@@ -24,6 +24,31 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.TDNetRunner", "R
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.RunnerUtils", "Runners\FSharpSpec.RunnerUtils\FSharpSpec.RunnerUtils.fsproj", "{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resharper", "Resharper", "{AA7A4013-5A1A-4BDA-AB89-32F2A7538B9A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.1", "5.1", "{C84F89D3-8663-4D85-B9CB-5F882FCA3221}"
+	ProjectSection(SolutionItems) = preProject
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.DocumentManager.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.DocumentManager.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.IDE.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.IDE.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Metadata.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Metadata.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.ProjectModel.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.ProjectModel.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.ProjectModel.xml = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.ProjectModel.xml
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Shell.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Shell.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Shell.xml = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Shell.xml
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.UI.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.UI.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Util.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Util.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Util.xml = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Util.xml
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.Feature.Services.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.Feature.Services.dll
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.Features.Common.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.Features.Common.dll
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.Psi.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.Psi.dll
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.Psi.xml = ..\Lib\Resharper\5.1\JetBrains.ReSharper.Psi.xml
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.TaskRunnerFramework.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.TaskRunnerFramework.dll
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.UnitTestExplorer.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.UnitTestExplorer.dll
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.UnitTestFramework.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.UnitTestFramework.dll
+	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.ResharperRunner.5.1", "Runners\FSharpSpec.ResharperRunner.5.1\FSharpSpec.ResharperRunner.5.1.fsproj", "{E153C860-7203-46E3-93A3-7FE99A1842FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -94,6 +119,16 @@ Global
 		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|x86.ActiveCfg = Release|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -101,8 +136,11 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{52BDB8F4-B62F-4770-AF64-39DE88707280} = {EAE67DBC-0E61-4BA2-BFD0-5EF9DD48390F}
 		{CDCAA051-8C72-4021-A16A-C7E02E9FFFA0} = {E02FED6F-D842-44AF-BAB5-5D639C2DAB2F}
+		{AA7A4013-5A1A-4BDA-AB89-32F2A7538B9A} = {E02FED6F-D842-44AF-BAB5-5D639C2DAB2F}
 		{2513A5BB-A96D-4005-8222-8DEE048BC1F1} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
 		{142ED45B-EBE5-4C00-99A3-534065FCCDB9} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
 		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
+		{E153C860-7203-46E3-93A3-7FE99A1842FF} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
+		{C84F89D3-8663-4D85-B9CB-5F882FCA3221} = {AA7A4013-5A1A-4BDA-AB89-32F2A7538B9A}
 	EndGlobalSection
 EndGlobal
