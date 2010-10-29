@@ -41,7 +41,8 @@ module ContextTree =
                                                     None, Pending)
 
                     | Failed        ->    (fullSpecName, "Should have thrown exception",
-                                                    None, Failed)  
+                                                    None, Failed) 
+                                                     
                     | Inconclusive  ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Inconclusive >>>" + "\n",
                                                     None, Inconclusive) 
                 with
