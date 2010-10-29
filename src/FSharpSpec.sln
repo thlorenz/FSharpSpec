@@ -3,41 +3,144 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec", "FSharpSpec\FSharpSpec.fsproj", "{12D7B460-5020-4D49-8FC0-11692A5E32E3}"
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.Runner", "FSharpSpec.Runner\FSharpSpec.Runner.fsproj", "{60BBF812-F0FD-4C33-B1A5-B4A164AC6AF3}"
-EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.Specs", "FSharpSpec.Specs\FSharpSpec.Specs.fsproj", "{807CFBD4-E1FD-4369-9639-436A582A93EB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAE67DBC-0E61-4BA2-BFD0-5EF9DD48390F}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.FSharpSampleSpecs", "Samples\FSharpSpec.FSharpSampleSpecs\FSharpSpec.FSharpSampleSpecs.fsproj", "{52BDB8F4-B62F-4770-AF64-39DE88707280}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Lib", "Lib", "{E02FED6F-D842-44AF-BAB5-5D639C2DAB2F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "TestDriven.NET 3", "TestDriven.NET 3", "{CDCAA051-8C72-4021-A16A-C7E02E9FFFA0}"
+	ProjectSection(SolutionItems) = preProject
+		..\Lib\TestDriven.NET 3\TestDriven.Framework.dll = ..\Lib\TestDriven.NET 3\TestDriven.Framework.dll
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Runners", "Runners", "{C676C969-C818-464A-B6A6-837A9DC44C0F}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.ConsoleRunner", "Runners\FSharpSpec.ConsoleRunner\FSharpSpec.ConsoleRunner.fsproj", "{2513A5BB-A96D-4005-8222-8DEE048BC1F1}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.TDNetRunner", "Runners\FSharpSpec.TDNetRunner\FSharpSpec.TDNetRunner.fsproj", "{142ED45B-EBE5-4C00-99A3-534065FCCDB9}"
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.RunnerUtils", "Runners\FSharpSpec.RunnerUtils\FSharpSpec.RunnerUtils.fsproj", "{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Resharper", "Resharper", "{AA7A4013-5A1A-4BDA-AB89-32F2A7538B9A}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.1", "5.1", "{C84F89D3-8663-4D85-B9CB-5F882FCA3221}"
+	ProjectSection(SolutionItems) = preProject
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.DocumentManager.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.DocumentManager.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.IDE.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.IDE.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Metadata.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Metadata.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.ProjectModel.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.ProjectModel.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.ProjectModel.xml = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.ProjectModel.xml
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Shell.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Shell.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Shell.xml = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Shell.xml
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.UI.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.UI.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Util.dll = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Util.dll
+		..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Util.xml = ..\Lib\Resharper\5.1\JetBrains.Platform.ReSharper.Util.xml
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.Feature.Services.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.Feature.Services.dll
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.Features.Common.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.Features.Common.dll
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.Psi.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.Psi.dll
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.Psi.xml = ..\Lib\Resharper\5.1\JetBrains.ReSharper.Psi.xml
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.TaskRunnerFramework.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.TaskRunnerFramework.dll
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.UnitTestExplorer.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.UnitTestExplorer.dll
+		..\Lib\Resharper\5.1\JetBrains.ReSharper.UnitTestFramework.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.UnitTestFramework.dll
+	EndProjectSection
+EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.ResharperRunner.5.1", "Runners\FSharpSpec.ResharperRunner.5.1\FSharpSpec.ResharperRunner.5.1.fsproj", "{E153C860-7203-46E3-93A3-7FE99A1842FF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
+		Debug|Mixed Platforms = Debug|Mixed Platforms
+		Debug|x86 = Debug|x86
 		Release|Any CPU = Release|Any CPU
+		Release|Mixed Platforms = Release|Mixed Platforms
+		Release|x86 = Release|x86
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Release|Any CPU.Build.0 = Release|Any CPU
-		{60BBF812-F0FD-4C33-B1A5-B4A164AC6AF3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{60BBF812-F0FD-4C33-B1A5-B4A164AC6AF3}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{60BBF812-F0FD-4C33-B1A5-B4A164AC6AF3}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{60BBF812-F0FD-4C33-B1A5-B4A164AC6AF3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{12D7B460-5020-4D49-8FC0-11692A5E32E3}.Release|x86.ActiveCfg = Release|Any CPU
 		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{807CFBD4-E1FD-4369-9639-436A582A93EB}.Release|x86.ActiveCfg = Release|Any CPU
 		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Debug|x86.ActiveCfg = Debug|Any CPU
 		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Release|Any CPU.Build.0 = Release|Any CPU
+		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{52BDB8F4-B62F-4770-AF64-39DE88707280}.Release|x86.ActiveCfg = Release|Any CPU
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1}.Debug|x86.ActiveCfg = Debug|x86
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1}.Debug|x86.Build.0 = Debug|x86
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1}.Release|Any CPU.ActiveCfg = Release|x86
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1}.Release|Mixed Platforms.Build.0 = Release|x86
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1}.Release|x86.ActiveCfg = Release|x86
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1}.Release|x86.Build.0 = Release|x86
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9}.Release|Any CPU.Build.0 = Release|Any CPU
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9}.Release|x86.ActiveCfg = Release|Any CPU
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|x86.ActiveCfg = Release|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{52BDB8F4-B62F-4770-AF64-39DE88707280} = {EAE67DBC-0E61-4BA2-BFD0-5EF9DD48390F}
+		{CDCAA051-8C72-4021-A16A-C7E02E9FFFA0} = {E02FED6F-D842-44AF-BAB5-5D639C2DAB2F}
+		{AA7A4013-5A1A-4BDA-AB89-32F2A7538B9A} = {E02FED6F-D842-44AF-BAB5-5D639C2DAB2F}
+		{2513A5BB-A96D-4005-8222-8DEE048BC1F1} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
+		{142ED45B-EBE5-4C00-99A3-534065FCCDB9} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
+		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
+		{E153C860-7203-46E3-93A3-7FE99A1842FF} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
+		{C84F89D3-8663-4D85-B9CB-5F882FCA3221} = {AA7A4013-5A1A-4BDA-AB89-32F2A7538B9A}
 	EndGlobalSection
 EndGlobal

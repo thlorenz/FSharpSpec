@@ -3,14 +3,12 @@
     #r "FSharpSpec.dll";;
 
 *)
-namespace FSharpSpec.Runner 
+namespace FSharpSpec.RunnerUtils 
 
 open System
 open System.Reflection
 open System.Collections.Generic 
-
 open FSharpSpec
-open FSharpSpec.Runner
 
 module SpecsExtractor =
     let getAssembly fullPath = 
@@ -44,18 +42,17 @@ module SpecsExtractor =
 
     let isContext (ctx : Context) = ctx.SpecLists.Length > 0
 
-    let getAllContexts specsDllPath  = 
-        specsDllPath 
-        |> getAssembly
+    let getAllContexts asm  = 
+        asm
         |> getAllPublicTypes
         |> Array.map toPotentialContextWithParents
         |> Array.filter isContext
  
-    let getContextTree specsPath =
+    let getContextTreeOfAssembly asm =
         let emptySpecLists :  MethodInfo[] = getSpecLists typeof<obj>
         let rootNode = new Node( {Clazz = typeof<obj>; SpecLists = emptySpecLists; ParentContexts = [] }, -1)
 
-        for context in specsPath |> getAllContexts do
+        for context in asm |> getAllContexts do
             let mutable lastNode : Node =  rootNode
         
             for parentType in context.ParentContexts do
@@ -66,5 +63,12 @@ module SpecsExtractor =
             lastNode.getContextNode(context) |> ignore
          
         rootNode    
+
+    let getContextTree specsDllPath =
+        specsDllPath 
+        |> getAssembly
+        |> getContextTreeOfAssembly
+
+    
 
     

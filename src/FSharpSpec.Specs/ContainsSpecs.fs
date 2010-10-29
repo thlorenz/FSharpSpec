@@ -3,7 +3,9 @@
 open System
 open FSharpSpec
 
+
 type Contains () =
+    
     member x.``Valid Strings`` = 
         let hello = "hello"
         let hel = "hel"
@@ -15,7 +17,7 @@ type Contains () =
             ass "\"helllo shouldn't.contain hel\" will fail" (it "" hello shouldn't.contain hel) will.fail
         ]
     member x.``Invalid Strings`` = [
-          //  it "null should.contain \"some string\"" null should.contain "some string"
+            //  it "null should.contain \"some string\"" null should.contain "some string"
         ]
              
     
@@ -30,3 +32,5 @@ type Contains () =
             ass "``1; 2; 3`` should.contain 4 will fail" (it "" ``1; 2; 3`` should.contain 4) will.fail
             ass "``1; 2; 3`` shouldn't.contain 1 will fail" (it "" ``1; 2; 3`` shouldn't.contain 1) will.fail
         ]
+
+  
