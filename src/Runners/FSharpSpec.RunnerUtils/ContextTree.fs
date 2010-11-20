@@ -4,6 +4,7 @@ open System.Text
 open System.Reflection
 
 open FSharpSpec
+open PrintUtils
 
 [<AutoOpen>]
 module ContextTree = 
@@ -24,16 +25,18 @@ module ContextTree =
     
      (new StringBuilder())
       .AppendLine(context.Clazz.Namespace)
-      .AppendLine((context.ParentContexts |> toInheritanceChain) + context.Clazz.Name + ": " + specMethodName + "  » " + specName)
+      .AppendLine((context.ParentContexts |> toInheritanceChain) + context.Clazz.Name + ": " + (removeLeadingGet specMethodName) + "  » " + specName)
       .ToString()
    
    let runContainedSpecs context (specMethod : MethodInfo) isFirstMethod instantiatedContext (indent : string) = 
         
         let specs = specMethod.Invoke(instantiatedContext, null) :?> list<(string * SpecDelegate)>
-        
+
         let rec getSpecResults (specs : (string * SpecDelegate) list) =
             let runSpec specName (specDelegate : SpecDelegate) =
+                let specName = specName |> prettifySpecName
                 let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) specName
+
                 try
                     let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
                     match outcome with
@@ -87,7 +90,18 @@ module ContextTree =
       sb.AppendLine(indent + "+ " + context.Clazz.Name)
         .AppendLine(indent + "Unable to setup context !!!") |> ignore
       
-      (sb.ToString(), [], [{ FullSpecName = (getFullSpecName context "" "Exception while setting up context"); Exception = ex } ], [sprintf "%s inconclusive" context.Clazz.Name]  )  
+      (sb.ToString(), [], [{ FullSpecName = (getFullSpecName context "" "Exception while setting up context"); Exception = ex } ], [sprintf "%s (Failed to setup context)" context.Clazz.Name]  )  
+
+   let unableToSetupSpecMethodResult context specMethodName ex (indent :string) =
+      let sb = new StringBuilder()
+      let mutable failures : FailureInfo list = []
+
+      sb.AppendLine(indent + "+ " + context.Clazz.Name)
+        .AppendLine(indent + "   - " + specMethodName)
+        .AppendLine(indent + "   Unable to setup specification !!!\n") |> ignore
+      
+      (sb.ToString(), [], [{ FullSpecName = (getFullSpecName context specMethodName "Exception while setting up specification"); Exception = ex } ], [sprintf "%s - %s (Failed to setup specification)" context.Clazz.Name specMethodName]  )  
+ 
 
    let getContextInfoForEmptyContext context (indent :string) = 
       (indent + "+ " + context.Clazz.Name + "\n", [], [], [])
@@ -121,17 +135,19 @@ module ContextTree =
               | ctx                               -> [getContextInfoForEmptyContext ctx x.Indent]
             
             results <- (addEmptyContextToResults context)
-
         else
           try
             let specMethods = x.Context.SpecLists
             for specMethod in specMethods do 
                 let instantiatedContext = context.Clazz |> instantiate
                 let isFirstMethod = Array.IndexOf(specMethods, specMethod) = 0
-                let result = runContainedSpecs context specMethod isFirstMethod instantiatedContext x.Indent
-                results <- results @ [result]
+                try 
+                    let result = runContainedSpecs context specMethod isFirstMethod instantiatedContext x.Indent
+                    results <- results @ [result]
+                with
+                | ex -> results <- results @ [unableToSetupSpecMethodResult context (removeLeadingGet specMethod.Name) ex x.Indent]
           with
-            | ex -> results <- results @ [unableToSetupContextResult context ex x.Indent]
+          | ex -> results <- results @ [unableToSetupContextResult context ex x.Indent]
         
         for childNode in x.Children do
             results <- results @ childNode.RunSpecs()

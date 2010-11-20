@@ -33,6 +33,11 @@ module SpecsRunnerUtils =
     let getSingleFailureSummary failure =
             
         failure.FullSpecName + (getFailureMessage failure) + "\n"  
+    
+    let getMeaningFullStackTrace failure =
+        match failure.Exception.InnerException with
+        | null  -> failure.Exception.StackTrace
+        | _     -> failure.Exception.InnerException.StackTrace 
             
     let getFailureDetails results = 
 
@@ -40,7 +45,7 @@ module SpecsRunnerUtils =
             | []        -> ""
             | x::xs     -> (new StringBuilder())
                             .AppendLine("\n" + getSingleFailureSummary x + "\n")
-                            .AppendLine(x.Exception.ToString() + "\n\n")
+                            .AppendLine(getMeaningFullStackTrace x + "\n\n")
                             .ToString() + failureDetailsToString xs
              
         let rec extractFailureDetails = function

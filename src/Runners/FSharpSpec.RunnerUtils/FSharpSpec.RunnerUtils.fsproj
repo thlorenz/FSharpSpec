@@ -45,6 +45,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="PrintUtils.fs" />
     <Compile Include="ContextTree.fs" />
     <Compile Include="SpecsExtractor.fs" />
     <Compile Include="SpecsRunnerUtils.fs" />

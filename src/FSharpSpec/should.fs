@@ -3,7 +3,7 @@
 open System
 
 type should() = 
-    
+
     static member equal(actual : obj, expected : obj) = 
         match (actual, expected) with
         | a, e when a = e   -> Passed
@@ -23,6 +23,8 @@ type should() =
         | a, e              -> String.Format("Expected [{0}], but was [{1}]!", e, a) 
                                |> SpecFailedException 
                                |> raise
+    
+    
          
     static member be (actual:bool, expected:bool) = should.equal (actual, expected)
     
@@ -41,57 +43,64 @@ type should() =
         | a, s            -> String.Format("Expected [{1}] to be greater than [{0}], but it wasn't.", s, a) 
                             |> SpecFailedException 
                             |> raise
+    
+    static member beSmallerThan<'a when 'a : comparison>(actual : 'a, smaller : 'a) =
+        match (actual, smaller) with
+        | a, s when a < s -> Passed
+        | a, s            -> String.Format("Expected [{1}] to be greater than [{0}], but it wasn't.", s, a) 
+                            |> SpecFailedException 
+                            |> raise
                                                           
    
-    static member failWith(codeBlock : (unit -> unit), expectedType : Type) =
+    static member failWith<'a>(codeBlock : (unit -> 'a), expectedType : Type) =
         try 
-          (new ThrowDelegate(codeBlock)).Invoke()
+          (new RiskDelegate<'a>(codeBlock)).Invoke() |> ignore
          
           String.Format("Expected exception of type {0}, but was never raised!", expectedType)
-          |> ExceptionNotRaisedException 
+          |> SpecFailedException 
           |> raise
         with 
           | ex  when (ex.GetType() <> expectedType) -> 
                 String.Format("Expected exception of type {0}, but instead exception of type {1} was raised.", 
                                expectedType, ex.GetType())
-                |> ExceptionNotRaisedException 
+                |> SpecFailedException 
                 |> raise
           | _                                       -> Passed
    
-    static member failWithMessage(codeBlock : (unit -> unit), expectedMessage : string) =
+    static member failWithMessage<'a>(codeBlock : (unit -> 'a), expectedMessage : string) =
         try 
-          (new ThrowDelegate(codeBlock)).Invoke()
+          (new RiskDelegate<'a>(codeBlock)).Invoke() |> ignore
          
           String.Format("Expected exception with message {0}, but was never raised!", expectedMessage)
-          |> ExceptionNotRaisedException 
+          |> SpecFailedException 
           |> raise
         with 
           | ex  when (ex.Message <> expectedMessage) -> 
                 String.Format("Expected exception with message [{0}], but instead exception with message [{1}] was raised.", 
                                expectedMessage, ex.Message)
-                |> ExceptionNotRaisedException 
+                |> SpecFailedException 
                 |> raise
           | _                                       -> Passed
           
-    static member failWithMessageContaining(codeBlock : (unit -> unit), containedMessage : string) =
+    static member failWithMessageContaining<'a>(codeBlock : (unit -> 'a), containedMessage : string) =
         try 
-          (new ThrowDelegate(codeBlock)).Invoke()
+          (new RiskDelegate<'a>(codeBlock)).Invoke() |> ignore
          
           String.Format("Expected exception with message {0}, but was never raised!", containedMessage)
-          |> ExceptionNotRaisedException 
+          |> SpecFailedException 
           |> raise
         with 
           | ex  when (ex.Message.Contains containedMessage) -> Passed
           | ex                                              -> 
                 String.Format("Expected exception with message containing [{0}], but instead exception with message [{1}] was raised.", 
                                containedMessage, ex.Message)
-                |> ExceptionNotRaisedException 
+                |> SpecFailedException 
                 |> raise
                 
     static member contain (container : string, contained : string) =
         match container, contained with
         |  cr, cd when cr.Contains(cd)  -> Passed
-        |  cr, cd                       -> String.Format("[{0}] was expected to contain [{1}] but didn't.", cr, cd)
+        |  cr, cd                       -> String.Format("[{0}] was expected to contain [{1}], but didn't.", cr, cd)
                                            |> SpecFailedException
                                            |> raise
           
@@ -102,3 +111,9 @@ type should() =
                                                            |> SpecFailedException
                                                            |> raise
   
+    // Risk-friendly overloads
+    static member equal<'a>(riskyCode : (unit -> 'a), expected) = should.equal((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
+    static member be<'a>(riskyCode : (unit -> 'a), expected) = should.be((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
+    static member beSameAs<'a when 'a : not struct>(riskyCode : (unit -> 'a), expected) = should.beSameAs((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
+    static member beGreaterThan<'a when 'a : comparison>(riskyCode : (unit -> 'a), expected) = should.beGreaterThan((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
+    static member beSmallerThan<'a when 'a : comparison>(riskyCode : (unit -> 'a), expected) = should.beSmallerThan((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)

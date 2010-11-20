@@ -10,9 +10,9 @@ module main =
     [<EntryPoint>]
     let main(args:string[]) =
         
-        let specsPath = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
-       // let specsPath = @"C:\dev\FSharp\FSharpSpec\src\Samples\FSharpSpec.FSharpSampleSpecs\bin\Debug\FSharpSpec.FSharpSampleSpecs.dll"
-       
+      //  let specsPath = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
+      // let specsPath = @"C:\dev\FSharp\FSharpSpec\src\Samples\FSharpSpec.FSharpSampleSpecs\bin\Debug\FSharpSpec.FSharpSampleSpecs.dll"
+        let specsPath = @"C:\dev\FSharp\FSharpSpec\src\Samples\FSharpSpec.Katas\bin\Debug\FSharpSpec.Katas.dll"
         
         let runSpecsContainedInPath specsPath print =
            
@@ -24,7 +24,9 @@ module main =
             printPendingSummary results print
             printFailureSummary results print
         
-        runSpecsContainedInPath specsPath writeToDebug
+        runSpecsContainedInPath specsPath writeToConsole
+
+        System.Console.ReadKey() |> ignore
 
         0
 

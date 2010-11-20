@@ -9,7 +9,6 @@ type SpecDelegate = delegate of unit -> AssertionResult
 
 
 exception SpecFailedException of string
-exception ExceptionNotRaisedException of string
 exception DidNotFailException
 
-type ThrowDelegate = delegate of unit -> unit
+type RiskDelegate<'a> = delegate of unit -> 'a

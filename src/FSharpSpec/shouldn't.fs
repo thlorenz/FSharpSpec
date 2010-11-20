@@ -33,7 +33,7 @@ type shouldn't() =
         
     static member contain (container : string, contained : string) =
         match container, contained with
-        |  cr, cd when cr.Contains(cd)  ->  String.Format("[{0}] was expected to  not contain [{1}] but did.", container, contained)
+        |  cr, cd when cr.Contains(cd)  ->  String.Format("[{0}] was expected to  not contain [{1}], but did.", container, contained)
                                             |> SpecFailedException
                                             |> raise
         | _ , _                         ->  Passed 
@@ -44,3 +44,10 @@ type shouldn't() =
                                                            |> SpecFailedException
                                                            |> raise
         | _, _                                         -> Passed                                                                   
+
+
+    // Risk-friendly overloads
+    static member equal<'a>(riskyCode : (unit -> 'a), expected) = shouldn't.equal((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
+    static member be<'a>(riskyCode : (unit -> 'a), expected) = shouldn't.be((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
+    static member beSameAs<'a when 'a : not struct>(riskyCode : (unit -> 'a), expected) = shouldn't.beSameAs((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
+   

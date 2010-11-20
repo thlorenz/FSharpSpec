@@ -21,7 +21,7 @@ type Equality () =
          let initializedObject = new Object()
          let (nullObject : Object) = null
          [   
-            it "null should.equal null" null should.equal null
+            it "null should.equal null" (null : obj) should.equal null
             it "nullObject should.equal null" nullObject should.equal null
             it "initializedObject shouldn't.equal null" initializedObject shouldn't.be null
             it "null shouldn't.equal initializedObject" null shouldn't.equal initializedObject

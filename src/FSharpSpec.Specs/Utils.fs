@@ -17,7 +17,7 @@ module Utils =
             with
               | :? DidNotFailException -> 
                         String.Format("Expected to fail but didn't")
-                        |> ExceptionNotRaisedException
+                        |> SpecFailedException
                         |> raise
               | _    -> Passed   
     
