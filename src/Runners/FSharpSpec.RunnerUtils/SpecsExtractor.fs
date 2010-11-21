@@ -20,8 +20,9 @@ module SpecsExtractor =
     let getSpecLists (ty : Type) = 
         let isSpecList (mi : MethodInfo) = 
             match mi.ReturnType with
-            |ty when ty  = typeof<list<(string * SpecDelegate)>> -> true
-            | _                                                  -> false 
+            |ty when ty  = typeof<(string * SpecDelegate) list>         -> true
+            |ty when ty  = typeof<Lazy<string * SpecDelegate> list>     -> true
+            | _                                                         -> false 
         
         let isDeclaredDirectlyOnThisType(mi : MethodInfo) = mi.DeclaringType = ty
        

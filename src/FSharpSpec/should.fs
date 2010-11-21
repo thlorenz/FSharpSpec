@@ -130,8 +130,12 @@ type should() =
                                                            |> raise
   
     // Risk-friendly overloads
+    // Using functions
     static member equal<'a>(riskyCode : (unit -> 'a), expected) = should.equal((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
     static member be<'a>(riskyCode : (unit -> 'a), expected) = should.be((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
     static member beSameAs<'a when 'a : not struct>(riskyCode : (unit -> 'a), expected) = should.beSameAs((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
     static member beGreaterThan<'a when 'a : comparison>(riskyCode : (unit -> 'a), expected) = should.beGreaterThan((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
     static member beSmallerThan<'a when 'a : comparison>(riskyCode : (unit -> 'a), expected) = should.beSmallerThan((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
+
+    // Using lazy
+    static member equal<'a>(lazyCode : Lazy<'a>, expected : 'a) = should.equal(lazyCode.Value, expected)

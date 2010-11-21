@@ -30,7 +30,7 @@ module ContextTree =
    
    let runContainedSpecs context (specMethod : MethodInfo) isFirstMethod instantiatedContext (indent : string) = 
         
-        let specs = specMethod.Invoke(instantiatedContext, null) :?> list<(string * SpecDelegate)>
+        let specs = specMethod.Invoke(instantiatedContext, null) 
 
         let rec getSpecResults (specs : (string * SpecDelegate) list) =
             let runSpec specName (specDelegate : SpecDelegate) =
@@ -59,9 +59,37 @@ module ContextTree =
             | []                    -> []
             | (specName, specDelegate) :: xs    -> [(runSpec specName specDelegate)] @ getSpecResults xs
         
+        let rec getLazySpecResults (specs : Lazy<string * SpecDelegate> list) =
+            let runSpec specName (specDelegate : SpecDelegate) =
+                let specName = specName |> prettifySpecName
+                let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) specName
+
+                try
+                    let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
+                    match outcome with
+                    | Passed        ->    (fullSpecName, indent  + "      »  "  + specName + "\n",
+                                                    None, Passed)
+
+                    | Pending       ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",
+                                                    None, Pending)
+
+                    | Failed        ->    (fullSpecName, "Should have thrown exception",
+                                                    None, Failed) 
+                                                     
+                    | Inconclusive  ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Inconclusive >>>" + "\n",
+                                                    None, Inconclusive) 
+                with
+                    ex              ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Failed >>>" + "\n",
+                                                    Some({ FullSpecName = fullSpecName; Exception = ex }), Failed) 
+
+            match specs with
+            | []                    -> []
+            | x :: xs    -> [(runSpec (fst x.Value) (snd x.Value))] @ getLazySpecResults xs
+
         let specResults =         
-            specs
-            |> getSpecResults
+            match specs.GetType() with
+            |ty when ty  = typeof<Lazy<string * SpecDelegate> list>     -> getLazySpecResults (specs :?> Lazy<string * SpecDelegate> list)
+            | _                                                         -> getSpecResults (specs :?> (string * SpecDelegate) list)
         
         let rec getFailures = function
             | []                                                        -> []
