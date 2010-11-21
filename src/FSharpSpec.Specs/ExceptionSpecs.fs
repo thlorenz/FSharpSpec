@@ -27,6 +27,14 @@ type Exceptions () =
         ass "failwith \"Exact Message\" should.failWithMessageContaining \"Different\" will fail"
            (it "" (fun () -> failwith "Exact Message") should.failWithMessageContaining "Different") will.fail 
      ]
+
+     member x.``FailWithMessageNotContaining`` = [
+        it  "failwith \"Exact Message\" should.failWithMessageNotContaining \"NotContained\""
+           (fun () -> failwith "Exact Message") should.failWithMessageNotContaining "NotContained"
+           
+        ass "failwith \"Exact Message\" should.failWithMessageNotContaining \"Mess\" will fail"
+           (it "" (fun () -> failwith "Exact Message") should.failWithMessageNotContaining "Mess") will.fail 
+     ]
      
      member x.UsingCatch = 
         let thrownException = catch (fun () -> new ArgumentException("Exact Message") |> raise)

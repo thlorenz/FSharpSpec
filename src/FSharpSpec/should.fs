@@ -85,17 +85,35 @@ type should() =
     static member failWithMessageContaining<'a>(codeBlock : (unit -> 'a), containedMessage : string) =
         try 
           (new RiskDelegate<'a>(codeBlock)).Invoke() |> ignore
-         
+
           String.Format("Expected exception with message {0}, but was never raised!", containedMessage)
           |> SpecFailedException 
           |> raise
         with 
-          | ex  when (ex.Message.Contains containedMessage) -> Passed
-          | ex                                              -> 
-                String.Format("Expected exception with message containing [{0}], but instead exception with message [{1}] was raised.", 
+          | ex  when (ex.GetType() = typeof<SpecFailedException>)       -> ex |> raise
+          | ex  when (ex.Message.Contains containedMessage)             -> Passed
+          | ex                                                          -> 
+                String.Format("Expected exception with message containing [{0}],\n but instead exception with message [{1}] was raised.", 
                                containedMessage, ex.Message)
                 |> SpecFailedException 
                 |> raise
+    
+    static member failWithMessageNotContaining<'a>(codeBlock : (unit -> 'a), notContainedMessage : string) =
+        try 
+          (new RiskDelegate<'a>(codeBlock)).Invoke() |> ignore
+
+          String.Format("Expected exception with message not containing {0}, but was never raised!", notContainedMessage)
+          |> SpecFailedException 
+          |> raise
+        with 
+          | ex  when (ex.GetType() = typeof<SpecFailedException>)       -> ex |> raise
+          | ex  when (ex.Message.Contains notContainedMessage)          -> 
+                String.Format("Expected exception with message not containing [{0}],\n but instead exception with message [{1}] was raised.", 
+                               notContainedMessage, ex.Message)
+                |> SpecFailedException 
+                |> raise
+          | _                                                           -> Passed
+       
                 
     static member contain (container : string, contained : string) =
         match container, contained with

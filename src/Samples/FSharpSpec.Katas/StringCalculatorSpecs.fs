@@ -66,12 +66,15 @@ type ``StringCalculator Specs``() =
             it "the exception message contains -3" ex.Message should.contain "-3"
         ]
 
-    // The following specification demonstrates how to implement the above specifications, by catching and querting the exception directly
-    // The disadvantage here is the rather verbose (fun -> ... |> ignore) syntax, but for simple exception assertions this is usefull
+    // The following specification demonstrates how to implement the above specifications, by catching and querting the exception directly.
+    // One disadvantage here is the rather verbose (fun -> ... ) syntax, but for simple exception assertions this is usefull.
+    // Additionally in this case, the add operation is performed 4 times vs. 1 time when using catch and thus will run somewhat slower.
     member x.``when given string that includes negative numbers inline`` = 
-        let nums = "-1,2,-3"
         [
-            it "raises an ArgumentException" (fun () -> sut.Add nums) should.failWith typeof<ArgumentException>
+            it "raises an ArgumentException" (fun () -> sut.Add "-1,2,-3") should.failWith typeof<ArgumentException>
+            it "the exception message contains -1" (fun () -> sut.Add "-1,2,-3") should.failWithMessageContaining "-1"
+            it "the exception does not message contain 2" (fun () -> sut.Add "-1,2,-3") should.failWithMessageNotContaining "2"
+            it "the exception message contains -3" (fun () -> sut.Add "-1,2,-3") should.failWithMessageContaining "-3"
         ]
 
     member x.``when given string that includes numbers > 10000 they will be ignored in the calculation`` = [
