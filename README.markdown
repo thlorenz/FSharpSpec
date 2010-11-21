@@ -3,7 +3,7 @@ FSharpSpec
 FSharpSpec is a BDD framework that leverages the succinctness of F# to create specifications without the noise.
 
 ## Why do I care? 
-Well, lets wet your appetite with some samples which can be found in their entirety [here](https://github.com/thlorenz/FSharpSpec/tree/master/src/Samples):
+Well, lets wet your appetite with some samples which can be found in their entirety [here](https://github.com/thlorenz/FSharpSpec/tree/master/src/Samples) :
 
 Assuming we have a system under test:
 <pre>let sut = new StringCalculator()</pre>
@@ -13,9 +13,9 @@ member x.``adding empty string`` =
         [ it "returns 0" (sut.Add "") should.equal 0 ]
 </pre>
 ###Produce specs however you like
-The fact that FSharpSpec verifies a list of specifications returned by an F# property, we can produce this list however we like which allows us to achieve super compact code and maximum code reuse among other things. 
+The fact that FSharpSpec verifies a list of specifications returned by an F# property, we can produce this list however we like which allows us to achieve super compact code and maximum code reuse, among other things. 
 
-We can use this helper function:
+As an example, we can use this helper function:
 <pre>
  let testAdding (nums:string) expected = 
         let specName = (sprintf "adding '%s' returns %d" nums expected)
@@ -28,7 +28,8 @@ member x.``handles \n separator`` = [
         testAdding "1\n2\n3\n4" 10
     ]
 </pre>
-Additionally this allows us to use F#s capabilities to do all kind of other neat things - the possibilities are endless (did I just say that?). For instance ...
+Additionally this allows us to use F#s capabilities to do all kind of other neat things - the possibilities are endless (did I just say that?) .
+For instance ...
 
 ###RowTests 
 By mapping values to specifications:
@@ -39,14 +40,14 @@ By mapping values to specifications:
             it (sprintf "adding '%s' returns %d" num r) (sut.Add num) should.equal r)
 </pre>
 ###Multiple assertions without the price
-In case you wondered if all specifications get evaluated, even if one of them fails ...
+In case you were wondering if all specifications get evaluated, even if one of them fails ...
 
 Each *'it'* is wrapped and executed independently from all other *'it's*, and therefore if one fails, **all the others still are evaluated**.
 
 No catch? - well, non-spec related errors (like null references) can make it impossible to create the spec list in the first place, but even that case can be dealt with.
 
 ###BDD oriented output
-The FSharp spec runner takes context inheritance into account to produce a tree-like output that visualizes this information. This makes it much easier to see under which circumstances specifications are failing and provides more documentation of our code.
+The FSharp spec runner takes context inheritance into account to produce a tree-like output that visualizes this information. This makes it much easier to see under which circumstances specifications are failing and provides better documentation of our code.
 
 An example:
 <pre>
@@ -73,9 +74,10 @@ An example:
 
 </pre>
 ###Tons of more features
- Further more FSharpSpec has support for dealing with exceptions, string and list queries and more, as explained in the more detailed documentation (further down).
+ Further more FSharpSpec has support for dealing with exceptions, string and list queries and more, as explained in the more detailed documentation.
 
-Sold? Read on ...
+###Sold? 
+Read on ...
 
 ## Getting Started with FSharpSpec
 
