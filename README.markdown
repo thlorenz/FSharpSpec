@@ -3,7 +3,7 @@ FSharpSpec
 FSharpSpec is a BDD framework that leverages the succinctness of F# to create specifications without the noise.
 
 ## Why do I care? 
-Well, lets wet your appetite with some samples which can be found in their entirety [here](https://github.com/thlorenz/FSharpSpec/tree/master/src/Samples) :
+Well, the examples speak for themselves. (They can be found in their entirety [here](https://github.com/thlorenz/FSharpSpec/tree/master/src/Samples))
 
 Assuming we have a system under test:
 <pre>let sut = new StringCalculator()</pre>
@@ -13,22 +13,22 @@ member x.``adding empty string`` =
         [ it "returns 0" (sut.Add "") should.equal 0 ]
 </pre>
 ###Produce specs however you like
-The fact that FSharpSpec verifies a list of specifications returned by an F# property, we can produce this list however we like which allows us to achieve super compact code and maximum code reuse, among other things. 
+Since FSharpSpec verifies a list of specifications that are returned by an F# property, we can produce this list however we like. This allows us, among other things, to achieve super compact code and maximum code reuse. 
 
-As an example, we can use this helper function:
+We can use this helper function:
 <pre>
  let testAdding (nums:string) expected = 
         let specName = (sprintf "adding '%s' returns %d" nums expected)
         it specName (sut.Add nums) should.equal expected
 </pre>
-to write our specs:
+to write these specs:
 <pre>
 member x.``handles \n separator`` = [
         testAdding "1\n1" 2
         testAdding "1\n2\n3\n4" 10
     ]
 </pre>
-Additionally this allows us to use F#s capabilities to do all kind of other neat things - the possibilities are endless (did I just say that?) .
+Additionally this allows us to use F#s capabilities to do all kind of other neat things - the possibilities are endless (did I just say that?).
 For instance ...
 
 ###RowTests 
@@ -42,7 +42,7 @@ By mapping values to specifications:
 ###Multiple assertions without the price
 In case you were wondering if all specifications get evaluated, even if one of them fails ...
 
-Each *'it'* is wrapped and executed independently from all other *'it's*, and therefore if one fails, **all the others still are evaluated**.
+Each *'it'* is wrapped and executed independently from all other *'it's*, and therefore if **one fails, all the others still are evaluated**.
 
 No catch? - well, non-spec related errors (like null references) can make it impossible to create the spec list in the first place, but even that case can be dealt with.
 
@@ -74,7 +74,7 @@ An example:
 
 </pre>
 ###Tons of more features
- Further more FSharpSpec has support for dealing with exceptions, string and list queries and more, as explained in the more detailed documentation.
+ Furthermore FSharpSpec has support for dealing with exceptions, string and list queries and more, as explained in the more detailed documentation.
 
 ###Sold? 
 Read on ...
@@ -100,7 +100,7 @@ At this point TD.Net can be used to run entire specification assemblies in norma
 Unfortunately TD.Net seems to have problems identifying F# namespaces and types, so those cannot be run individually.
 
 ###ReSharper Support
-In the works (when ever I get around to implement their huge interface).
+In the works (whenever I get around to implement their huge interface).
 
 ## Writing Specifications
 ### Equality Assertions
