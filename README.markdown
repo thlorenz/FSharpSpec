@@ -3,7 +3,7 @@ FSharpSpec
 FSharpSpec is a BDD framework that leverages the succinctness of F# to create specifications without the noise.
 
 ## Why do I care? 
-Well, lets wet your appetite with some samples which can be found in their entirety [[here | https://github.com/thlorenz/FSharpSpec/tree/master/src/Samples]]:
+Well, lets wet your appetite with some samples which can be found in their entirety [here] (https://github.com/thlorenz/FSharpSpec/tree/master/src/Samples):
 
 Assuming we have a system under test:
 <pre>let sut = new StringCalculator()</pre>
@@ -55,21 +55,21 @@ An example:
 |      + named ContextName
 |      |
 |         - when I increment by 1
-|            »  should have Value 1
+|            -  should have Value 1
 
 |      + named ContextName
 
 |      |      + that has been incremented
               |
 |      |         - when I increment by 1
-|      |            »  should have Value 2
+|      |            -  should have Value 2
 
 |      |      + that has been incremented
 
 |      |      |      + and was incremented again
 |      |      |      |
 |      |      |         - when I increment by 1
-|      |      |            »  should have Value 3
+|      |      |            -  should have Value 3
 
 </pre>
 ###Tons of more features
@@ -91,7 +91,7 @@ The best way to obtain the source code for FSharpSpec is to [clone its Git repos
 FSharpSpec comes with a built in runner that can be invoked from the command line or from within Visual Studio via an external command to run specification assemblies.
 Debugging specifications is not supported when they are run this way.
 
-Of course there is nothing keeping you from directly using the [[FSharpSpec.RunnerUtils | https://github.com/thlorenz/FSharpSpec/tree/master/src/Runners/FSharpSpec.RunnerUtils/]] in order to create a short F# program that runs your tests and thus enables debugging. It's quite simple - really, as can be seen from the built in [[FSharpSpec Runner | https://github.com/thlorenz/FSharpSpec/blob/master/src/Runners/FSharpSpec.ConsoleRunner/Program.fs]]
+Of course there is nothing keeping you from directly using the [FSharpSpec.RunnerUtils] (https://github.com/thlorenz/FSharpSpec/tree/master/src/Runners/FSharpSpec.RunnerUtils/) in order to create a short F# program that runs your tests and thus enables debugging. It's quite simple - really, as can be seen from the built in [FSharpSpec Runner] (https://github.com/thlorenz/FSharpSpec/blob/master/src/Runners/FSharpSpec.ConsoleRunner/Program.fs)
 
 ###TD.Net Support
 At this point TD.Net can be used to run entire specification assemblies in normal and debug mode.
