@@ -93,7 +93,8 @@ The best way to obtain the source code for FSharpSpec is to [clone its Git repos
 FSharpSpec comes with a built in runner that can be invoked from the command line or from within Visual Studio via an external command to run specification assemblies.
 Debugging specifications is not supported when they are run this way.
 
-Of course there is nothing keeping you from directly using the [FSharpSpec.RunnerUtils](https://github.com/thlorenz/FSharpSpec/tree/master/src/Runners/FSharpSpec.RunnerUtils/) in order to create a short F# program that runs your tests and thus enables debugging. It's quite simple - really, as can be seen from the built in [FSharpSpec Runner] (https://github.com/thlorenz/FSharpSpec/blob/master/src/Runners/FSharpSpec.ConsoleRunner/Program.fs)
+Of course there is nothing keeping you from directly using the [FSharpSpec.RunnerUtils](https://github.com/thlorenz/FSharpSpec/tree/master/src/Runners/FSharpSpec.RunnerUtils/) in order to create a short F# program that runs your tests and thus enables debugging. 
+It's quite simple - really, as can be seen from the built in [FSharpSpec Runner](https://github.com/thlorenz/FSharpSpec/blob/master/src/Runners/FSharpSpec.ConsoleRunner/Program.fs)
 
 ###TD.Net Support
 At this point TD.Net can be used to run entire specification assemblies in normal and debug mode.
