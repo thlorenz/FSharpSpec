@@ -82,7 +82,7 @@ Sold? Read on ...
 ### Downloading and Building FSharpSpec
 
 #### Build from Source
-The best way to obtain the source code for FSharpSpec is to [clone its Git repository](http://book.git-scm.com/documentation) available via:
+The best way to obtain the source code for FSharpSpec is to [clone its Git repository](www.book.git-scm.com/documentation) available via:
 
 `git clone git://github.com/thlorenz/FSharpSpec.git`
 
