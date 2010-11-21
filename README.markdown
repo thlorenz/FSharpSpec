@@ -2,7 +2,7 @@ FSharpSpec
 ======================================================================
 FSharpSpec is a BDD framework that leverages the succinctness of F# to create specifications without the noise.
 
-## Why do I care? 
+## Another specification framework? Why do I care? 
 Well, the examples speak for themselves. (They can be found in their entirety [here](https://github.com/thlorenz/FSharpSpec/tree/master/src/Samples))
 
 Assuming we have a system under test:
