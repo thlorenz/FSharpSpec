@@ -10,7 +10,7 @@ Assuming we have a system under test:
 ###Write a simple spec:
 <pre>
 member x.``adding empty string`` = 
-        [ it "returns 0" (sut.Add "") should.equal 0 ]
+    it "returns 0" (sut.Add "") should.equal 0
 </pre>
 ###Produce specs however you like
 Since FSharpSpec verifies a list of specifications that are returned by an F# property, we can produce this list however we like. This allows us, among other things, to achieve super compact code and maximum code reuse. 
