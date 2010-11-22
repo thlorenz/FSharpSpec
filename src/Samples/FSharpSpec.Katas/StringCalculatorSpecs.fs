@@ -12,8 +12,9 @@ type ``StringCalculator Specs``() =
         let specName = (sprintf "adding \"%s\" returns %d" nums expected)
         it specName (sut.Add nums) should.equal expected
 
+    // When only one assertion is made it can be returned as is (instead of inside a list)
     member x.``adding empty string`` = 
-        [ it "returns 0" (sut.Add "") should.equal 0 ]
+        it "returns 0" (sut.Add "") should.equal 0 
     
     // Uses 'Row test' approach by mapping inputs and expected outputs to specifications
     member x.``single numbers`` =

@@ -18,16 +18,17 @@ module SpecsExtractor =
     let getAllPublicTypes (asm : Assembly) = asm.GetExportedTypes()
 
     let getSpecLists (ty : Type) = 
-        let isSpecList (mi : MethodInfo) = 
+        let isReturningSpecs (mi : MethodInfo) = 
             match mi.ReturnType with
-            |ty when ty  = typeof<(string * SpecDelegate) list>         -> true
-            |ty when ty  = typeof<Lazy<string * SpecDelegate> list>     -> true
+            | ty when ty  = typeof<(string * SpecDelegate)>             -> true    
+            | ty when ty  = typeof<(string * SpecDelegate) list>        -> true
+            | ty when ty  = typeof<Lazy<string * SpecDelegate> list>    -> true
             | _                                                         -> false 
         
         let isDeclaredDirectlyOnThisType(mi : MethodInfo) = mi.DeclaringType = ty
        
         ty.GetMethods() 
-        |> Array.filter isSpecList
+        |> Array.filter isReturningSpecs
         |> Array.filter isDeclaredDirectlyOnThisType
 
     let getParentContexts (ty : Type) = 

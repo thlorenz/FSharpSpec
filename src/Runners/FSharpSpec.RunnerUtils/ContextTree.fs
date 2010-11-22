@@ -53,6 +53,9 @@ module ContextTree =
         
         let specs = specMethod.Invoke(instantiatedContext, null) 
 
+        let getSingleSpecResult (specName, specDelegate) =
+            [(runSpec specName specDelegate)]
+
         let rec getSpecResults (specs : (string * SpecDelegate) list) =
             match specs with
             | []                    -> []
@@ -73,7 +76,8 @@ module ContextTree =
 
         let specResults =         
             match specs.GetType() with
-            |ty when ty  = typeof<Lazy<string * SpecDelegate> list>     -> getLazySpecResults (specs :?> Lazy<string * SpecDelegate> list)
+            | ty when ty  = typeof<(string * SpecDelegate)>             -> getSingleSpecResult (specs :?> (string * SpecDelegate))
+            | ty when ty  = typeof<Lazy<string * SpecDelegate> list>    -> getLazySpecResults (specs :?> Lazy<string * SpecDelegate> list)
             | _                                                         -> getSpecResults (specs :?> (string * SpecDelegate) list)
         
         let rec getFailures = function
