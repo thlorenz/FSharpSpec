@@ -9,82 +9,67 @@ open PrintUtils
 [<AutoOpen>]
 module ContextTree = 
    
-   type Context  =  { Clazz : Type; SpecLists : MethodInfo[]; ParentContexts : Type list  }
-   type SpecInfo = { Name : string; Method : MethodInfo } 
-   type FailureInfo = { FullSpecName : string; Exception : Exception; }
+    type Context  =  { Clazz : Type; SpecLists : MethodInfo[]; ParentContexts : Type list  }
+    type SpecInfo = { Name : string; Method : MethodInfo } 
+    type FailureInfo = { FullSpecName : string; Exception : Exception; }
     
-   let instantiate (ty : Type) =  Activator.CreateInstance(ty)
+    let instantiate (ty : Type) =  Activator.CreateInstance(ty)
   
-   let removeLeadingGet = function
+    let removeLeadingGet = function
         | (pn : string) when pn.StartsWith("get_")  -> pn.Substring(4)
         | pn                                        -> pn
 
-   let getFullSpecName context specMethodName specName = 
-     let toInheritanceChain = 
-         List.fold (fun acc (clazz : Type) -> acc + clazz.Name + ", ")  ("")  
+    let getFullSpecName context specMethodName specName = 
+        let toInheritanceChain = 
+            List.fold (fun acc (clazz : Type) -> acc + clazz.Name + ", ")  ("")  
     
-     (new StringBuilder())
-      .AppendLine(context.Clazz.Namespace)
-      .AppendLine((context.ParentContexts |> toInheritanceChain) + context.Clazz.Name + ": " + (removeLeadingGet specMethodName) + "  » " + specName)
-      .ToString()
+        (new StringBuilder())
+            .AppendLine(context.Clazz.Namespace)
+            .AppendLine((context.ParentContexts |> toInheritanceChain) + context.Clazz.Name + ": " + (removeLeadingGet specMethodName) + "  » " + specName)
+            .ToString()
    
-   let runContainedSpecs context (specMethod : MethodInfo) isFirstMethod instantiatedContext (indent : string) = 
+    let runContainedSpecs context (specMethod : MethodInfo) isFirstMethod instantiatedContext (indent : string) = 
+        let runSpec specName (specDelegate : SpecDelegate) =
+            let specName = specName |> prettifySpecName
+            let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) specName
+
+            try
+                let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
+                match outcome with
+                | Passed        ->    (fullSpecName, indent  + "      »  "  + specName + "\n",
+                                                None, Passed)
+
+                | Pending       ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",
+                                                None, Pending)
+
+                | Failed        ->    (fullSpecName, "Should have thrown exception",
+                                                None, Failed) 
+                                                     
+                | Inconclusive  ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Inconclusive >>>" + "\n",
+                                                None, Inconclusive) 
+            with
+                    ex              ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Failed >>>" + "\n",
+                                                    Some({ FullSpecName = fullSpecName; Exception = ex }), Failed) 
         
         let specs = specMethod.Invoke(instantiatedContext, null) 
 
         let rec getSpecResults (specs : (string * SpecDelegate) list) =
-            let runSpec specName (specDelegate : SpecDelegate) =
-                let specName = specName |> prettifySpecName
-                let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) specName
-
-                try
-                    let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
-                    match outcome with
-                    | Passed        ->    (fullSpecName, indent  + "      »  "  + specName + "\n",
-                                                    None, Passed)
-
-                    | Pending       ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",
-                                                    None, Pending)
-
-                    | Failed        ->    (fullSpecName, "Should have thrown exception",
-                                                    None, Failed) 
-                                                     
-                    | Inconclusive  ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Inconclusive >>>" + "\n",
-                                                    None, Inconclusive) 
-                with
-                    ex              ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Failed >>>" + "\n",
-                                                    Some({ FullSpecName = fullSpecName; Exception = ex }), Failed) 
-
             match specs with
             | []                    -> []
             | (specName, specDelegate) :: xs    -> [(runSpec specName specDelegate)] @ getSpecResults xs
         
         let rec getLazySpecResults (specs : Lazy<string * SpecDelegate> list) =
-            let runSpec specName (specDelegate : SpecDelegate) =
-                let specName = specName |> prettifySpecName
-                let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) specName
-
-                try
-                    let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
-                    match outcome with
-                    | Passed        ->    (fullSpecName, indent  + "      »  "  + specName + "\n",
-                                                    None, Passed)
-
-                    | Pending       ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",
-                                                    None, Pending)
-
-                    | Failed        ->    (fullSpecName, "Should have thrown exception",
-                                                    None, Failed) 
-                                                     
-                    | Inconclusive  ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Inconclusive >>>" + "\n",
-                                                    None, Inconclusive) 
-                with
-                    ex              ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Failed >>>" + "\n",
-                                                    Some({ FullSpecName = fullSpecName; Exception = ex }), Failed) 
-
             match specs with
             | []                    -> []
-            | x :: xs    -> [(runSpec (fst x.Value) (snd x.Value))] @ getLazySpecResults xs
+            | x :: xs    ->
+                try
+                    [(runSpec (fst x.Value) (snd x.Value))] @ getLazySpecResults xs 
+                with
+                    ex              ->    
+                        let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) "(Specification name could not be resolved)"
+
+                        [("Unable to resolve spec", indent  + "      »  "  + "Unresolvable" + " - <<< Threw Exception >>>" + "\n",
+                                                    Some({ FullSpecName = fullSpecName ; Exception = ex }), Failed) ] @ getLazySpecResults xs 
 
         let specResults =         
             match specs.GetType() with
@@ -111,115 +96,115 @@ module ContextTree =
         | false -> (specMethodName + combinedMessage, passes, failures, pending)        
 
    
-   let unableToSetupContextResult context ex (indent :string) =
-      let sb = new StringBuilder()
-      let mutable failures : FailureInfo list = []
-
-      sb.AppendLine(indent + "+ " + context.Clazz.Name)
-        .AppendLine(indent + "Unable to setup context !!!") |> ignore
-      
-      (sb.ToString(), [], [{ FullSpecName = (getFullSpecName context "" "Exception while setting up context"); Exception = ex } ], [sprintf "%s (Failed to setup context)" context.Clazz.Name]  )  
-
-   let unableToSetupSpecMethodResult context specMethodName ex (indent :string) =
-      let sb = new StringBuilder()
-      let mutable failures : FailureInfo list = []
-
-      sb.AppendLine(indent + "+ " + context.Clazz.Name)
-        .AppendLine(indent + "   - " + specMethodName)
-        .AppendLine(indent + "   Unable to setup specification !!!\n") |> ignore
-      
-      (sb.ToString(), [], [{ FullSpecName = (getFullSpecName context specMethodName "Exception while setting up specification"); Exception = ex } ], [sprintf "%s - %s (Failed to setup specification)" context.Clazz.Name specMethodName]  )  
- 
-
-   let getContextInfoForEmptyContext context (indent :string) = 
-      (indent + "+ " + context.Clazz.Name + "\n", [], [], [])
- 
-   let typeWasNotAddedBefore (ty :Type) (typesAddedBefore : Type list) = 
-     typesAddedBefore
-     |> List.exists (fun t -> t = ty)
-     |> not
-        
-  type Node (context : Context, ply : int) =
-     let _context = context
-     let  _ply = ply
-     
-     let mutable _children : Node list = []
-     let mutable _contexts : Context list = []
-
-     member x.Context with get() = _context
-     member x.Ply with get() = _ply
-     member x.Children with get() = _children
-        
-     member x.getContextNode(context : Context) = x.addToChildrenIfNotFoundAndReturnReference context
-     
-     member x.RunSpecs() =
+    let unableToSetupContextResult context ex (indent :string) =
         let sb = new StringBuilder()
-        let mutable results = []
-        let mutable addedType = []
+        let mutable failures : FailureInfo list = []
+
+        sb.AppendLine(indent + "+ " + context.Clazz.Name)
+          .AppendLine(indent + "Unable to setup context !!!") |> ignore
+      
+        (sb.ToString(), [], [{ FullSpecName = (getFullSpecName context "" "Exception while setting up context"); Exception = ex } ], [sprintf "%s (Failed to setup context)" context.Clazz.Name]  )  
+
+    let unableToSetupSpecMethodResult context specMethodName ex (indent :string) =
+        let sb = new StringBuilder()
+        let mutable failures : FailureInfo list = []
+
+        sb.AppendLine(indent + "+ " + context.Clazz.Name)
+          .AppendLine(indent + "   - " + specMethodName)
+          .AppendLine(indent + "   Unable to resolve specifications !!!\n") |> ignore
+      
+        (sb.ToString(), [], [{ FullSpecName = (getFullSpecName context specMethodName "Exception while setting up specification"); Exception = ex } ], [sprintf "%s - %s (Failed to setup specification)" context.Clazz.Name specMethodName]  )  
+ 
+
+    let getContextInfoForEmptyContext context (indent :string) = 
+        (indent + "+ " + context.Clazz.Name + "\n", [], [], [])
+ 
+    let typeWasNotAddedBefore (ty :Type) (typesAddedBefore : Type list) = 
+         typesAddedBefore
+         |> List.exists (fun t -> t = ty)
+         |> not
         
-        if context.SpecLists.Length = 0 then
-            let addEmptyContextToResults = function
-              | ctx when ctx.Clazz = typeof<obj>  -> []
-              | ctx                               -> [getContextInfoForEmptyContext ctx x.Indent]
+    type Node (context : Context, ply : int) =
+        let _context = context
+        let  _ply = ply
+     
+        let mutable _children : Node list = []
+        let mutable _contexts : Context list = []
+
+        member x.Context with get() = _context
+        member x.Ply with get() = _ply
+        member x.Children with get() = _children
+        
+        member x.getContextNode(context : Context) = x.addToChildrenIfNotFoundAndReturnReference context
+     
+        member x.RunSpecs() =
+            let sb = new StringBuilder()
+            let mutable results = []
+            let mutable addedType = []
+        
+            if context.SpecLists.Length = 0 then
+                let addEmptyContextToResults = function
+                  | ctx when ctx.Clazz = typeof<obj>  -> []
+                  | ctx                               -> [getContextInfoForEmptyContext ctx x.Indent]
             
-            results <- (addEmptyContextToResults context)
-        else
-          try
-            let specMethods = x.Context.SpecLists
-            for specMethod in specMethods do 
-                let instantiatedContext = context.Clazz |> instantiate
-                let isFirstMethod = Array.IndexOf(specMethods, specMethod) = 0
-                try 
-                    let result = runContainedSpecs context specMethod isFirstMethod instantiatedContext x.Indent
-                    results <- results @ [result]
-                with
-                | ex -> results <- results @ [unableToSetupSpecMethodResult context (removeLeadingGet specMethod.Name) ex x.Indent]
-          with
-          | ex -> results <- results @ [unableToSetupContextResult context ex x.Indent]
+                results <- (addEmptyContextToResults context)
+            else
+              try
+                let specMethods = x.Context.SpecLists
+                for specMethod in specMethods do 
+                    let instantiatedContext = context.Clazz |> instantiate
+                    let isFirstMethod = Array.IndexOf(specMethods, specMethod) = 0
+                    try 
+                        let result = runContainedSpecs context specMethod isFirstMethod instantiatedContext x.Indent
+                        results <- results @ [result]
+                    with
+                    | ex -> results <- results @ [unableToSetupSpecMethodResult context (removeLeadingGet specMethod.Name) ex x.Indent]
+              with
+              | ex -> results <- results @ [unableToSetupContextResult context ex x.Indent]
         
-        for childNode in x.Children do
-            results <- results @ childNode.RunSpecs()
+            for childNode in x.Children do
+                results <- results @ childNode.RunSpecs()
        
-        results
+            results
 
-     member private x.hasNodeWith(contextToFind : Context) : Option<Node> =
-        let rec foundIn (nodes : Node list) = 
-            match nodes with
-            | x::xs when (x.Context = contextToFind) -> Some(x)
-            | x::xs                                                 -> foundIn xs
-            | []                                                    -> None
+        member private x.hasNodeWith(contextToFind : Context) : Option<Node> =
+            let rec foundIn (nodes : Node list) = 
+                match nodes with
+                | x::xs when (x.Context = contextToFind) -> Some(x)
+                | x::xs                                                 -> foundIn xs
+                | []                                                    -> None
         
-        foundIn _children
+            foundIn _children
         
-     member private x.addNode(child : Node) = 
-        _children <- _children @ [child]
-        child
+        member private x.addNode(child : Node) = 
+            _children <- _children @ [child]
+            child
      
-     member private x.addToChildrenIfNotFoundAndReturnReference(context : Context) =
-        let existingNode = x.hasNodeWith context
-        match existingNode with
-        | None         -> x.addNode(new Node(context, _ply + 1))
-        | _            -> existingNode.Value
+        member private x.addToChildrenIfNotFoundAndReturnReference(context : Context) =
+            let existingNode = x.hasNodeWith context
+            match existingNode with
+            | None         -> x.addNode(new Node(context, _ply + 1))
+            | _            -> existingNode.Value
      
-     member private x.Indent =
-          let rec getIndentFor = function
-                | 0   -> ""
-                | ply -> "|      " + getIndentFor (ply - 1)
-          getIndentFor _ply   
+        member private x.Indent =
+              let rec getIndentFor = function
+                    | 0   -> ""
+                    | ply -> "|      " + getIndentFor (ply - 1)
+              getIndentFor _ply   
 
-     override x.ToString() = 
-        let sb = new StringBuilder()
-        sb.AppendLine(x.Indent + "+ " + x.Context.Clazz.Name) |> ignore
+        override x.ToString() = 
+            let sb = new StringBuilder()
+            sb.AppendLine(x.Indent + "+ " + x.Context.Clazz.Name) |> ignore
         
-        for specMethod in x.Context.SpecLists do 
-            sb.AppendLine(x.Indent + "|") |> ignore
-            sb.AppendLine(x.Indent + "|   » " + specMethod.Name) |> ignore
+            for specMethod in x.Context.SpecLists do 
+                sb.AppendLine(x.Indent + "|") |> ignore
+                sb.AppendLine(x.Indent + "|   » " + specMethod.Name) |> ignore
         
-        for childNode in x.Children do
-            sb.AppendLine(x.Indent + "|") |> ignore
-            sb.Append(childNode.ToString()) |> ignore
+            for childNode in x.Children do
+                sb.AppendLine(x.Indent + "|") |> ignore
+                sb.Append(childNode.ToString()) |> ignore
         
-        sb.ToString()
+            sb.ToString()
 
 
 

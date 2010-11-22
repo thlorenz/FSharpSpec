@@ -2,8 +2,9 @@
 
 open System
 
-type should() = 
 
+
+type should() = 
     static member equal(actual : obj, expected : obj) = 
         match (actual, expected) with
         | a, e when a = e   -> Passed

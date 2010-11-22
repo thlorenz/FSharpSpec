@@ -9,7 +9,6 @@ open System.Text
 open FSharpSpec
 
 module SpecsRunnerUtils =
-
     let getSpecFailedException (ex : Exception) =
             let innerEx = ex.InnerException
             let assertionEx = 
@@ -19,19 +18,24 @@ module SpecsRunnerUtils =
             assertionEx
     
     let getFailureMessage failure = 
-        let specFailedException = failure.Exception |> getSpecFailedException
-        match specFailedException with
-        | excep when excep.IsSome -> "\t\t" + specFailedException.Value.Data0
-        | _                       -> "\t\t" + failure.Exception.InnerException.Message   
+        match failure.Exception.InnerException with
+        | null  -> "\t\t" + failure.Exception.Message
+        | _     ->   
+            let specFailedException = failure.Exception |> getSpecFailedException
+            match specFailedException with
+            | excep when excep.IsSome -> "\t\t" + specFailedException.Value.Data0
+            | _                       -> "\t\t" + failure.Exception.InnerException.Message   
 
     let getFailureStackTrace failure = 
-        let specFailedException = failure.Exception |> getSpecFailedException
-        match specFailedException with
-        | excep when excep.IsSome -> "\t\t" + specFailedException.Value.StackTrace
-        | _                       -> "\t\t" + failure.Exception.InnerException.StackTrace   
+        match failure.Exception.InnerException with
+        | null  -> "\t\t" + failure.Exception.StackTrace
+        | _     ->   
+            let specFailedException = failure.Exception |> getSpecFailedException
+            match specFailedException with
+            | excep when excep.IsSome -> "\t\t" + specFailedException.Value.StackTrace
+            | _                       -> "\t\t" + failure.Exception.InnerException.StackTrace   
 
     let getSingleFailureSummary failure =
-            
         failure.FullSpecName + (getFailureMessage failure) + "\n"  
     
     let getMeaningFullStackTrace failure =

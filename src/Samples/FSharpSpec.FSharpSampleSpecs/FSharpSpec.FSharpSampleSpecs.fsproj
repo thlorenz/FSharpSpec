@@ -42,6 +42,7 @@
   <ItemGroup>
     <Compile Include="RowTests.fs" />
     <Compile Include="PendingSpecs.fs" />
+    <Compile Include="MultipleAssertions.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\FSharpSpec\FSharpSpec.fsproj">
