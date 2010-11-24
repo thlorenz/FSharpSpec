@@ -7,7 +7,7 @@ type ``StringCalculator Specs``() =
     let sut = new StringCalculator()
 
     // Helper Function to archieve more succinct specifications
-    let testAdding (nums:string) expected = 
+    let addsTo expected (nums:string) = 
         
         let specName = (sprintf "adding \"%s\" returns %d" nums expected)
         it specName (sut.Add nums) should.equal expected
@@ -24,34 +24,34 @@ type ``StringCalculator Specs``() =
     
     // The fact that we can use a function to return specifications allows to use helper functions easily
     member x.``adding two numbers`` =  [ 
-        testAdding "0,1" 1
-        testAdding "0,2" 2
-        testAdding "1,1" 2
-        testAdding "99,100" 199
+        "0,1"       |> addsTo 1 
+        "0,2"       |> addsTo 2 
+        "1,1"       |> addsTo 2 
+        "99,100"    |> addsTo 199 
     ]
     
     member x.``adding more than two numbers`` = [
-        testAdding "1,1,1,1" 4
-        testAdding "1,2,3,4" 10
-        testAdding "2,2,2,2,2,2,2,2" 16
+        "1,1,1,1"           |> addsTo 4 
+        "1,2,3,4"           |> addsTo 10 
+        "2,2,2,2,2,2,2,2"   |> addsTo 16 
     ]
 
     member x.``handles \n separator`` = [
-        testAdding "1\n1" 2
-        testAdding "1\n2\n3\n4" 10
+        "1\n1"          |> addsTo 2 
+        "1\n2\n3\n4"    |> addsTo 10 
     ]
 
     member x.``handles \n separator mixed with ',' separator`` = [
-        testAdding "1\n2,3\n4" 10
+        "1\n2,3\n4" |> addsTo 10 
     ]
 
     member x.``handles any separator specified via //[delimiter]\n[numbers…]`` = [
-        testAdding "//&\n1&1" 2
-        testAdding "//^\n1^2^3^4" 10
+        "//&\n1&1"      |> addsTo 2 
+        "//^\n1^2^3^4"  |> addsTo 10 
     ]
 
     member x.``handles any separator specified via //[delimiter]\n[numbers…] and mixed with ',' and '\n'`` = [
-        testAdding "//^\n1^2,3\n4" 10
+        "//^\n1^2,3\n4" |> addsTo 10 
     ]
 
     // The following specification demonstrates catching an expected exception and then querying its properties
@@ -79,8 +79,8 @@ type ``StringCalculator Specs``() =
         ]
 
     member x.``when given string that includes numbers > 10000 they will be ignored in the calculation`` = [
-        testAdding "1001,1" 1
-        testAdding "1, 2, 9999, 3, 4" 10
+        "1001,1"            |> addsTo 1 
+        "1, 2, 9999, 3, 4"  |> addsTo 10 
     ]
 
 
