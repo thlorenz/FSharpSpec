@@ -27,6 +27,7 @@ module main =
         runSpecsContainedInPath specsPath writeToConsole
 
         System.Console.ReadKey() |> ignore
+        
 
         0
 
