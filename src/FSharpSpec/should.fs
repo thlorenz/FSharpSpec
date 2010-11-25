@@ -29,7 +29,12 @@ type should() =
          
     static member be (actual:bool, expected:bool) = should.equal (actual, expected)
     
-    static member be(actual : 'a, expectedType : Type) = should.equal (actual.GetType(), expectedType)
+    static member be(actual : obj, expectedType : Type) = 
+        match actual with
+        | null              ->  sprintf "Expected object to be of type [%s] but was [null]!" expectedType.Name
+                                |> SpecFailedException
+                                |> raise
+        | _                 ->  should.equal (actual.GetType(), expectedType)
     
     static member beSameAs<'a when 'a : not struct>(actual : 'a, expected : 'a) =
         match (actual, expected) with
@@ -138,5 +143,4 @@ type should() =
     static member beGreaterThan<'a when 'a : comparison>(riskyCode : (unit -> 'a), expected) = should.beGreaterThan((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
     static member beSmallerThan<'a when 'a : comparison>(riskyCode : (unit -> 'a), expected) = should.beSmallerThan((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
 
-    // Using lazy
-    static member equal<'a>(lazyCode : Lazy<'a>, expected : 'a) = should.equal(lazyCode.Value, expected)
+    

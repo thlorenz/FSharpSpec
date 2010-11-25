@@ -5,8 +5,6 @@ open System
 [<AutoOpen>]
 module Syntax = 
     
-    type ThrowDelegate = delegate of unit -> unit
-
     type soon() =
         static member it (specName : string) =
             let specDelegate = new SpecDelegate(fun () -> Pending)
@@ -17,9 +15,9 @@ module Syntax =
         (specName, specDelegate)
   
         
-    let catch(throwingCode:(unit -> unit)) =
+    let catch<'a>(throwingCode:(unit -> 'a)) =
         try 
-           (new ThrowDelegate(throwingCode)).Invoke()
+           (new RiskDelegate<'a>(throwingCode)).Invoke() |> ignore
            null
         with
            | excep  ->  excep     
