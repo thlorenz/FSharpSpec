@@ -1,8 +1,8 @@
 ﻿(* 
     #I @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec\bin\Debug";;
     #r "FSharpSpec.dll";;
-
 *)
+
 namespace FSharpSpec.RunnerUtils 
 
 open System
@@ -17,6 +17,8 @@ module SpecsExtractor =
     
     let getAllPublicTypes (asm : Assembly) = asm.GetExportedTypes()
 
+    let filterOutInvalidTypes (types : Type[]) = types |> Array.filter(fun ty -> not ty.IsAbstract)
+        
     let getSpecLists (ty : Type) = 
         let isReturningSpecs (mi : MethodInfo) = 
             match mi.ReturnType with
@@ -47,14 +49,15 @@ module SpecsExtractor =
     let getAllContexts asm  = 
         asm
         |> getAllPublicTypes
+        |> filterOutInvalidTypes
         |> Array.map toPotentialContextWithParents
         |> Array.filter isContext
  
-    let getContextTreeOfAssembly asm =
+    let getContextTreeOfContexts contexts =
         let emptySpecLists :  MethodInfo[] = getSpecLists typeof<obj>
         let rootNode = new Node( {Clazz = typeof<obj>; SpecLists = emptySpecLists; ParentContexts = [] }, -1)
 
-        for context in asm |> getAllContexts do
+        for context in contexts do
             let mutable lastNode : Node =  rootNode
         
             for parentType in context.ParentContexts do
@@ -65,6 +68,11 @@ module SpecsExtractor =
             lastNode.getContextNode(context) |> ignore
          
         rootNode    
+
+    let getContextTreeOfAssembly asm =
+         asm 
+         |> getAllContexts
+         |> getContextTreeOfContexts
 
     let getContextTree specsDllPath =
         specsDllPath 
