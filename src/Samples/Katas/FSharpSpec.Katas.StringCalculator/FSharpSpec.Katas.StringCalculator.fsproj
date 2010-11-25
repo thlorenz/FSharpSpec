@@ -7,10 +7,10 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{b31e7b0a-9b46-412f-b998-2b84bce12e34}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>FSharpSpecs.Katas</RootNamespace>
+    <RootNamespace>FSharpSpecs.Katas.StringCalculator</RootNamespace>
     <AssemblyName>FSharpSpec.Katas</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <Name>FSharpSpec.Katas</Name>
+    <Name>FSharpSpec.Katas.StringCalculator</Name>
     <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
@@ -21,7 +21,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\FSharpSpecs.Katas.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\FSharpSpecs.Katas.StringCalculator.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,7 +30,7 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\FSharpSpecs.Katas.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\FSharpSpecs.Katas.StringCalculator.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
@@ -42,7 +42,7 @@
     <Compile Include="StringCalculatorSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\FSharpSpec\FSharpSpec.fsproj">
+    <ProjectReference Include="..\..\..\FSharpSpec\FSharpSpec.fsproj">
       <Name>FSharpSpec</Name>
       <Project>{12d7b460-5020-4d49-8fc0-11692a5e32e3}</Project>
       <Private>True</Private>

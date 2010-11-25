@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec.Katas  
+﻿namespace FSharpSpec.Katas.StringCalculator  
 
 open FSharpSpec
 open System
@@ -27,7 +27,7 @@ type ``StringCalculator Specs``() =
         "0,1"       |> addsTo 1 
         "0,2"       |> addsTo 2 
         "1,1"       |> addsTo 2 
-        "99,100"    |> addsTo 199 
+        "99,100"    |> addsTo 199
     ]
     
     member x.``adding more than two numbers`` = [

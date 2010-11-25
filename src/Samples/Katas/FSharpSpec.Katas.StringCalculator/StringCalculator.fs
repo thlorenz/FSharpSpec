@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec.Katas  
+﻿namespace FSharpSpec.Katas.StringCalculator  
 
 open System
 
