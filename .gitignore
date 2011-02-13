@@ -35,6 +35,7 @@ _ReSharper.*/
 
 bin/
 obj/
+bundle/
 [Bb]uild/
 [Bb]uild.[Ss]pecs/
 *.resharper.user
