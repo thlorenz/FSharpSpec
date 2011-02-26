@@ -5,14 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{12d7b460-5020-4d49-8fc0-11692a5e32e3}</ProjectGuid>
+    <ProjectGuid>{504f2020-ce2f-4ba2-aa4f-8414a804d8ed}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>src</RootNamespace>
-    <AssemblyName>FSharpSpec</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <Name>FSharpSpec</Name>
-    <TargetFrameworkProfile />
-    <ProjectTypeGuids>{f2a71f9b-5d33-465a-a702-920d77279786}</ProjectTypeGuids>
+    <RootNamespace>FSharpSpec.Rx</RootNamespace>
+    <AssemblyName>FSharpSpec.Rx</AssemblyName>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <Name>FSharpSpec.Rx</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -22,6 +20,7 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
+    <DocumentationFile>bin\Debug\FSharpSpec.Rx.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -30,41 +29,32 @@
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
+    <DocumentationFile>bin\Release\FSharpSpec.Rx.XML</DocumentationFile>
   </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll')" />
-  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition="Exists('$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll')" />
+  <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
+  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <ItemGroup>
-    <Compile Include="CommonTypes.fs" />
-    <Compile Include="should.fs" />
-    <Compile Include="shouldn%27t.fs" />
-    <Compile Include="Syntax.fs" />
+    <Compile Include="Observable.fs" />
+    <Compile Include="rx.fs" />
     <None Include="packages.config" />
+    <None Include="Rx.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
+    <Reference Include="System.Core" />
     <Reference Include="System.CoreEx">
-      <HintPath>..\packages\Rx-Core.1.0.2856.0\lib\Net35\System.CoreEx.dll</HintPath>
+      <HintPath>..\packages\Rx-Core.1.0.2856.0\lib\Net4\System.CoreEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Observable">
-      <HintPath>..\packages\Rx-Core.1.0.2856.0\lib\Net35\System.Observable.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="System.Numerics" />
     <Reference Include="System.Reactive">
-      <HintPath>..\packages\Rx-Main.1.0.2856.0\lib\Net35\System.Reactive.dll</HintPath>
+      <HintPath>..\packages\Rx-Main.1.0.2856.0\lib\Net4\System.Reactive.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Reactive.Testing">
-      <HintPath>..\packages\Rx-Testing.1.0.2856.0\lib\Net35\System.Reactive.Testing.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
-    <Reference Include="System.Threading">
-      <HintPath>..\packages\Rx-Core.1.0.2856.0\lib\Net35\System.Threading.dll</HintPath>
+      <HintPath>..\packages\Rx-Testing.1.0.2856.0\lib\Net4\System.Reactive.Testing.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

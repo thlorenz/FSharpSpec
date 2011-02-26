@@ -53,6 +53,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Katas", "Katas", "{DFDA1143
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.Katas.StringCalculator", "Samples\Katas\FSharpSpec.Katas.StringCalculator\FSharpSpec.Katas.StringCalculator.fsproj", "{B31E7B0A-9B46-412F-B998-2B84BCE12E34}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.Rx", "FSharpSpec.Rx\FSharpSpec.Rx.fsproj", "{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -144,6 +146,16 @@ Global
 		{B31E7B0A-9B46-412F-B998-2B84BCE12E34}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{B31E7B0A-9B46-412F-B998-2B84BCE12E34}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{B31E7B0A-9B46-412F-B998-2B84BCE12E34}.Release|x86.ActiveCfg = Release|Any CPU
+		{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{504F2020-CE2F-4BA2-AA4F-8414A804D8ED}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
