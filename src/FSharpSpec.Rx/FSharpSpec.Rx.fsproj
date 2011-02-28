@@ -36,8 +36,6 @@
   <ItemGroup>
     <Compile Include="RecordedNotification.fs" />
     <None Include="packages.config" />
-    <None Include="Repl.fsx" />
-    <None Include="WPFAndFSharp.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

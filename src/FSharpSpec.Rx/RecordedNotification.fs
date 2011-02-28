@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec.Rx
+﻿namespace FSharpSpec
 
 open System
 open System.Collections.Generic

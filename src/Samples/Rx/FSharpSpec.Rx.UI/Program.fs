@@ -1,11 +1,9 @@
-﻿// Learn more about F# at http://fsharp.net
+﻿namespace FSharpSpec.Rx.UI
 
 open System.Windows
 open System
 open System.Linq
 open System.Diagnostics
-
-open LoginManager
 
 module main =
   
@@ -18,7 +16,7 @@ module main =
     override this.OnStartup (args:StartupEventArgs) =
       base.OnStartup(args)
      
-     // ShowLogin
+      LoginManager.ShowLogin
     end
   
   [<STAThread()>]
