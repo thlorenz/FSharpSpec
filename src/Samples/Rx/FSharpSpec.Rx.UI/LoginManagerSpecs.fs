@@ -63,4 +63,4 @@ type ``when the user types too slow`` () =
     let record = testScheduler.Run (fun () -> 
       LoginManager.detectCorrectKeypass keys x.delay password testScheduler)
 
-    it "rejects the entry when the timeout is exeeded" record should.contain <| onNext 251L false
+    it "rejects the entry when the timeout is exceeded" record should.contain <| onNext 251L false
