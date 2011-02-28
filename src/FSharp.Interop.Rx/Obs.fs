@@ -3,6 +3,7 @@
 open System
 open System.Linq
 open System.Threading
+open System.Collections.Generic
 
 module Obs =
   
@@ -32,7 +33,12 @@ module Obs =
   /// Generates an observable from an IEvent<_>
   let fromEvent (event:IEvent<_,_>) =
     Observable.FromEvent(event.AddHandler, event.RemoveHandler)
+  
+  /// Returns an observable sequence of the event of the given name occuring on the target
+  let fromNamedEvent (target : obj) (name : string) = 
+     Observable.FromEvent(target, name)
 
+  
   /// Generates an observable from an Async<_>.
   let fromAsync a = 
     { new IObservable<_> with
@@ -62,8 +68,17 @@ module Obs =
   let head = Observable.First
   
   /// Merges the two observables
-  let merge (obs1: 'a observable) (obs2: 'a observable) = Observable.Merge(obs1, obs2)
+  let merge2 (obs1: 'a observable) (obs2: 'a observable) = Observable.Merge(obs1, obs2)
+
+  /// Merges all the observable sequences into a single observable sequence. 
+  let mergeAll (sources : IObservable<'a>) = Observable.Merge sources
+
+  /// Merges all the observable sequences into a single observable sequence. 
+  let mergeAllSeq (sources : IEnumerable<IObservable<'a>>) = Observable.Merge sources
   
+  /// Merges all the observable sequences into a single observable sequence. 
+  let mergeAllObs (sources : IObservable<IObservable<'a>>) = Observable.Merge sources
+
   /// Creates a range as an observable
   let range start count = Observable.Range(start, count)
   
@@ -125,7 +140,7 @@ module Obs =
   /// maps the given observable with the given function
   let mapi f observable =
     Observable.Select(observable,Func<_,_,_>(fun x i ->f i x))  
-   
+  
   /// Filters all elements where the given predicate is satisfied
   let filter f observable =
     Observable.Where(observable, Func<_,_>(f))
@@ -163,11 +178,11 @@ module Obs =
   /// Takes elements while the predicate is satisfied
   let takeWhile f observable = Observable.TakeWhile(observable, Func<_,_>(f))
    
-  /// Iterates through the observable and performs the given side-effect
-  let Do f observable = Observable.Do(observable, fun x -> f x)
+  /// Iterates through the observable and performs the given side-effect via Observable.Do
+  let act f observable = Observable.Do(observable, fun x -> f x)
    
   /// Invokes the finally action after source observable sequence terminates normally or by an exception.
-  let Finally f observable = Observable.Finally(observable, fun _ -> f())
+  let terminal f observable = Observable.Finally(observable, fun _ -> f())
    
   /// Folds the observable
   let fold f seed observable = Observable.Aggregate(observable, seed, Func<_,_,_>(f))  
@@ -181,6 +196,8 @@ module Obs =
   
   let distinctUntilChanged observable = Observable.DistinctUntilChanged(observable)
 
+  /// Filters values of the given type.
+  let ofType<'a> source = Observable.OfType<'a>(source)
 
 
   type IObservable<'a> with

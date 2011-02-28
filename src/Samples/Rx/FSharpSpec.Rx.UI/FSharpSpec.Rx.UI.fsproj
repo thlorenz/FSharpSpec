@@ -2,17 +2,18 @@
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{504f2020-ce2f-4ba2-aa4f-8414a804d8ed}</ProjectGuid>
-    <OutputType>Library</OutputType>
-    <RootNamespace>FSharpSpec.Rx</RootNamespace>
-    <AssemblyName>FSharpSpec.Rx</AssemblyName>
+    <ProjectGuid>{f462e889-d291-4eec-ac26-f0536673cd10}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <RootNamespace>FSharpSpec.Rx.UI</RootNamespace>
+    <AssemblyName>FSharpSpec.Rx.UI</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <Name>FSharpSpec.Rx</Name>
+    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <Name>FSharpSpec.Rx.UI</Name>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -20,51 +21,53 @@
     <OutputPath>bin\Debug\</OutputPath>
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Debug\FSharpSpec.Rx.XML</DocumentationFile>
+    <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>bin\Debug\FSharpSpec.Rx.UI.XML</DocumentationFile>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <Tailcalls>true</Tailcalls>
     <OutputPath>bin\Release\</OutputPath>
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
-    <DocumentationFile>bin\Release\FSharpSpec.Rx.XML</DocumentationFile>
+    <PlatformTarget>x86</PlatformTarget>
+    <DocumentationFile>bin\Release\FSharpSpec.Rx.UI.XML</DocumentationFile>
   </PropertyGroup>
   <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <ItemGroup>
-    <Compile Include="RecordedNotification.fs" />
+    <Compile Include="LoginManager.fs" />
+    <Compile Include="Program.fs" />
     <None Include="packages.config" />
     <None Include="Repl.fsx" />
-    <None Include="WPFAndFSharp.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
+    <Reference Include="PresentationCore" />
+    <Reference Include="PresentationFramework" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.CoreEx">
-      <HintPath>..\packages\Rx-Core.1.0.2856.0\lib\Net4\System.CoreEx.dll</HintPath>
+      <HintPath>..\..\..\packages\Rx-Core.1.0.2856.0\lib\Net4\System.CoreEx.dll</HintPath>
       <Private>True</Private>
     </Reference>
     <Reference Include="System.Numerics" />
     <Reference Include="System.Reactive">
-      <HintPath>..\packages\Rx-Main.1.0.2856.0\lib\Net4\System.Reactive.dll</HintPath>
+      <HintPath>..\..\..\packages\Rx-Main.1.0.2856.0\lib\Net4\System.Reactive.dll</HintPath>
       <Private>True</Private>
     </Reference>
-    <Reference Include="System.Reactive.Testing">
-      <HintPath>..\packages\Rx-Testing.1.0.2856.0\lib\Net4\System.Reactive.Testing.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
+    <Reference Include="System.Xaml" />
+    <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FSharp.Interop.Rx\FSharp.Interop.Rx.fsproj">
+    <ProjectReference Include="..\..\..\FSharp.Interop.Rx\FSharp.Interop.Rx.fsproj">
       <Name>FSharp.Interop.Rx</Name>
       <Project>{36c39b03-3aab-4c1f-89e3-8c27666167b9}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <ProjectReference Include="..\FSharp.Interop\FSharp.Interop.fsproj">
+    <ProjectReference Include="..\..\..\FSharp.Interop\FSharp.Interop.fsproj">
       <Name>FSharp.Interop</Name>
       <Project>{ad93a1f7-178a-4ba6-8cf9-2e3945c4dc35}</Project>
       <Private>True</Private>
