@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec.Specs
+﻿namespace FSharpSpec
 
 open System
 open FSharpSpec

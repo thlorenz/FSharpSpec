@@ -1,7 +1,8 @@
-﻿namespace FSharpSpec.Katas.StringCalculator  
+﻿module StringCalculatorSpecs
 
 open FSharpSpec
 open System
+open FSharpSpec.Katas.StringCalculator 
 
 type ``StringCalculator Specs``() = 
     let sut = new StringCalculator()

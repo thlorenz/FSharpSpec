@@ -70,14 +70,30 @@ module SpecsExtractor =
         rootNode    
 
     let getContextTreeOfAssembly asm =
-         asm 
-         |> getAllContexts
-         |> getContextTreeOfContexts
+      asm 
+      |> getAllContexts
+      |> getContextTreeOfContexts
 
     let getContextTree specsDllPath =
-        specsDllPath 
-        |> getAssembly
-        |> getContextTreeOfAssembly
+      specsDllPath 
+      |> getAssembly
+      |> getContextTreeOfAssembly
+
+    let getContextTreeForContextInModule memberInfo asm =
+      let getContextsInModule (memberInfo : MemberInfo) contexts = 
+        contexts 
+        |> Array.filter (fun (c : Context) -> 
+            
+            let contextType = c.Clazz.DeclaringType
+            match contextType with
+            | null                                   -> false
+            | x when x.Name.Equals(memberInfo.Name)  -> true
+            | otherwise                              -> false)
+         
+      asm 
+      |> getAllContexts
+      |> getContextsInModule memberInfo
+      |> getContextTreeOfContexts
 
     
 

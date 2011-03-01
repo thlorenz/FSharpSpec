@@ -1,13 +1,12 @@
-﻿
-namespace FSharpSpec.Specs
+﻿module BDDSpecs
 
 open System
 open FSharpSpec
 
 type ``Given a TestType(0)`` () =
-     let _sut = new TestType(0)
+      let _sut = new TestType(0)
      
-     member x.sut = _sut
+      member x.sut = _sut
           
 type ``named ContextName`` () = 
     inherit ``Given a TestType(0)`` ()    
@@ -32,7 +31,7 @@ type ``named ContextName`` () =
             it "should have Value 2" x.sut.Value should.equal 2
         ]
  
- type ``that has been incremented`` () = 
+  type ``that has been incremented`` () = 
     inherit ``named ContextName`` ()
     
     do 
@@ -51,7 +50,7 @@ type ``named ContextName`` () =
             it "should have Value 2" x.sut.Value should.equal 2
         ]
  
- type ``and was incremented again`` () = 
+  type ``and was incremented again`` () = 
     inherit ``that has been incremented`` ()
     
     do 
