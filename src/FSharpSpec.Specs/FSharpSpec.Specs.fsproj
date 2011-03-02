@@ -39,14 +39,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Utils.fs" />
+    <Compile Include="BDD.fs" />
+    <Compile Include="BeGreaterThan.fs" />
+    <Compile Include="BeSameAsSpecs.fs" />
     <Compile Include="ContainsSpecs.fs" />
     <Compile Include="EqualitySpecs.fs" />
     <Compile Include="ExceptionSpecs.fs" />
     <Compile Include="SpecIndependenceSpecs.fs" />
     <Compile Include="TypeCheckingSpecs.fs" />
-    <Compile Include="BeSameAsSpecs.fs" />
-    <Compile Include="BeGreaterThan.fs" />
-    <Compile Include="BDD.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FSharpSpec\FSharpSpec.fsproj">

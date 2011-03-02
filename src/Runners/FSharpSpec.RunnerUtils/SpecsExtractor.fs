@@ -80,15 +80,21 @@ module SpecsExtractor =
       |> getContextTreeOfAssembly
 
     let getContextTreeForContextInModule memberInfo asm =
+    
       let getContextsInModule (memberInfo : MemberInfo) contexts = 
+        
+        let  getTypeEqualsRunTimeTypeOrDeclaringType (ty : Type) (memberInfo : MemberInfo) =
+          ty.FullName.Equals(memberInfo.ToString()) || 
+          (ty.DeclaringType <> null && ty.DeclaringType.Name.Equals(memberInfo.ToString()))
+        
         contexts 
         |> Array.filter (fun (c : Context) -> 
-            
-            let contextType = c.Clazz.DeclaringType
-            match contextType with
-            | null                                   -> false
-            | x when x.Name.Equals(memberInfo.Name)  -> true
-            | otherwise                              -> false)
+            let contextClass = c.Clazz
+          
+            match contextClass with
+            | null  -> false
+            | x     -> getTypeEqualsRunTimeTypeOrDeclaringType x memberInfo
+            )
          
       asm 
       |> getAllContexts

@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec.Rx.UI
+﻿module LoginManagerSpecs
 
 open System
 open System.Linq

@@ -31,40 +31,40 @@ type ``named ContextName`` () =
             it "should have Value 2" x.sut.Value should.equal 2
         ]
  
-  type ``that has been incremented`` () = 
-    inherit ``named ContextName`` ()
+type ``that has been incremented`` () = 
+  inherit ``named ContextName`` ()
     
-    do 
-      base.sut.IncrementValue() |> ignore
+  do 
+    base.sut.IncrementValue() |> ignore
         
-    member x.initially = 
-        [
-            it "should have name ContextName" x.sut.Name should.equal "ContextName"
-            it "should have Value 1" x.sut.Value should.equal 1
-        ]
+  member x.initially = 
+      [
+          it "should have name ContextName" x.sut.Name should.equal "ContextName"
+          it "should have Value 1" x.sut.Value should.equal 1
+      ]
 
-    member x.``when I increment by 1`` = 
-        x.sut.IncrementValue() |>ignore
-        [
-            it "should have name ContextName" x.sut.Name should.equal "ContextName"
-            it "should have Value 2" x.sut.Value should.equal 2
-        ]
+  member x.``when I increment by 1`` = 
+      x.sut.IncrementValue() |>ignore
+      [
+          it "should have name ContextName" x.sut.Name should.equal "ContextName"
+          it "should have Value 2" x.sut.Value should.equal 2
+      ]
  
-  type ``and was incremented again`` () = 
-    inherit ``that has been incremented`` ()
+type ``and was incremented again`` () = 
+  inherit ``that has been incremented`` ()
     
-    do 
-      base.sut.IncrementValue() |> ignore
+  do 
+    base.sut.IncrementValue() |> ignore
         
-    member x.initially = 
-        [
-            it "should have name ContextName" x.sut.Name should.equal "ContextName"
-            it "should have Value 2" x.sut.Value should.equal 2
-        ]
+  member x.initially = 
+      [
+          it "should have name ContextName" x.sut.Name should.equal "ContextName"
+          it "should have Value 2" x.sut.Value should.equal 2
+      ]
 
-    member x.``when I increment by 1`` = 
-        x.sut.IncrementValue() |>ignore
-        [
-            it "should have name ContextName" x.sut.Name should.equal "ContextName"
-            it "should have Value 3" x.sut.Value should.equal 3
-        ]
+  member x.``when I increment by 1`` = 
+      x.sut.IncrementValue() |>ignore
+      [
+          it "should have name ContextName" x.sut.Name should.equal "ContextName"
+          it "should have Value 3" x.sut.Value should.equal 3
+      ]
