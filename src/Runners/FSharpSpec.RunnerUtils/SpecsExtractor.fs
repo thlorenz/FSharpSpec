@@ -79,9 +79,9 @@ module SpecsExtractor =
       |> getAssembly
       |> getContextTreeOfAssembly
 
-    let getContextTreeForContextInModule memberInfo asm =
+    let getContextTreeOfTypesInAssembly memberInfo asm =
     
-      let getContextsInModule (memberInfo : MemberInfo) contexts = 
+      let getContextsInType (memberInfo : MemberInfo) contexts = 
         
         let  getTypeEqualsRunTimeTypeOrDeclaringType (ty : Type) (memberInfo : MemberInfo) =
           ty.FullName.Equals(memberInfo.ToString()) || 
@@ -98,9 +98,9 @@ module SpecsExtractor =
          
       asm 
       |> getAllContexts
-      |> getContextsInModule memberInfo
+      |> getContextsInType memberInfo
       |> getContextTreeOfContexts
 
     
-
+  
     

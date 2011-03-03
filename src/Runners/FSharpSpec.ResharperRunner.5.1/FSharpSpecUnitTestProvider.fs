@@ -41,9 +41,13 @@ type FSharpSpecUnitTestProvider() =
         
         member x.ExploreAssembly(assembly, project, unitTestConsumer) = ()
         
-        member x.ExploreExternal unitTestElementConsumer = ()
+        
+        member x.ExploreExternal unitTestElementConsumer = () // No implementation needed
+       
         member x.ExploreFile(psiFile, unitTestElementLocationConsumer, checkForInterrupt) = ()
-        member x.ExploreSolution(solution, unitTestElementConsumer) = ()
+        
+        
+        member x.ExploreSolution(solution, unitTestElementConsumer) = () // No implementation needed
        
         member x.GetCustomOptionsControl solution = null
         member x.GetTaskRunnerInfo() = new RemoteTaskRunnerInfo()
