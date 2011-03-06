@@ -1,6 +1,7 @@
 ﻿namespace FSharpSpec.ConsoleRunner
 
 open System.IO
+open System.Diagnostics
 
 open FSharpSpec
 open FSharpSpec.RunnerUtils
@@ -9,8 +10,9 @@ open SpecsRunnerUtils
 
 module main = 
    
-    let helpFlag = "-help"
-    let silentFlag = "-silent"
+    let helpFlag = ("--help", "-h")
+    let silentFlag = ("--silent", "-s")
+    let debugFlag = ("--debug", "-d")
     
     let helpText = "
 Usage: FsharpSpec.ConsoleRunner [options] [FullPath1 FullPath2 ...]
@@ -18,20 +20,24 @@ Usage: FsharpSpec.ConsoleRunner [options] [FullPath1 FullPath2 ...]
     FullPath: The full path to the assembly containing the specifications to run
 
     Options:
-        -help:      prints this help
-        -silent:    supresses printing out of the detailed specification tree
+        --help:      prints this help
+        --silent:    supresses printing out of the detailed specification tree
 
 "
    
     let getFlags (args : string list) = 
-        let validFlags = ["-silent"; "-help"]
-        let flags = args |> List.filter(fun arg -> arg.StartsWith("-"))
+        let validFlags = [helpFlag; silentFlag; debugFlag]
+        let flags = args |> List.filter(fun arg -> arg.StartsWith("--"))
+        let shortFlags = args |> List.filter(fun arg -> arg.StartsWith("-") && arg.Length = 2)
+        let allFlags = List.concat [flags; shortFlags]
 
-        let invalidFlags = flags |> List.filter(fun flag -> not (validFlags |> List.exists(fun f -> f = flag)))
+        let invalidFlags = 
+          allFlags
+          |> List.filter(fun flag -> not (validFlags |> List.exists(fun f -> fst f = flag || snd f = flag)))
             
         match invalidFlags with
-        | []    -> flags
-        | x     -> failwithf "\n\nFound invalid option(s), use -help for more information. \nInvalid option(s): %A\n\n" x
+        | []    -> allFlags
+        | x     -> failwithf "\n\nFound invalid option(s), use --help for more information. \nInvalid option(s): %A\n\n" x
         
     let getPaths (args : string list) =
         let paths = args |> List.filter(fun arg -> not (arg.StartsWith("-")))
@@ -75,13 +81,17 @@ Usage: FsharpSpec.ConsoleRunner [options] [FullPath1 FullPath2 ...]
     let main(args:string[]) =
         let printer = writeToConsole
         
+        let containFlag flag flags =
+          flags |> List.exists(fun f -> f = fst flag || f = snd flag)
+
         try
             let args = args |> Array.toList |> List.map(fun arg -> arg.Trim())
-        
+          //  let args = [@"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"]
+
             let flags = args |> getFlags
-            let needHelp = args |> List.isEmpty || flags |> List.exists(fun f -> f = helpFlag) 
-            let isSilent = flags |> List.exists(fun f -> f = silentFlag)
-           
+            let needHelp = flags |> containFlag helpFlag
+            let isSilent = flags |> containFlag silentFlag
+            let isDebug = flags |> containFlag debugFlag
 
             if needHelp then 
                 helpText |> printer
@@ -90,8 +100,14 @@ Usage: FsharpSpec.ConsoleRunner [options] [FullPath1 FullPath2 ...]
                 let allContexts, allWarnings = args |> extraxtAllContexts
         
                 let tree = allContexts |> getContextTreeOfContexts
+                
+                if (isDebug) then
+                  printfn "Attaching debugger - Just click yes in the dialog."
+                  Debugger.Launch() |> ignore
+                  Debugger.Log(0, "FSharpSpec", "Successfully attached Debugger.\n")
+                
                 let results = tree.RunSpecs() 
-                       
+                
                 if (not isSilent) then printResultTree results printer
                 printFailureDetails results printer
                 printPendingSummary results printer

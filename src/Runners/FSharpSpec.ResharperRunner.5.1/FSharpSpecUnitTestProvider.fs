@@ -53,7 +53,13 @@ type FSharpSpecUnitTestProvider() =
         member x.GetTaskRunnerInfo() = new RemoteTaskRunnerInfo()
         member x.GetTaskSequence(unitTestElement, explicitElements) = new List<UnitTestTask>() :> IList<UnitTestTask>
         
-        member x.IsElementOfKind(declaredElement : IDeclaredElement, unitTestElementKind : UnitTestElementKind) = true
+        member x.IsElementOfKind(declaredElement : IDeclaredElement, unitTestElementKind : UnitTestElementKind) = 
+          //let isSpecification (elem  : IDeclaredElement) =
+          match unitTestElementKind with
+          | UnitTestElementKind.Test          -> true
+          | UnitTestElementKind.TestContainer -> true
+          | otherwise                         -> false
+        
         member x.IsElementOfKind(element : UnitTestElement, elementKind : UnitTestElementKind) = true
         
         member x.Present(element : UnitTestElement,item : IPresentableItem ,node : TreeModelNode , state :PresentationState) = ()
