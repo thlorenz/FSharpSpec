@@ -2,7 +2,6 @@
 
 open System
 open System.Linq
-open System.Threading
 open System.Collections.Generic
 
 module Obs =
@@ -209,3 +208,5 @@ module Obs =
    
     /// Subscribes to the Observable with all 3 callbacks
     member this.Subscribe(next, error, completed) = subscribeAll next error completed this
+
+

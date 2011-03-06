@@ -1,4 +1,4 @@
-﻿namespace FSharpSpec.ResharperRunner
+﻿module FSharpSpecUnitTestProvider
 
 open FSharpSpec
 open FSharpSpec.RunnerUtils
@@ -21,7 +21,6 @@ open JetBrains.Util
 
 open System.Diagnostics
 
-
 [<UnitTestProvider>]
 type FSharpSpecUnitTestProvider() =
     do
@@ -29,7 +28,6 @@ type FSharpSpecUnitTestProvider() =
     
     let ProviderId = "FSharpSpec"
     
-  
     interface IUnitTestProvider with
         member x.ID with get() = ProviderId
         member x.Name with get() = ProviderId
@@ -39,8 +37,10 @@ type FSharpSpecUnitTestProvider() =
         member x.Deserialize(solution, elementString) = null
         member x.CompareUnitTestElements(unitTestElementX, unitTestElementY) = 1
         
-        member x.ExploreAssembly(assembly, project, unitTestConsumer) = ()
-        
+        member x.ExploreAssembly(assembly, project, unitTestConsumer) = 
+          assembly.Location |> ignore
+          
+          ()
         
         member x.ExploreExternal unitTestElementConsumer = () // No implementation needed
        
@@ -53,7 +53,7 @@ type FSharpSpecUnitTestProvider() =
         member x.GetTaskRunnerInfo() = new RemoteTaskRunnerInfo()
         member x.GetTaskSequence(unitTestElement, explicitElements) = new List<UnitTestTask>() :> IList<UnitTestTask>
         
-        member x.IsElementOfKind(declaredElement : IDeclaredElement, unitTestElementKind : UnitTestElementKind) = false
-        member x.IsElementOfKind(element : UnitTestElement, elementKind : UnitTestElementKind) = false
+        member x.IsElementOfKind(declaredElement : IDeclaredElement, unitTestElementKind : UnitTestElementKind) = true
+        member x.IsElementOfKind(element : UnitTestElement, elementKind : UnitTestElementKind) = true
         
         member x.Present(element : UnitTestElement,item : IPresentableItem ,node : TreeModelNode , state :PresentationState) = ()

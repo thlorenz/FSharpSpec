@@ -9,8 +9,10 @@ open SpecsExtractor
 open SpecsRunnerUtils
 
 type SpecsRunner() =
+  
   let runSpecs listener (tree : Node) =
     let logger = new TDNetLogger(listener) :> ISpecsResultsLogger
+   
     let printOutput = function | content -> listener.WriteLine(content, Category.Output)
 
     let results = tree.RunSpecs() 

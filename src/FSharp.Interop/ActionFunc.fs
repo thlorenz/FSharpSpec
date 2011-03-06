@@ -16,12 +16,6 @@ module ActionFunc =
   let action3 f = Action<_,_,_>(f)
   /// converts a lambda a System.Action
   let action4 f = Action<_,_,_,_>(f)
-   /// converts a lambda a System.Action
-  let action5 f = Action<_,_,_,_,_>(f)
-  /// converts a lambda a System.Action
-  let action6 f = Action<_,_,_,_,_,_>(f)
-  /// converts a lambda a System.Action
-  let action7 f = Action<_,_,_,_,_,_,_>(f)
   
   /// converts a lambda a System.Action
   let actionExn f = Action<exn>(f)
@@ -36,10 +30,5 @@ module ActionFunc =
   let func3 f = Func<_,_,_,_>(f)
   /// converts a lambda with given params to and output 'x to a System.Func that returns 'x
   let func4 f = Func<_,_,_,_,_>(f)
-  /// converts a lambda with given params to and output 'x to a System.Func that returns 'x
-  let func5 f = Func<_,_,_,_,_,_>(f)
-  /// converts a lambda with given params to and output 'x to a System.Func that returns 'x
-  let func6 f = Func<_,_,_,_,_,_,_>(f)
-  /// converts a lambda with given params to and output 'x to a System.Func that returns 'x
-  let func7 f = Func<_,_,_,_,_,_,_,_>(f)
+ 
 

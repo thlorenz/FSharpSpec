@@ -57,11 +57,6 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FSharp.Interop.Rx\FSharp.Interop.Rx.fsproj">
-      <Name>FSharp.Interop.Rx</Name>
-      <Project>{36c39b03-3aab-4c1f-89e3-8c27666167b9}</Project>
-      <Private>True</Private>
-    </ProjectReference>
     <ProjectReference Include="..\FSharp.Interop\FSharp.Interop.fsproj">
       <Name>FSharp.Interop</Name>
       <Project>{ad93a1f7-178a-4ba6-8cf9-2e3945c4dc35}</Project>
