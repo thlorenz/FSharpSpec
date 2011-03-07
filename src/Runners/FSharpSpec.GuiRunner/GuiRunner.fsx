@@ -70,7 +70,7 @@ let addOrFindItem rootItem (node : Node) name =
   | n                                 -> 
       let newItem = TreeViewItem ( Header = n, DataContext = node )
       rootItem.Items.Add newItem |> ignore
-      newItem.MouseDown |> Event.add (fun i -> node |> runSpecsAndShowResults name writeToConsole )
+      newItem.MouseDown |> Event.add (fun i -> if i.Source.Equals newItem then node |> runSpecsAndShowResults name writeToConsole )
       newItem
 
 let rec populateTree (rootItem : TreeViewItem) (node : Node) =
