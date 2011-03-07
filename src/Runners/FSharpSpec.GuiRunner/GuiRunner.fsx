@@ -39,9 +39,17 @@ type ContextsViewModel () =
   member x.SpecContainers = _specContainers
 
   member public x.Explore (tree : Node) = ()
+
+let runSpecsAndShowResults name printer (node : Node) = 
+  printfn "Running specs"
+  let results = node.RunSpecs() 
+  
+  printResultTree     results printer          
+  printFailureDetails results printer
+  printPendingSummary results printer
+  printFailureSummary results printer
         
 let tree = allContexts |> getContextTreeOfContexts
-
 
 let uiTree = TreeView()
 let win = Window( Topmost = true, Width=300.0, Height = 200.0, Content = uiTree)
@@ -55,13 +63,14 @@ let foundInItemsOf (treeItem : TreeViewItem) name =
   treeItem.Items.Cast<TreeViewItem>()
   |> Seq.filter (fun i -> i.Header = name)
 
-let addOrFindItem rootItem name = 
-  let found = name |> foundInItemsOf rootItem
+let addOrFindItem rootItem (node : Node) name = 
+  let foundItems = name |> foundInItemsOf rootItem
   match name with
-  | n when Seq.length found > 0  -> Seq.head found
-  | n                       -> 
-      let newItem = TreeViewItem ( Header = n)
+  | n when Seq.length foundItems > 0  -> Seq.head foundItems
+  | n                                 -> 
+      let newItem = TreeViewItem ( Header = n, DataContext = node )
       rootItem.Items.Add newItem |> ignore
+      newItem.MouseDown |> Event.add (fun i -> node |> runSpecsAndShowResults name writeToConsole )
       newItem
 
 let rec populateTree (rootItem : TreeViewItem) (node : Node) =
@@ -71,20 +80,20 @@ let rec populateTree (rootItem : TreeViewItem) (node : Node) =
   let moduleType = clazz.DeclaringType
   let contextName = clazz.Name    
 
-  if (not <| String.IsNullOrWhiteSpace clazz.Name) then 
+  if (not <| clazz.Equals(typeof<obj>)) then 
     
     let specsContainers = ctx.SpecLists
     
     let contextItem = 
       match moduleType with
-      | n when n = null ->  addOrFindItem rootItem contextName
-      | n               ->  let moduleItem = addOrFindItem rootItem moduleType.Name
-                            addOrFindItem moduleItem contextName
+      | n when n = null ->  addOrFindItem rootItem node contextName
+      | n               ->  let moduleItem = addOrFindItem rootItem node moduleType.Name 
+                            addOrFindItem moduleItem node contextName
 
    
     let instantiatedContext = ctx.Clazz |> instantiate
-    specsContainers |> Array.iter ( fun container ->
-      let containerItem =  container.Name  |> removeLeadingGet|> addOrFindItem contextItem 
+    specsContainers |> Array.iter (fun container ->
+      let containerItem =  container.Name  |> removeLeadingGet|> addOrFindItem contextItem node
       let specs = container.Invoke(instantiatedContext, null) :?> (string * SpecDelegate) list
       specs 
       |> List.map  (fun s -> fst s)
