@@ -5,12 +5,12 @@
     <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
     <ProductVersion>8.0.30703</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2513a5bb-a96d-4005-8222-8dee048bc1f1}</ProjectGuid>
+    <ProjectGuid>{dfdae481-6837-442c-8ea8-b0cd56b9c4e9}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>FSharpSpec.ConsoleRunner</RootNamespace>
-    <AssemblyName>FSharpSpec.ConsoleRunner</AssemblyName>
+    <RootNamespace>FSharpSpec.GuiRunner</RootNamespace>
+    <AssemblyName>FSharpSpec.GuiRunner</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <Name>FSharpSpec.ConsoleRunner</Name>
+    <Name>FSharpSpec.GuiRunner</Name>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <DebugSymbols>true</DebugSymbols>
@@ -21,7 +21,7 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
-    <DocumentationFile>bin\Debug\FSharpSpec.ConsoleRunner.XML</DocumentationFile>
+    <DocumentationFile>bin\Debug\FSharpSpec.GuiRunner.XML</DocumentationFile>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
     <DebugType>pdbonly</DebugType>
@@ -31,30 +31,19 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
     <PlatformTarget>x86</PlatformTarget>
-    <DocumentationFile>bin\Release\FSharpSpec.ConsoleRunner.XML</DocumentationFile>
+    <DocumentationFile>bin\Release\FSharpSpec.GuiRunner.XML</DocumentationFile>
   </PropertyGroup>
-  <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
-  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
-  <ItemGroup>
-    <Compile Include="ConsoleLogger.fs" />
-    <Compile Include="Program.fs" />
-  </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <ProjectReference Include="..\..\FSharpSpec\FSharpSpec.fsproj">
-      <Name>FSharpSpec</Name>
-      <Project>{12d7b460-5020-4d49-8fc0-11692a5e32e3}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\FSharpSpec.RunnerUtils\FSharpSpec.RunnerUtils.fsproj">
-      <Name>FSharpSpec.RunnerUtils</Name>
-      <Project>{bee45fe9-9ebb-4c04-9213-8b884f68b50b}</Project>
-      <Private>True</Private>
-    </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="GuiRunner.fsx" />
+  </ItemGroup>
+  <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
+  <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.
 	<Target Name="BeforeBuild">

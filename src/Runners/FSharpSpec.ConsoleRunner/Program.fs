@@ -85,8 +85,8 @@ Usage: FsharpSpec.ConsoleRunner [options] [FullPath1 FullPath2 ...]
           flags |> List.exists(fun f -> f = fst flag || f = snd flag)
 
         try
-            let args = args |> Array.toList |> List.map(fun arg -> arg.Trim())
-          //  let args = [@"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"]
+           // let args = args |> Array.toList |> List.map(fun arg -> arg.Trim())
+            let args = [@"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"]
 
             let flags = args |> getFlags
             let needHelp = flags |> containFlag helpFlag

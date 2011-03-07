@@ -196,19 +196,19 @@ module ContextTree =
                     | ply -> "|      " + getIndentFor (ply - 1)
               getIndentFor _ply   
 
-        override x.ToString() = 
-            let sb = new StringBuilder()
-            sb.AppendLine(x.Indent + "+ " + x.Context.Clazz.Name) |> ignore
-        
-            for specMethod in x.Context.SpecLists do 
-                sb.AppendLine(x.Indent + "|") |> ignore
-                sb.AppendLine(x.Indent + "|   » " + specMethod.Name) |> ignore
-        
-            for childNode in x.Children do
-                sb.AppendLine(x.Indent + "|") |> ignore
-                sb.Append(childNode.ToString()) |> ignore
-        
-            sb.ToString()
+//        override x.ToString() = 
+//            let sb = new StringBuilder()
+//            sb.AppendLine(x.Indent + "+ " + x.Context.Clazz.Name) |> ignore
+//        
+//            for specMethod in x.Context.SpecLists do 
+//                sb.AppendLine(x.Indent + "|") |> ignore
+//                sb.AppendLine(x.Indent + "|   » " + specMethod.Name) |> ignore
+//        
+//            for childNode in x.Children do
+//                sb.AppendLine(x.Indent + "|") |> ignore
+//                sb.Append(childNode.ToString()) |> ignore
+//        
+//            sb.ToString()
 
 
 
