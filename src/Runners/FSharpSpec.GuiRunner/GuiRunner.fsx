@@ -68,28 +68,34 @@ let rec populateTree (rootItem : TreeViewItem) (node : Node) =
   
   let ctx = node.Context
   let clazz = ctx.Clazz
-  let moduleName = ctx.Clazz.DeclaringType
-  let contextName = ctx.Clazz.Name    
+  let moduleType = clazz.DeclaringType
+  let contextName = clazz.Name    
 
   if (not <| String.IsNullOrWhiteSpace clazz.Name) then 
     
     let specsContainers = ctx.SpecLists
-  
-    let moduleItem = addOrFindItem rootItem moduleName 
-    let contextItem = addOrFindItem moduleItem contextName
+    
+    let contextItem = 
+      match moduleType with
+      | n when n = null ->  addOrFindItem rootItem contextName
+      | n               ->  let moduleItem = addOrFindItem rootItem moduleType.Name
+                            addOrFindItem moduleItem contextName
 
+   
     let instantiatedContext = ctx.Clazz |> instantiate
     specsContainers |> Array.iter ( fun container ->
+      let containerItem =  container.Name  |> removeLeadingGet|> addOrFindItem contextItem 
       let specs = container.Invoke(instantiatedContext, null) :?> (string * SpecDelegate) list
       specs 
       |> List.map  (fun s -> fst s)
       |> List.map  (fun n -> TreeViewItem (Header = n))
-      |> List.iter (fun i -> contextItem.Items.Add i |> ignore)
+      |> List.iter (fun i -> containerItem.Items.Add i |> ignore)
     )
 
   node.Children
   |> List.iter (fun c -> populateTree rootItem c)
 
+rootItem.Items.Clear()
 populateTree rootItem tree
 
 
