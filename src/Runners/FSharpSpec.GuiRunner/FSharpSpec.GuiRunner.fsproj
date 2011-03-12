@@ -40,6 +40,7 @@
     <Compile Include="GuiCore.fs" />
     <None Include="GuiRunner.fsx" />
     <None Include="DirectTreeViewGui.fsx" />
+    <None Include="GuiRunnerView.xaml" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
