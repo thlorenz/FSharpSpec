@@ -51,17 +51,7 @@ let view () =
   userControl.DataContext <- asmRoot
   userControl
 
-let win = Window( Topmost = true, Width=300.0, Height = 200.0, Content = view ())
+let win = Window( Topmost = true, Width=800.0, Height = 700.0, Content = view ())
 win.Show()
 
 win.Content <- view ()
-
-
-
-let r = asmRoot.ChildContexts.[1]
-let c = r.SpecContainers.[0]
-c.IsExpanded <- true
-let s = c.Specifications.[0]
-s.RunSpecCommand.Execute(null)
-s.DebugSpecCommand.Execute(null)
-

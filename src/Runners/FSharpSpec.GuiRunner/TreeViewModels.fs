@@ -24,33 +24,49 @@ type TreeViewModel (name) =
    inherit ViewModelBase ()
    
    let _name = name
+   let mutable _isExpanded = false
+   let mutable _isSelected = false
    
    member x.Name with get () = _name
+  
+   member x.IsExpanded 
+    with get() = _isExpanded
+    and set value = 
+      _isExpanded <- value 
+      base.OnPropertyChanged("IsExpanded")
+      x.OnExpanded ()
+
+   abstract member OnExpanded : unit -> unit
+   default x.OnExpanded () = ()
 
    override x.ToString() = x.Name
 
-type SpecViewModel (spec : (string * SpecDelegate)) =
+type SpecViewModel (spec : (string * SpecDelegate), buildContextAndResolveSpecs) =
   inherit TreeViewModel (fst spec)
 
   let _spec = snd spec
 
   let mutable _state = NotRunYet
-  let mutable _stateName = "NotRunYet"
 
-  member private x._runSpecCommand = ActionCommand ((fun _ -> x.runSpec()), (fun _ -> true))
-  member private x._debugSpecCommand = ActionCommand ((fun _ -> x.runSpec()), (fun _ -> true))
+  member private x._runSpecCommand = ActionCommand ((fun _ -> x.runSpec _spec), (fun _ -> true))
+  member private x._debugSpecCommand = ActionCommand ((fun _ -> x.debugSpec _spec), (fun _ -> true))
 
   member private x.toSpecState assertionResult = 
     match assertionResult with
     | AssertionResult.Passed -> Passed | AssertionResult.Pending -> Pending | AssertionResult.Failed -> Failed | AssertionResult.Inconclusive -> Inconclusive
  
-  member x.runSpec () = 
-    let assertionResult = _spec.Invoke()
-    x.State <- _spec.Invoke() |> x.toSpecState
+  member x.runSpec specToRun = 
+    try
+      let outcome = _spec.Method.Invoke(specToRun.Target, null) :?> AssertionResult  
+      x.State <- outcome |> x.toSpecState
+    with
+      ex              -> x.State <- Failed
 
-  member x.debugSpec () = 
+  /// Re-evaluates the Context after launching the debugger in order to hit all possible breakpoints relevant to the specification
+  member x.debugSpec specToDebug = 
     Debugger.Launch() |> ignore
-    x.runSpec
+    buildContextAndResolveSpecs () |> ignore
+    x.runSpec specToDebug
  
   member x.RunSpecCommand with get () = x._runSpecCommand :> ICommand
   member x.DebugSpecCommand with get () = x._debugSpecCommand :> ICommand
@@ -59,37 +75,36 @@ type SpecViewModel (spec : (string * SpecDelegate)) =
     and  set (value)  = 
       _state <- value
       base.OnPropertyChanged("State")
- 
-//  member x.StateName 
-//    with get ()         = _stateName
-//    and  set (value)    =
-//      _stateName <- value
-//      base.
+  
+  member x.IsDummySpec = x.Name = SpecViewModel.DummySpecName
 
+  static member DummySpecName = "___###DummySpecToShowTreeExpander###___"
+  static member Dummy = SpecViewModel ((SpecViewModel.DummySpecName, SpecDelegate(fun () -> AssertionResult.Inconclusive)), (fun () -> []))
+  
+ 
 type SpecContainerViewModel (specs : SpecInfo, clazz) =
   inherit TreeViewModel (specs.Name |> removeLeadingGet)
   let _specs = specs
   let _clazz = clazz
   
-  let mutable _isExpanded = false
-  let _instantiatedSpecs = ObservableCollection<SpecViewModel>()
+  let _instantiatedSpecs = ObservableCollection<SpecViewModel>([ SpecViewModel.Dummy ])
   
   let extractSpecs () = 
     match _instantiatedSpecs with
-    | xs when xs.Count > 0  -> ()
+    | xs when xs.Count > 0 && (not _instantiatedSpecs.[0].IsDummySpec)  -> ()
     | otherwise             ->
-        let instantiatedContext = _clazz |> instantiate
-        _specs.Method.Invoke(instantiatedContext, null) :?> (string * SpecDelegate) list
-        |> List.iter (fun spec -> _instantiatedSpecs.Add <| SpecViewModel(spec)) 
+        _instantiatedSpecs.Clear()
+        let buildContextAndResolveSpecs () =
+          let instantiatedContext = _clazz |> instantiate
+          _specs.Method.Invoke(instantiatedContext, null) :?> (string * SpecDelegate) list
+        
+        buildContextAndResolveSpecs ()
+        |> List.iter (fun spec -> _instantiatedSpecs.Add <| SpecViewModel(spec, buildContextAndResolveSpecs)) 
 
   member x.Name with get() =  _specs.Name |> removeLeadingGet
   member x.Specifications with get() = _instantiatedSpecs
 
-  member x.IsExpanded 
-    with get() = _isExpanded
-    and set value = 
-      _isExpanded <- value 
-      extractSpecs()
+  override x.OnExpanded () = extractSpecs ()
 
 
 type ContextViewModel (node : Node) = 
