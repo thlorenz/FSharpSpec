@@ -9,6 +9,11 @@ open System.Text
 open FSharpSpec
 
 module SpecsRunnerUtils =
+    let getNodeName (node : Node) = 
+         match node.Context.Clazz.Name with
+          | x when x <> "Object"  -> x
+          | otherwise             -> "Specifications"
+
     let getSpecFailedException (ex : Exception) =
             let innerEx = ex.InnerException
             let assertionEx = 

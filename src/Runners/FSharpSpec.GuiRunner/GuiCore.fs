@@ -1,4 +1,4 @@
-﻿module GuiCore
+﻿namespace FSharpSpec.GuiRunner
 
 open System
 open System.ComponentModel
