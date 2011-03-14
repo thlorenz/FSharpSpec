@@ -40,7 +40,8 @@ module main =
       base.OnStartup(args)
       
       let tree = allContexts |> getContextTreeOfContexts
-      let asmRoot = ContextViewModel(tree)
+      let specsRunResult = SpecsRunResult()
+      let asmRoot = ContextViewModel(tree, specsRunResult)
 
       let loadGuiRunnerView (fileName : string) =
         let reader = XmlReader.Create fileName
@@ -48,10 +49,10 @@ module main =
 
       let view () = 
         let userControl = loadGuiRunnerView @"C:\dev\FSharp\FSharpSpec\src\Runners\FSharpSpec.GuiRunner\GuiRunnerView.xaml" 
-        userControl.DataContext <- asmRoot
+        userControl.DataContext <- MainViewModel (asmRoot, specsRunResult)
         userControl
 
-      let win = Window( Topmost = true, Width=700.0, Height = 600.0, Content = view ())
+      let win = Window( Width=700.0, Height = 600.0, Content = view ())
       win.Show()
       
     end

@@ -12,7 +12,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-       
+
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -20,7 +20,7 @@
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
         <Border Grid.Column="0" Padding="5" BorderBrush="Gray" BorderThickness="2">
-            <TreeView ItemsSource="{Binding Children}">
+            <TreeView DataContext="{Binding Root}" ItemsSource="{Binding Children}">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:ContextViewModel}">
                         <TextBlock Text="{Binding Name}" />
@@ -57,25 +57,36 @@
                             <Button Command="{Binding RunSpecCommand}" Margin="3">
                                 <Button.Template>
                                     <ControlTemplate>
-                                        <Image Source="Run.png" Width="15" Height="15"/>
+                                        <Image Source="Run.png" Width="15" Height="15" />
                                     </ControlTemplate>
                                 </Button.Template>
                             </Button>
                             <Button Command="{Binding DebugSpecCommand}" Margin="3">
                                 <Button.Template>
                                     <ControlTemplate>
-                                        <Image Source="Debug.png" Width="15" Height="15"/>
+                                        <Image Source="Debug.png" Width="15" Height="15" />
                                     </ControlTemplate>
                                 </Button.Template>
                             </Button>
                             <TextBlock Text="{Binding Name}" />
-                            
+
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.Resources>
             </TreeView>
         </Border>
-        <TextBlock Grid.Column="1" Text="Hello World" />
+        <ListBox Grid.Column="1" ItemsSource="{Binding SpecsRunResult.Items}">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border Padding="5" Background="DarkBlue" BorderBrush="Blue" BorderThickness="2" CornerRadius="5" Margin="5">
+                        <StackPanel>
+                            <TextBlock Text="{Binding FullSpecName}" FontWeight="Bold" FontSize="10" Foreground="White"/>
+                            <TextBlock Text="{Binding StateDisplay}" FontWeight="Bold" FontSize="12" Foreground="White" />
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
     </Grid>
 </UserControl>
 
