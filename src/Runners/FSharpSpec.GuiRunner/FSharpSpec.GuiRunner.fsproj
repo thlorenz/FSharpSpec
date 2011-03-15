@@ -39,7 +39,10 @@
   <ItemGroup>
     <Compile Include="GuiCore.fs" />
     <Compile Include="ReportViewModels.fs" />
-    <Compile Include="TreeViewModels.fs" />
+    <Compile Include="TreeViewModel.fs" />
+    <Compile Include="SpecViewModel.fs" />
+    <Compile Include="SpecContainerViewModel.fs" />
+    <Compile Include="ContextViewModel.fs" />
     <Compile Include="GuiRunnerViewModel.fs" />
     <None Include="GuiRunnerView.xaml" />
     <Compile Include="Program.fs" />
