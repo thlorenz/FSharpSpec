@@ -1,11 +1,10 @@
 ﻿namespace FSharpSpec.GuiRunner
-
 open System.Collections.ObjectModel
 
 open FSharpSpec
 
 type SpecState = | NotRunYet | Passed | Pending | Failed | Inconclusive 
- 
+
 type SpecRunResultViewModel =
   inherit ViewModelBase
 
@@ -44,3 +43,15 @@ type SpecsRunResult () =
   let _items = ObservableCollection<SpecRunResultViewModel>()
   
   member x.Items with get () = _items
+
+[<AutoOpen>]
+module GuiReportingHelpers =
+
+  let toSpecState assertionResult = 
+      match assertionResult with
+      | AssertionResult.Passed        -> Passed 
+      | AssertionResult.Pending       -> Pending 
+      | AssertionResult.Failed        -> Failed 
+      | AssertionResult.Inconclusive  -> Inconclusive
+
+  
