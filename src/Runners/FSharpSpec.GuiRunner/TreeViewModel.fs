@@ -7,7 +7,8 @@ type TreeViewModel (name, specsRunResult) =
    let mutable _isSelected = false
    let mutable _state = NotRunYet
 
-   member x.Name with get () = name
+   abstract member Name : string
+   default x.Name with get () = name
   
    member x.IsExpanded 
      with get() = _isExpanded

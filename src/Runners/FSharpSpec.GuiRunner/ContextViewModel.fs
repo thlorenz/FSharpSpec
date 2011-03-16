@@ -16,32 +16,32 @@ open SpecsRunnerUtils
 type ContextViewModel (node : Node, specsRunResult : SpecsRunResult) = 
   inherit TreeViewModel (getNodeName node, specsRunResult)
 
-  let _node = node
   let _childContexts = List<ContextViewModel>()
   let _specContainers = List<SpecContainerViewModel>()
   let mutable _isExpanded = false
+  let mutable count = 0
 
   do
-    _node.Children
+    node.Children
     |> Seq.iter (fun c -> _childContexts.Add <| ContextViewModel(c, specsRunResult))
     
-    _node.Context.SpecLists
+    node.Context.SpecLists
     |> Seq.map (fun mi -> { Name = mi.Name; Method = mi }) 
-    |> Seq.iter (fun si -> _specContainers.Add <| SpecContainerViewModel(si, _node.Context, specsRunResult))
+    |> Seq.iter (fun si -> _specContainers.Add <| SpecContainerViewModel(si, node.Context, specsRunResult))
+
+  let _children = new List<TreeViewModel>(Seq.cast<TreeViewModel>(_childContexts) |> Seq.append(Seq.cast<TreeViewModel>(_specContainers)))
     
+  member x.runSpecs = 
+    x.State <- NotRunYet
+    x.Children |> Seq.iter (fun (c : TreeViewModel) -> c.State <- NotRunYet)
+    
+    if count < 1 then
+      x.ChildContexts |> Seq.iter (fun (c : ContextViewModel) -> c.runSpecs)
+      x.SpecContainers |> Seq.iter (fun (c : SpecContainerViewModel) -> c.runSpecs)
+      x.State <- x.Children |> TreeViewModel.aggregatedResults 
+    count <- count + 1
 
-  member x.Name 
-    with get() = 
-      match _node.Context.Clazz.Name with
-      | x when x <> "Object"  -> x
-      | otherwise             -> "Specifications"
-
-   member x.runSpecs = 
-    x.ChildContexts |> Seq.iter (fun (c : ContextViewModel) -> c.runSpecs)
-    x.SpecContainers |> Seq.iter (fun (c : SpecContainerViewModel) -> c.runSpecs)
-    x.State <- x.Children |> TreeViewModel.aggregatedResults 
-
-  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> x.Children.Count > 0))
+  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> Seq.length x.Children > 0))
   member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
 
   member x.ChildContexts with get() = _childContexts
@@ -51,8 +51,7 @@ type ContextViewModel (node : Node, specsRunResult : SpecsRunResult) =
     and  set (value)  = _isExpanded <- value
 
   member x.Children
-    with get () : List<TreeViewModel> =
-      let lst = new List<TreeViewModel>()
-      _childContexts.ForEach(fun x -> lst.Add x)
-      _specContainers.ForEach(fun x -> lst.Add x)
-      lst
+    with get () = _children
+      
+
+  

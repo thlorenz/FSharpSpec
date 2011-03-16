@@ -76,7 +76,7 @@ module LoginManager =
   let toClickEventObservable (btn : Button) = btn.Click :> IObservable<_>
 
   open Obs
-
+  
   let toPressedContent (buttons : seq<Button>) =
         buttons
         |> Seq.map toClickEventObservable

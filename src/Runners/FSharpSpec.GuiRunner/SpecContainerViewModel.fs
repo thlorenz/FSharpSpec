@@ -33,13 +33,15 @@ type SpecContainerViewModel (specs : SpecInfo, context, specRunResults) =
         |> List.iter (fun spec -> _instantiatedSpecs.Add <| SpecViewModel(spec, specRunResults, buildContextAndResolveSpecs, getFullNameOfSpec)) 
 
   member x.runSpecs = 
+    x.State <- NotRunYet
+    _instantiatedSpecs |> Seq.iter (fun c -> c.State <- NotRunYet)
     extractSpecs ()
     _instantiatedSpecs |> Seq.iter (fun s -> s.runSpec)
     x.State <- _instantiatedSpecs.Cast<TreeViewModel>() |> TreeViewModel.aggregatedResults 
 
   member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> true))
 
-  member x.Name with get() =  specs.Name |> removeLeadingGet
+  override x.Name with get() =  specs.Name |> removeLeadingGet
   member x.Specifications with get() = _instantiatedSpecs
 
   override x.OnExpanded () = extractSpecs ()

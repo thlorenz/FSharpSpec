@@ -42,6 +42,22 @@
         <Border Grid.Column="0" Padding="5" BorderBrush="Gray" BorderThickness="2">
             <TreeView DataContext="{Binding Root}" ItemsSource="{Binding Children}">
                 <TreeView.Resources>
+                    <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:AssembliesViewModel}" />
+                    
+                    <HierarchicalDataTemplate ItemsSource="{Binding Child.Children}" DataType="{x:Type local:AssemblyViewModel}">
+                        <StackPanel Orientation="Horizontal">
+                            <Image Style="{StaticResource Image_SpecState}" />
+                            <Button Command="{Binding RunSpecsCommand}" Margin="3">
+                                <Button.Template>
+                                    <ControlTemplate>
+                                        <Image Source="Run.png" Width="15" Height="15" />
+                                    </ControlTemplate>
+                                </Button.Template>
+                            </Button>
+                            <TextBlock Text="{Binding Name}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                    
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:ContextViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource Image_SpecState}" />
@@ -88,7 +104,6 @@
                                 </Button.Template>
                             </Button>
                             <TextBlock Text="{Binding Name}" />
-
                         </StackPanel>
                     </HierarchicalDataTemplate>
                 </TreeView.Resources>

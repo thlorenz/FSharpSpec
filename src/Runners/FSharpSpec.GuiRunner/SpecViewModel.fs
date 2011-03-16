@@ -9,21 +9,24 @@ type SpecViewModel (specInfo : (string * SpecDelegate), specsRunResult, buildCon
   inherit TreeViewModel (fst specInfo, specsRunResult)
 
   let _spec = snd specInfo
-
   
   let mutable _specRunResult = getFullNameOfSpec (fst specInfo) |> SpecRunResultViewModel.NotRunYet  
+  let getResult state = SpecRunResultViewModel (state, getFullNameOfSpec (fst specInfo))
 
   member private x._runSpecCommand = ActionCommand ((fun _ -> x.runSpec), (fun _ -> true))
   member private x._debugSpecCommand = ActionCommand ((fun _ -> x.debugSpec), (fun _ -> true))
  
   member x.runSpec = 
+    x.State <- NotRunYet
     try
       let outcome = _spec.Method.Invoke(_spec.Target, null) :?> AssertionResult  
       x.State <- outcome |> toSpecState
-      _specRunResult <- SpecRunResultViewModel (x.State, getFullNameOfSpec (fst specInfo))
+      _specRunResult <- getResult x.State
       if x.IsSelected then x.OnSelected ()
     with
-      ex              -> x.State <- SpecState.Failed
+      ex              -> 
+        x.State <- SpecState.Failed
+        _specRunResult <- getResult x.State
 
   /// Re-evaluates the Context after launching the debugger in order to hit all possible breakpoints relevant to the specification
   member x.debugSpec = 

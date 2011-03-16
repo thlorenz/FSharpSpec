@@ -4,6 +4,8 @@ open System
 open System.IO
 open System.Linq
 open System.Diagnostics
+open System.Collections.ObjectModel
+open System.Reflection
 
 open FSharpSpec
 open FSharpSpec.RunnerUtils
@@ -28,8 +30,6 @@ module main =
   let path = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
 
   let asm = path |> getAssembly
-  let allContexts = asm |> getAllContexts
-  let getName (asmFullName : string) = (asmFullName.Split(',')).[0]
   
   type App = class
     inherit Application
@@ -39,9 +39,8 @@ module main =
     override this.OnStartup (args:StartupEventArgs) =
       base.OnStartup(args)
       
-      let tree = allContexts |> getContextTreeOfContexts
       let specsRunResult = SpecsRunResult()
-      let asmRoot = ContextViewModel(tree, specsRunResult)
+      let asmRoot = AssembliesViewModel(new ObservableCollection<Assembly>([asm]), specsRunResult)
 
       let loadGuiRunnerView (fileName : string) =
         let reader = XmlReader.Create fileName
