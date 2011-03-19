@@ -1,8 +1,4 @@
-﻿<UserControl 
-    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
-    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="clr-namespace:FSharpSpec.GuiRunner;assembly=FSharpSpec.GuiRunner"
-    >
+﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:FSharpSpec.GuiRunner;assembly=FSharpSpec.GuiRunner">
     <UserControl.Resources>
         <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
         <Style TargetType="{x:Type TreeViewItem}">
@@ -16,7 +12,7 @@
                 </Trigger>
             </Style.Triggers>
         </Style>
-        <Style x:Key="Image_SpecState"  TargetType="Image">
+        <Style x:Key="Image_SpecState" TargetType="Image">
             <Setter Property="Width" Value="15" />
             <Setter Property="Height" Value="15" />
             <Setter Property="Margin" Value="3" />
@@ -36,7 +32,20 @@
                 </DataTrigger>
             </Style.Triggers>
         </Style>
-        
+
+        <Style x:Key="Button_RunSpecs" TargetType="Button">
+            <Setter Property="Margin"  Value="3" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="IsDefault" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate>
+                        <Image Source="Run.png" Width="15" Height="15" />
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
     </UserControl.Resources>
     <Grid>
         <Grid.ColumnDefinitions>
@@ -47,45 +56,27 @@
             <TreeView DataContext="{Binding Root}" ItemsSource="{Binding Children}">
                 <TreeView.Resources>
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:AssembliesViewModel}" />
-                    
+
                     <HierarchicalDataTemplate ItemsSource="{Binding Child.Children}" DataType="{x:Type local:AssemblyViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource Image_SpecState}" />
-                            <Button Command="{Binding RunSpecsCommand}" Margin="3">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Image Source="Run.png" Width="15" Height="15" />
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                            <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecsCommand}" />
                             <TextBlock Text="{Binding Name}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
-                    
+
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:ContextViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource Image_SpecState}" />
-                            <Button Command="{Binding RunSpecsCommand}" Margin="3">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Image Source="Run.png" Width="15" Height="15" />
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                            <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecsCommand}"/>
                             <TextBlock Text="{Binding Name}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
-                  
+
                     <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:SpecContainerViewModel}">
-                       <StackPanel Orientation="Horizontal">
+                        <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource Image_SpecState}" />
-                            <Button Command="{Binding RunSpecsCommand}" Margin="3">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Image Source="Run.png" Width="15" Height="15" />
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
+                            <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecsCommand}"/>
                             <TextBlock Text="{Binding Name}" />
                         </StackPanel>
                     </HierarchicalDataTemplate>
@@ -93,14 +84,8 @@
                     <HierarchicalDataTemplate DataType="{x:Type local:SpecViewModel}">
                         <StackPanel Orientation="Horizontal">
                             <Image Style="{StaticResource Image_SpecState}" />
-                            <Button Command="{Binding RunSpecCommand}" Margin="3">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Image Source="Run.png" Width="15" Height="15" />
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <Button Command="{Binding DebugSpecCommand}" Margin="3">
+                            <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecCommand}" />
+                            <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding DebugSpecCommand}">
                                 <Button.Template>
                                     <ControlTemplate>
                                         <Image Source="Debug.png" Width="15" Height="15" />

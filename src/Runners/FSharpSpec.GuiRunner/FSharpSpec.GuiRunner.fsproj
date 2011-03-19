@@ -39,7 +39,9 @@
   <ItemGroup>
     <Compile Include="GuiCore.fs" />
     <Compile Include="ReportViewModels.fs" />
+    <Compile Include="Interfaces.fs" />
     <Compile Include="TreeViewModel.fs" />
+    <Compile Include="GuiController.fs" />
     <Compile Include="SpecViewModel.fs" />
     <Compile Include="SpecContainerViewModel.fs" />
     <Compile Include="ContextViewModel.fs" />

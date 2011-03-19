@@ -13,12 +13,11 @@ open FSharpSpec.RunnerUtils
 open SpecsExtractor
 open SpecsRunnerUtils  
  
-type SpecContainerViewModel (specs : SpecInfo, context, specRunResults) =
-  inherit TreeViewModel (specs.Name |> removeLeadingGet, specRunResults)
+type SpecContainerViewModel (specs : SpecInfo, context, controller) =
+  inherit TreeViewModel (specs.Name |> removeLeadingGet, controller)
   
   let _instantiatedSpecs = ObservableCollection<SpecViewModel>([ SpecViewModel.Dummy ])
   let getFullNameOfSpec = getFullSpecName context specs.Method.Name
-  
 
   let extractSpecs () = 
     match _instantiatedSpecs with
@@ -30,20 +29,23 @@ type SpecContainerViewModel (specs : SpecInfo, context, specRunResults) =
           specs.Method.Invoke(instantiatedContext, null) :?> (string * SpecDelegate) list
         
         buildContextAndResolveSpecs ()
-        |> List.iter (fun spec -> _instantiatedSpecs.Add <| SpecViewModel(spec, specRunResults, buildContextAndResolveSpecs, getFullNameOfSpec)) 
+        |> List.iter (fun spec -> _instantiatedSpecs.Add <| SpecViewModel(spec, controller, buildContextAndResolveSpecs, getFullNameOfSpec)) 
 
   member x.runSpecs = 
-    _instantiatedSpecs |> Seq.iter (fun c -> c.State <- NotRunYet)
+    x.Children |> Seq.iter (fun c -> c.State <- NotRunYet)
     extractSpecs ()
     _instantiatedSpecs |> Seq.iter (fun s -> s.runSpec)
-    x.State <- _instantiatedSpecs.Cast<TreeViewModel>() |> TreeViewModel.aggregatedResults 
+    x.AsI.State <- x.aggregateStates
+    x.AsI.SpecsRunResult <- x.aggregateResults
 
   member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> true))
+  member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
 
-  override x.Name with get() =  specs.Name |> removeLeadingGet
-  override x.Children with get() = _instantiatedSpecs.AsEnumerable() |> Seq.cast<TreeViewModel>
+  interface ITreeViewModel with
+    override x.Name with get() =  specs.Name |> removeLeadingGet
+    override x.Children with get() = _instantiatedSpecs.AsEnumerable() |> Seq.cast<ITreeViewModel>
 
   override x.OnExpanded () = extractSpecs ()
 
-  member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
+  
 

@@ -13,8 +13,8 @@ open FSharpSpec.RunnerUtils
 open SpecsExtractor
 open SpecsRunnerUtils  
 
-type ContextViewModel (node : Node, specsRunResult : SpecsRunResult) = 
-  inherit TreeViewModel (getNodeName node, specsRunResult)
+type ContextViewModel (node : Node, controller) = 
+  inherit TreeViewModel (getNodeName node, controller)
 
   let _childContexts = List<ContextViewModel>()
   let _specContainers = List<SpecContainerViewModel>()
@@ -22,32 +22,30 @@ type ContextViewModel (node : Node, specsRunResult : SpecsRunResult) =
 
   do
     node.Children
-    |> Seq.iter (fun c -> _childContexts.Add <| ContextViewModel(c, specsRunResult))
+    |> Seq.iter (fun c -> _childContexts.Add <| ContextViewModel(c, controller))
     
     node.Context.SpecLists
     |> Seq.map (fun mi -> { Name = mi.Name; Method = mi }) 
-    |> Seq.iter (fun si -> _specContainers.Add <| SpecContainerViewModel(si, node.Context, specsRunResult))
+    |> Seq.iter (fun si -> _specContainers.Add <| SpecContainerViewModel(si, node.Context, controller))
 
-  let _children = Seq.cast<TreeViewModel>(_childContexts) |> Seq.append(Seq.cast<TreeViewModel>(_specContainers))
+  let _children = Seq.cast<ITreeViewModel>(_childContexts) |> Seq.append(Seq.cast<ITreeViewModel>(_specContainers))
     
   member x.runSpecs = 
-    x.Reset ()
+    x.AsI.Reset ()
     x.ChildContexts |> Seq.iter (fun (c : ContextViewModel) -> c.runSpecs)
     x.SpecContainers |> Seq.iter (fun (c : SpecContainerViewModel) -> c.runSpecs)
     
-    
-    x.State <- x.Children |> TreeViewModel.aggregatedResults 
+    x.AsI.State <- x.aggregateStates
+    x.AsI.SpecsRunResult <- x.aggregateResults
 
-  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> Seq.length x.Children > 0))
+  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> Seq.length x.AsI.Children > 0))
   member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
 
   member x.ChildContexts with get() = _childContexts
   member x.SpecContainers with get() = _specContainers
-  member x.IsExpanded 
-    with get ()       = _isExpanded
-    and  set (value)  = _isExpanded <- value
-
-  override x.Children with get () = _children
+  
+  interface ITreeViewModel with
+    override x.Children with get () = _children
       
 
   

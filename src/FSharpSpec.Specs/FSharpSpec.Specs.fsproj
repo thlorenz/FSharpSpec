@@ -9,8 +9,9 @@
     <OutputType>Library</OutputType>
     <RootNamespace>FSharpSpec.Specs</RootNamespace>
     <AssemblyName>FSharpSpec.Specs</AssemblyName>
-    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
     <Name>FSharpSpec.Specs</Name>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -29,32 +30,6 @@
     <DefineConstants>TRACE</DefineConstants>
     <WarningLevel>3</WarningLevel>
   </PropertyGroup>
-  <ItemGroup>
-    <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core" />
-    <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Utils.fs" />
-    <Compile Include="BDD.fs" />
-    <Compile Include="BeGreaterThan.fs" />
-    <Compile Include="BeSameAsSpecs.fs" />
-    <Compile Include="ContainsSpecs.fs" />
-    <Compile Include="EqualitySpecs.fs" />
-    <Compile Include="ExceptionSpecs.fs" />
-    <Compile Include="SpecIndependenceSpecs.fs" />
-    <Compile Include="TypeCheckingSpecs.fs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\FSharpSpec\FSharpSpec.fsproj">
-      <Name>FSharpSpec</Name>
-      <Project>{12d7b460-5020-4d49-8fc0-11692a5e32e3}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition="Exists('$(MSBuildToolsPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
@@ -72,4 +47,39 @@
     <PostBuildEvent>
     </PostBuildEvent>
   </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Utils.fs" />
+    <Compile Include="BDD.fs" />
+    <Compile Include="BeGreaterThan.fs" />
+    <Compile Include="BeSameAsSpecs.fs" />
+    <Compile Include="ContainsSpecs.fs" />
+    <Compile Include="EqualitySpecs.fs" />
+    <Compile Include="ExceptionSpecs.fs" />
+    <Compile Include="SpecIndependenceSpecs.fs" />
+    <Compile Include="TypeCheckingSpecs.fs" />
+    <Compile Include="TreeViewModelSpecs.fs" />
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Moq">
+      <HintPath>..\packages\Moq.4.0.10827\lib\NET40\Moq.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="mscorlib" />
+    <Reference Include="FSharp.Core" />
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <ProjectReference Include="..\FSharpSpec\FSharpSpec.fsproj">
+      <Name>FSharpSpec</Name>
+      <Project>{12d7b460-5020-4d49-8fc0-11692a5e32e3}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Runners\FSharpSpec.GuiRunner\FSharpSpec.GuiRunner.fsproj">
+      <Name>FSharpSpec.GuiRunner</Name>
+      <Project>{dfdae481-6837-442c-8ea8-b0cd56b9c4e9}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
 </Project>

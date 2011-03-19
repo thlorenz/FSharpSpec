@@ -39,8 +39,10 @@ module main =
     override this.OnStartup (args:StartupEventArgs) =
       base.OnStartup(args)
       
+      let controller = GuiController() :> IGuiController
       let specsRunResult = SpecsRunResult()
-      let asmRoot = AssembliesViewModel(new ObservableCollection<Assembly>([asm]), specsRunResult)
+      let asmRoot = AssembliesViewModel(new ObservableCollection<Assembly>([asm]), controller)
+     
 
       let loadGuiRunnerView (fileName : string) =
         let reader = XmlReader.Create fileName
@@ -48,7 +50,7 @@ module main =
 
       let view () = 
         let userControl = loadGuiRunnerView @"C:\dev\FSharp\FSharpSpec\src\Runners\FSharpSpec.GuiRunner\GuiRunnerView.xaml" 
-        userControl.DataContext <- MainViewModel (asmRoot, specsRunResult)
+        userControl.DataContext <- MainViewModel (asmRoot, controller)
         userControl
 
       let win = Window( Width=700.0, Height = 600.0, Content = view (), Topmost = false)
