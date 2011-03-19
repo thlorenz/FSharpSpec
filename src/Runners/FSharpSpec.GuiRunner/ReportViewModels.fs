@@ -5,6 +5,24 @@ open FSharpSpec
 
 type SpecState = | NotRunYet | Passed | Pending | Failed | Inconclusive 
 
+[<AutoOpen>]
+module GuiReportingHelpers =
+
+  let toSpecState assertionResult = 
+      match assertionResult with
+      | AssertionResult.Passed        -> Passed 
+      | AssertionResult.Pending       -> Pending 
+      | AssertionResult.Failed        -> Failed 
+      | AssertionResult.Inconclusive  -> Inconclusive
+
+  let toSpecStateDisplay state =
+    match state with
+    | NotRunYet     -> "Not Run Yet"
+    | Passed        -> "Passed"
+    | Pending       -> "Pending"
+    | Failed        -> "Failed"
+    | Inconclusive  -> "Inconclusive"
+
 type SpecRunResultViewModel =
   inherit ViewModelBase
 
@@ -21,17 +39,9 @@ type SpecRunResultViewModel =
     { _state = state; _fullSpecName = fullSpecName; _exceptionMessage = exceptionMessage }
 
   member x.State with get () = x._state
-    
-  member x.StateDisplay 
-    with get () =  
-      match x.State with
-      | NotRunYet     -> "Not Run Yet"
-      | Passed        -> "Passed"
-      | Pending       -> "Pending"
-      | Failed        -> "Failed"
-      | Inconclusive  -> "Inconclusive"
   
-     
+  member x.StateDisplay with get () = toSpecStateDisplay x.State
+       
   member x.FullSpecName with get () = x._fullSpecName
   member x.ExceptionMessage with get () = x._exceptionMessage
 
@@ -44,14 +54,6 @@ type SpecsRunResult () =
   
   member x.Items with get () = _items
 
-[<AutoOpen>]
-module GuiReportingHelpers =
-
-  let toSpecState assertionResult = 
-      match assertionResult with
-      | AssertionResult.Passed        -> Passed 
-      | AssertionResult.Pending       -> Pending 
-      | AssertionResult.Failed        -> Failed 
-      | AssertionResult.Inconclusive  -> Inconclusive
+ 
 
   

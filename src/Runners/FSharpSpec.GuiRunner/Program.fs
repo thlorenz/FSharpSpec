@@ -51,7 +51,7 @@ module main =
         userControl.DataContext <- MainViewModel (asmRoot, specsRunResult)
         userControl
 
-      let win = Window( Width=700.0, Height = 600.0, Content = view ())
+      let win = Window( Width=700.0, Height = 600.0, Content = view (), Topmost = false)
       win.Show()
       
     end

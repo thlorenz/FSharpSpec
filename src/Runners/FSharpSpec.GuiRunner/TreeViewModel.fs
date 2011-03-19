@@ -1,5 +1,5 @@
 ﻿namespace FSharpSpec.GuiRunner
-
+open System.Diagnostics
 type TreeViewModel (name, specsRunResult) =
    inherit ViewModelBase ()
    
@@ -9,7 +9,10 @@ type TreeViewModel (name, specsRunResult) =
 
    abstract member Name : string
    default x.Name with get () = name
-  
+
+   abstract member Children : seq<TreeViewModel>
+   default x.Children with get () = Seq.empty
+      
    member x.IsExpanded 
      with get() = _isExpanded
      and set value = 
@@ -34,10 +37,18 @@ type TreeViewModel (name, specsRunResult) =
     with get ()       = _state
     and  set (value : SpecState)  = 
       _state <- value
-      base.OnPropertyChanged("State")
+      Debug.WriteLine("{0} -> {1}", x.Name, x.State |> toSpecStateDisplay)
+      x.OnPropertyChanged("State")
 
    member x.SpecsRunResult with get () : SpecsRunResult = specsRunResult
 
+   abstract Reset : unit -> unit
+   default x.Reset () = 
+     Debug.WriteLine("Resetting: " + x.Name)
+     x.State <- NotRunYet
+     x.Children |> Seq.iter(fun c -> c.Reset ())
+     
+  
    static member aggregatedResults (treeViewModels : seq<TreeViewModel>) =
       match treeViewModels with
       | xs when xs |> Seq.exists (fun s -> s.State = SpecState.Failed)        -> SpecState.Failed

@@ -76,6 +76,11 @@
     <Reference Include="WindowsBase" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\FSharp.Interop\FSharp.Interop.fsproj">
+      <Name>FSharp.Interop</Name>
+      <Project>{ad93a1f7-178a-4ba6-8cf9-2e3945c4dc35}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\..\FSharpSpec\FSharpSpec.fsproj">
       <Name>FSharpSpec</Name>
       <Project>{12d7b460-5020-4d49-8fc0-11692a5e32e3}</Project>

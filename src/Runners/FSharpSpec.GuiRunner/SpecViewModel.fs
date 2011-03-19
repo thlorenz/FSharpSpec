@@ -17,7 +17,7 @@ type SpecViewModel (specInfo : (string * SpecDelegate), specsRunResult, buildCon
   member private x._debugSpecCommand = ActionCommand ((fun _ -> x.debugSpec), (fun _ -> true))
  
   member x.runSpec = 
-    x.State <- NotRunYet
+    // x.State <- NotRunYet
     try
       let outcome = _spec.Method.Invoke(_spec.Target, null) :?> AssertionResult  
       x.State <- outcome |> toSpecState
@@ -37,7 +37,6 @@ type SpecViewModel (specInfo : (string * SpecDelegate), specsRunResult, buildCon
   member x.RunSpecCommand with get () = x._runSpecCommand :> ICommand
   member x.DebugSpecCommand with get () = x._debugSpecCommand :> ICommand
   
-
   override x.OnSelected () = 
     x.SpecsRunResult.Items.Clear()
     x.SpecsRunResult.Items.Add _specRunResult
