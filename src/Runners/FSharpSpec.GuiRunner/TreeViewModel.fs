@@ -8,7 +8,7 @@ type TreeViewModel (name, controller : IGuiController) =
   let mutable _isSelected = false
   let mutable _state = NotRunYet
   let mutable _specsRunResult = Seq.empty
-  member x.AsI with get () = x :> ITreeViewModel
+  member x.AsITreeViewModel with get () = x :> ITreeViewModel
   
   interface ITreeViewModel with
     override x.Name with get () = name
@@ -25,13 +25,12 @@ type TreeViewModel (name, controller : IGuiController) =
       and set (value) = _specsRunResult <- value
   
     override x.Reset () = 
-      x.AsI.State <- NotRunYet
-      x.AsI.Children |> Seq.iter(fun c -> c.Reset ())
+      x.AsITreeViewModel.State <- NotRunYet
+      x.AsITreeViewModel.Children |> Seq.iter(fun c -> c.Reset ())
 
-    
      
   member x.aggregateStates =
-    match x.AsI.Children with
+    match x.AsITreeViewModel.Children with
     | xs when xs |> Seq.exists (fun s -> s.State = SpecState.Failed)        -> SpecState.Failed
     | xs when xs |> Seq.exists (fun s -> s.State = SpecState.Inconclusive)  -> SpecState.Inconclusive
     | xs when xs |> Seq.exists (fun s -> s.State = SpecState.NotRunYet)     -> SpecState.NotRunYet
@@ -43,9 +42,10 @@ type TreeViewModel (name, controller : IGuiController) =
   abstract member OnSelected : unit -> unit
   default x.OnSelected () = ()
   
-  member x.Children with get () = x.AsI.Children 
-  member x.Name with get () = x.AsI.Name 
-  member x.State with get () = x.AsI.State
+  // Need these to ensure proper DataBinding
+  member x.Children with get () = x.AsITreeViewModel.Children 
+  member x.Name with get () = x.AsITreeViewModel.Name 
+  member x.State with get () = x.AsITreeViewModel.State
   
   member x.IsSelected 
       with get() = _isSelected
@@ -61,9 +61,9 @@ type TreeViewModel (name, controller : IGuiController) =
       base.OnPropertyChanged("IsExpanded")
       x.OnExpanded ()
 
-  member x.aggregateResults = x.AsI.Children |> Seq.collect(fun c -> c.SpecsRunResult) 
+  member x.aggregateResults = x.AsITreeViewModel.Children |> Seq.collect(fun c -> c.SpecsRunResult) 
 
-  override x.ToString() = x.AsI.Name
+  override x.ToString() = x.AsITreeViewModel.Name
 
 
 

@@ -32,11 +32,11 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
         |> List.iter (fun spec -> _instantiatedSpecs.Add <| SpecViewModel(spec, controller, buildContextAndResolveSpecs, getFullNameOfSpec)) 
 
   member x.runSpecs = 
-    x.Children |> Seq.iter (fun c -> c.State <- NotRunYet)
+    x.AsITreeViewModel.Children |> Seq.iter (fun c -> c.State <- NotRunYet)
     extractSpecs ()
     _instantiatedSpecs |> Seq.iter (fun s -> s.runSpec)
-    x.AsI.State <- x.aggregateStates
-    x.AsI.SpecsRunResult <- x.aggregateResults
+    x.AsITreeViewModel.State <- x.aggregateStates
+    x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
 
   member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> true))
   member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand

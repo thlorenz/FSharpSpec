@@ -21,14 +21,14 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller, buildContext
   member x.runSpec = 
     try
       let outcome = _spec.Method.Invoke(_spec.Target, null) :?> AssertionResult  
-      x.AsI.State <- outcome |> toSpecState
-      _specRunResult <- getResult x.AsI.State
-      x.AsI.SpecsRunResult <- [_specRunResult]
+      x.AsITreeViewModel.State <- outcome |> toSpecState
+      _specRunResult <- getResult x.AsITreeViewModel.State
+      x.AsITreeViewModel.SpecsRunResult <- [_specRunResult]
       if x.IsSelected then x.OnSelected ()
     with
       ex              -> 
-        x.AsI.State <- SpecState.Failed
-        _specRunResult <- getResult x.AsI.State
+        x.AsITreeViewModel.State <- SpecState.Failed
+        _specRunResult <- getResult x.AsITreeViewModel.State
 
   /// Re-evaluates the Context after launching the debugger in order to hit all possible breakpoints relevant to the specification
   member x.debugSpec = 
@@ -39,7 +39,7 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller, buildContext
   member x.RunSpecCommand with get () = x._runSpecCommand :> ICommand
   member x.DebugSpecCommand with get () = x._debugSpecCommand :> ICommand
   
-  member x.IsDummySpec = x.AsI.Name = SpecViewModel.DummySpecName
+  member x.IsDummySpec = x.AsITreeViewModel.Name = SpecViewModel.DummySpecName
   
   static member DummySpecName = "___DummySpecToShowTreeExpander___GUID:0D46D658-A328-466C-873F-B4BA1E394E5D"
   static member Dummy = SpecViewModel ((SpecViewModel.DummySpecName, SpecDelegate(fun () -> AssertionResult.Inconclusive)), GuiController() :> IGuiController , (fun () -> []), (fun _ -> null))

@@ -31,14 +31,14 @@ type ContextViewModel (node : Node, controller) =
   let _children = Seq.cast<ITreeViewModel>(_childContexts) |> Seq.append(Seq.cast<ITreeViewModel>(_specContainers))
     
   member x.runSpecs = 
-    x.AsI.Reset ()
+    x.AsITreeViewModel.Reset ()
     x.ChildContexts |> Seq.iter (fun (c : ContextViewModel) -> c.runSpecs)
     x.SpecContainers |> Seq.iter (fun (c : SpecContainerViewModel) -> c.runSpecs)
     
-    x.AsI.State <- x.aggregateStates
-    x.AsI.SpecsRunResult <- x.aggregateResults
+    x.AsITreeViewModel.State <- x.aggregateStates
+    x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
 
-  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> Seq.length x.AsI.Children > 0))
+  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> Seq.length x.AsITreeViewModel.Children > 0))
   member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
 
   member x.ChildContexts with get() = _childContexts

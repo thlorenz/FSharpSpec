@@ -24,14 +24,14 @@ type AssemblyViewModel (asm : Assembly, controller : IGuiController) =
   let mutable count = 0
 
   member x.runSpecs = 
-    x.Child.AsI.Reset ()
-    x.AsI.State <- x.Child.AsI.State
+    x.Child.AsITreeViewModel.Reset ()
+    x.AsITreeViewModel.State <- x.Child.AsITreeViewModel.State
     
     Dispatcher.CurrentDispatcher.BeginInvoke(
       DispatcherPriority.SystemIdle, 
       action(fun () ->
         x.Child.runSpecs
-        x.AsI.State <- x.Child.AsI.State)) 
+        x.AsITreeViewModel.State <- x.Child.AsITreeViewModel.State)) 
     |> ignore
 
   member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> true))
