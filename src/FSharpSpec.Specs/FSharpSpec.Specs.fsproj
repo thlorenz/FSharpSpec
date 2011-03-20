@@ -58,10 +58,16 @@
     <Compile Include="SpecIndependenceSpecs.fs" />
     <Compile Include="TypeCheckingSpecs.fs" />
     <Compile Include="TreeViewModelSpecs.fs" />
+    <None Include="packages.config" />
+    <None Include="NSubstitute.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
+    <Reference Include="NSubstitute">
+      <HintPath>..\packages\NSubstitute.1.0.0.0\lib\35\NSubstitute.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
