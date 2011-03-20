@@ -6,7 +6,7 @@ open FSharpSpec
 
 type Equality () =
   member x.Boolean = [
-    it "true should.be true" true should.be false
+    it "true should.be true" true should.be true
     it "false should.be false" false should.be false
     it "false shouldn't.be true" false shouldn't.be true
     it "true shouldn't.be false" true shouldn't.be false

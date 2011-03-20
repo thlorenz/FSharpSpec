@@ -47,7 +47,7 @@ type shouldn't() =
 
 
     // Risk-friendly overloads
-    static member equal<'a>(riskyCode : (unit -> 'a), expected) = shouldn't.equal((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
-    static member be<'a>(riskyCode : (unit -> 'a), expected) = shouldn't.be((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
-    static member beSameAs<'a when 'a : not struct>(riskyCode : (unit -> 'a), expected) = shouldn't.beSameAs((new RiskDelegate<'a>(riskyCode)).Invoke(), expected)
+    static member equal<'a>(riskyCode : (unit -> 'a), expected) = shouldn't.equal(riskyCode (), expected)
+    static member be<'a>(riskyCode : (unit -> 'a), expected) = shouldn't.be(riskyCode (), expected)
+    static member beSameAs<'a when 'a : not struct>(riskyCode : (unit -> 'a), expected) = shouldn't.beSameAs(riskyCode (), expected)
    

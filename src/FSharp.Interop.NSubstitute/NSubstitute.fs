@@ -8,6 +8,8 @@ module NSubstitute =
   let any<'a> = Arg.Any<'a>()
   let is<'a> (value : 'a) = Arg.Is<'a>(value)
 
+  let fake<'a when 'a: not struct> = Substitute.For<'a>()
+
   let clearReceivedCalls substitute = SubstituteExtensions.ClearReceivedCalls(substitute)
 
   let received substitute = SubstituteExtensions.Received(substitute)
@@ -16,3 +18,4 @@ module NSubstitute =
   let returns (arg : 'a) call = SubstituteExtensions.Returns(call, arg)
   
   let whenReceived f substitute = SubstituteExtensions.When(substitute, action1(f))
+

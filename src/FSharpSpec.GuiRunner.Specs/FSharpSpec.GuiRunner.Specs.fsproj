@@ -35,16 +35,16 @@
   <Import Project="$(MSBuildExtensionsPath32)\FSharp\1.0\Microsoft.FSharp.Targets" Condition="!Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <ItemGroup>
-    <None Include="packages.config" />
     <Compile Include="TreeViewModelSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\FSharp.Interop.NSubstitute\FSharp.Interop.NSubstitute.fsproj">
+      <Name>FSharp.Interop.NSubstitute</Name>
+      <Project>{e943efa6-b874-4c9d-96c1-32b6599e1523}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
-    <Reference Include="NSubstitute">
-      <HintPath>..\packages\NSubstitute.1.0.0.0\lib\35\NSubstitute.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <ProjectReference Include="..\FSharpSpec\FSharpSpec.fsproj">
@@ -57,6 +57,7 @@
       <Project>{dfdae481-6837-442c-8ea8-b0cd56b9c4e9}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <Reference Include="System.Numerics" />
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.

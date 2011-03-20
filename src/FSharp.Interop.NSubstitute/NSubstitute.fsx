@@ -2,8 +2,6 @@
 #r @"C:\dev\FSharp\FSharpSpec\src\FSharp.Interop.NSubstitute\bin\Debug\FSharp.Interop.NSubstitute.dll"
 
 open System
-open NSubstitute
-open NSubstitute.Core
 
 open FSharp.Interop
 
@@ -15,8 +13,7 @@ type IMonkey =
   abstract Count : string -> int
 
 
-// MonkeyMock
-let m = Substitute.For<IMonkey>()
+let m = fake<IMonkey>
 
 m.Name |> returns "Bob"
 printfn "m.Name -> %A" m.Name
@@ -37,4 +34,7 @@ m.Eat 3 "bananas"
 
 (m |> received).Eat 3 "bananas"
 (m |> received).Eat any<int> any<string>
+
+m.Age <- 3
+(m |> received).Age <- 3
 
