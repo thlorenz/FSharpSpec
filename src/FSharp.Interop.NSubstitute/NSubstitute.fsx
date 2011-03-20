@@ -1,8 +1,11 @@
 ﻿#r @"C:\dev\FSharp\FSharpSpec\src\packages\NSubstitute.1.0.0.0\lib\35\NSubstitute.dll"
+#r @"C:\dev\FSharp\FSharpSpec\src\FSharp.Interop.NSubstitute\bin\Debug\FSharp.Interop.NSubstitute.dll"
 
 open System
 open NSubstitute
 open NSubstitute.Core
+
+open FSharp.Interop
 
 type IMonkey =
   abstract Scream : string -> unit
@@ -11,21 +14,6 @@ type IMonkey =
   abstract Eat : int -> string -> unit
   abstract Count : string -> int
 
-module NSub =   
-  let any<'a> = Arg.Any<'a>()
-  let is<'a> (value : 'a) = Arg.Is<'a>(value)
-
-  let clearReceivedCalls substitute = SubstituteExtensions.ClearReceivedCalls(substitute)
-
-  let received substitute = SubstituteExtensions.Received(substitute)
-  let didNotReceive substitute = SubstituteExtensions.DidNotReceive(substitute)
-
-  let returns (arg : 'a) propGet = SubstituteExtensions.Returns(propGet, arg)
-
-  let whenReceived (f : 'a -> unit) (substitute) = SubstituteExtensions.When(substitute, Action<'a>(f))
-
-
-open NSub
 
 // MonkeyMock
 let m = Substitute.For<IMonkey>()

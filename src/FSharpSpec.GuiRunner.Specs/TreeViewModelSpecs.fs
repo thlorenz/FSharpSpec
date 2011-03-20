@@ -21,3 +21,4 @@ type ``when the node has specs run results`` () =
   inherit TreeViewModelSpecs ()
   do base.sut.AsITreeViewModel.SpecsRunResult <- [ SpecRunResultViewModel(Passed, "some spec name") ] 
 
+

@@ -9,7 +9,7 @@
     <OutputType>Library</OutputType>
     <RootNamespace>FSharpSpec.Specs</RootNamespace>
     <AssemblyName>FSharpSpec.Specs</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <Name>FSharpSpec.Specs</Name>
     <TargetFrameworkProfile />
   </PropertyGroup>
@@ -57,29 +57,19 @@
     <Compile Include="ExceptionSpecs.fs" />
     <Compile Include="SpecIndependenceSpecs.fs" />
     <Compile Include="TypeCheckingSpecs.fs" />
-    <Compile Include="TreeViewModelSpecs.fs" />
-    <None Include="packages.config" />
-    <None Include="NSubstitute.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
-    <Reference Include="NSubstitute">
-      <HintPath>..\packages\NSubstitute.1.0.0.0\lib\35\NSubstitute.dll</HintPath>
-      <Private>True</Private>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
-    <ProjectReference Include="..\FSharpSpec\FSharpSpec.fsproj">
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FSharpSpec\FSharpSpec.fsproj">
       <Name>FSharpSpec</Name>
       <Project>{12d7b460-5020-4d49-8fc0-11692a5e32e3}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Runners\FSharpSpec.GuiRunner\FSharpSpec.GuiRunner.fsproj">
-      <Name>FSharpSpec.GuiRunner</Name>
-      <Project>{dfdae481-6837-442c-8ea8-b0cd56b9c4e9}</Project>
       <Private>True</Private>
     </ProjectReference>
   </ItemGroup>
