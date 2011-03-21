@@ -36,11 +36,17 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <ItemGroup>
     <Compile Include="TreeViewModelSpecs.fs" />
+    <Compile Include="GuiControllerSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FSharp.Interop.NSubstitute\FSharp.Interop.NSubstitute.fsproj">
       <Name>FSharp.Interop.NSubstitute</Name>
       <Project>{e943efa6-b874-4c9d-96c1-32b6599e1523}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\Runners\FSharpSpec.RunnerUtils\FSharpSpec.RunnerUtils.fsproj">
+      <Name>FSharpSpec.RunnerUtils</Name>
+      <Project>{bee45fe9-9ebb-4c04-9213-8b884f68b50b}</Project>
       <Private>True</Private>
     </ProjectReference>
     <Reference Include="mscorlib" />

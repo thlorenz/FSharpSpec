@@ -1,22 +1,29 @@
 ﻿module TreeViewModelSpecs
 
 open System
-open System.Linq.Expressions
 open FSharpSpec
 open FSharpSpec.GuiRunner
 open FSharp.Interop
 
 type TreeViewModelSpecs () = 
-  
-  member x.name = "some Name"
-  member x.guiControllerMock = fake<IGuiController>
-  member x.sut = TreeViewModel(x.name, x.guiControllerMock)
+  let _controllerMock = fake<IGuiController>
+  let _name = "some Name"
+  let _sut = TreeViewModel(_name, _controllerMock)
+ 
+  member x.name with get () = _name 
+  member x.controllerMock with get () = _controllerMock
+  member x.sut with get () = _sut
 
   member x.``when the user selects it`` = 
-    verify "tells the controller" <| lazy (x.guiControllerMock |> received).Selected(x.sut)
+    x.sut.IsSelected <- true
+    lazy (x.controllerMock |> received).Selected x.sut |> verify "tells the controller that it was selected" 
+  
+  member x.``when the user de-selects it`` =
+    x.sut.IsSelected <- false
+    lazy (x.controllerMock |> didNotReceive).Selected x.sut |> verify "doesn't tell the controller that it was selected" 
+     
 
-type ``when the node has specs run results`` () =
-  inherit TreeViewModelSpecs ()
-  do base.sut.AsITreeViewModel.SpecsRunResult <- [ SpecRunResultViewModel(Passed, "some spec name") ] 
+
+
 
 

@@ -38,6 +38,7 @@
     <Compile Include="should.fs" />
     <Compile Include="shouldn%27t.fs" />
     <Compile Include="Syntax.fs" />
+    <None Include="FSharpSpecRepl.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

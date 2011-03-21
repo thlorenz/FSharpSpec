@@ -41,18 +41,14 @@ type TreeViewModel (name, controller : IGuiController) =
   
   abstract member OnSelected : unit -> unit
   default x.OnSelected () = ()
-  
-  // Need these to ensure proper DataBinding
-  member x.Children with get () = x.AsITreeViewModel.Children 
-  member x.Name with get () = x.AsITreeViewModel.Name 
-  member x.State with get () = x.AsITreeViewModel.State
-  
+ 
   member x.IsSelected 
       with get() = _isSelected
       and set value = 
         _isSelected <- value 
-        base.OnPropertyChanged("IsSelected")
+        if _isSelected then controller.Selected x.AsITreeViewModel
         x.OnSelected ()
+        base.OnPropertyChanged("IsSelected")
   
   member x.IsExpanded 
     with get() = _isExpanded
@@ -65,5 +61,9 @@ type TreeViewModel (name, controller : IGuiController) =
 
   override x.ToString() = x.AsITreeViewModel.Name
 
-
+  // Need these to ensure proper DataBinding
+  member x.Children with get () = x.AsITreeViewModel.Children 
+  member x.Name with get () = x.AsITreeViewModel.Name 
+  member x.State with get () = x.AsITreeViewModel.State
+  
 

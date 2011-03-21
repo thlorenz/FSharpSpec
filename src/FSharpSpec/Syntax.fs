@@ -31,8 +31,8 @@ module Syntax =
   let verify (specName : string) (verifyCall : Lazy<unit>) = 
     let specDelegate = SpecDelegate(fun () -> verifyCall.Value ; AssertionResult.Passed)
     (specName, specDelegate)
-  
-  /// Use to catch an exception in order to then assert about its type, message etc.      
+
+   /// Use to catch an exception in order to then assert about its type, message etc.      
   let catch<'a>(throwingCode:(unit -> 'a)) =
     try 
       throwingCode () |> ignore

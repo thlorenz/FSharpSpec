@@ -2,6 +2,19 @@
 
 open System
 
+module utils =
+  let notContainedButShould source = ( fun containedItem -> 
+    source 
+    |> Seq.exists(fun sourceItem -> sourceItem = containedItem) 
+    |> not )  
+  
+  let containedButShouldn't containedItems = ( fun sourceItem -> 
+    containedItems 
+    |> Seq.exists(fun containedItem -> containedItem = sourceItem) 
+    |> not ) 
+
+open utils
+
 type should() = 
   
   /// Used for mock verifications e.g. (m |> received).Scream "hello" should.pass
@@ -137,6 +150,59 @@ type should() =
                                                         |> SpecFailedException
                                                         |> raise
   
+  static member contain1<'a when 'a: equality>(source : 'a seq, containedItems : 'a seq) =   
+
+    if (Seq.isEmpty source) then 
+      sprintf "should have contained\n%A\n but was empty" containedItems
+      |> SpecFailedException
+      |> raise
+    
+    if (Seq.isEmpty containedItems) then 
+      sprintf "\n%A cannot contain an empty list" source
+      |> SpecFailedException
+      |> raise
+
+    let itemsNotContainedThatShouldHaveBeen = 
+      containedItems 
+      |> Seq.filter (notContainedButShould source)
+   
+    let notContainedMsg = 
+      sprintf "%A \nshould have contained\n%A\n but didn't" source itemsNotContainedThatShouldHaveBeen
+    
+    match (Seq.toList itemsNotContainedThatShouldHaveBeen) with
+    | []        -> Passed
+    | otherwise -> notContainedMsg
+                   |> SpecFailedException
+                   |> raise
+                                                      
+  static member containOnly<'a when 'a: equality>(source : 'a seq, containedItems : 'a seq) =
+      
+    let itemsNotContainedThatShouldHaveBeen = 
+      containedItems 
+      |> Seq.filter (notContainedButShould source)
+    
+    let itemsContainedThatShouldn'tHaveBeen = 
+      source 
+      |> Seq.filter ( containedButShouldn't containedItems)
+   
+    let notContainedMsg = 
+      sprintf "%A \nshould have contained\n%A\n but didn't" source itemsNotContainedThatShouldHaveBeen
+    let containedButShouldn'dMsg = 
+      sprintf "%A \nshouldn't have contained\n%A\n but did" source itemsContainedThatShouldn'tHaveBeen
+   
+    let message, result = 
+      match (Seq.toList itemsNotContainedThatShouldHaveBeen, Seq.toList itemsContainedThatShouldn'tHaveBeen) with
+      | ([],[]) -> ("", Passed)
+      | (xs,[]) -> (notContainedMsg, Failed)
+      | ([],ys) -> (containedButShouldn'dMsg, Failed)
+      | (xs, ys)-> (notContainedMsg + containedButShouldn'dMsg, Failed)
+    
+    match result with
+    | Passed    ->  Passed
+    | otherwise ->  message
+                    |> SpecFailedException
+                    |> raise
+
   // Risk-friendly overloads
   // Using functions
   static member equal<'a>(riskyCode : (unit -> 'a), expected) = should.equal(riskyCode (), expected)
