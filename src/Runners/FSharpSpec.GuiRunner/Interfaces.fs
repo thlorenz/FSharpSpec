@@ -1,6 +1,5 @@
 ﻿namespace FSharpSpec.GuiRunner
 
-open System.Collections.ObjectModel
 
 type ITreeViewModel =
   abstract member Name : string
@@ -11,4 +10,6 @@ type ITreeViewModel =
 
 type IGuiController =
   abstract member Selected : ITreeViewModel -> unit
-  abstract member SpecRunResults : ObservableCollection<SpecRunResultViewModel> with get
+
+type IGuiRunnerViewModel =
+  abstract UpdateSpecsRunResult : seq<SpecRunResultViewModel> -> unit

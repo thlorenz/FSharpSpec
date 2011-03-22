@@ -1,19 +1,10 @@
 ﻿
 
-let source = [1;2] |> List.toSeq
+let source = Seq.empty
 
 let containedItems = [1;2;3] |> List.toSeq
 
-let notContainedButShould = ( fun containedItem -> 
-  source 
-  |> Seq.exists(fun sourceItem -> sourceItem = containedItem) 
-  |> not )  
-
-let containedButShouldn't = ( fun sourceItem -> 
-  containedItems 
-  |> Seq.exists(fun containedItem -> containedItem = sourceItem) 
-  |> not )
-
-let itemsNotContainedButThatShouldHaveBeen =  containedItems |> Seq.filter notContainedButShould
-let itemsContainedThatShouldn'tHaveBeen = source |> Seq.filter containedButShouldn't
-   
+let testForEmpty = 
+  match source with
+  | s when s |> Seq.isEmpty -> ("", "Passed")
+  | otherwise               -> (sprintf "%A was expected to be empty but wasn't" source, "Failed")

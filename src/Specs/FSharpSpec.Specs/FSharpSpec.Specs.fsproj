@@ -57,6 +57,7 @@
     <Compile Include="ExceptionSpecs.fs" />
     <Compile Include="SpecIndependenceSpecs.fs" />
     <Compile Include="TypeCheckingSpecs.fs" />
+    <Compile Include="BeEmptySpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

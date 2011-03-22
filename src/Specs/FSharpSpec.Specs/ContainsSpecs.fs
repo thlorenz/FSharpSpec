@@ -34,7 +34,7 @@ type Contains () =
   member x.``list containing multiple values`` = [
     it "[1;2;3] should.contain1 [1;2]" [1;2;3] should.contain1 [1;2]
     it "[1;2;3] should.contain1 [1;2;3]" [1;2;3] should.contain1 [1;2;3]
-    
+   
     ass "[1;2] should.contain1 [] will fail" (it "" [1;2] should.contain1 []) will.fail
     ass "[] should.contain1 [1;2] will fail" (it "" [] should.contain1 [1;2]) will.fail
     ass "[1;2;3] should.contain [1;4] will fail" 

@@ -7,18 +7,25 @@ open FSharp.Interop
 
 type GuiControllerSpecs () =
   let _treeViewModelStub = fake<ITreeViewModel>
-  let _sut = GuiController() :> IGuiController
+  let _guiViewModelMock = fake<IGuiRunnerViewModel>
+  let _sut = GuiController( GuiRunnerViewModel = _guiViewModelMock ) :> IGuiController
 
   member x.treeViewModelStub with get () = _treeViewModelStub
+  member x.guiRunnerViewModelMock with get () = _guiViewModelMock
   member x.sut with get () = _sut
 
 type ``when a tree viewmodel has specs run results`` () =
   inherit GuiControllerSpecs ()
-  
-  let specsRunResult = [ SpecRunResultViewModel(Passed, "some spec name") ]
-  do base.treeViewModelStub.SpecsRunResult <- specsRunResult
+  let firstResult = SpecRunResultViewModel(Passed, "some spec name")
+  let secondResult = SpecRunResultViewModel(Failed, "some other spec name")
 
-//  member x.``the user selects it`` =
-//    x.sut.Selected x.treeViewModelStub
-//    it "the spec run results contain only the results of the selected tree view model"
-//      x.sut.SpecRunResults should.con
+  let specsRunResult = [ firstResult; secondResult ] |> List.toSeq
+  do base.treeViewModelStub.SpecsRunResult |> returns specsRunResult
+
+  member x.``and the user selects it`` =
+    x.sut.Selected x.treeViewModelStub
+    [
+      verify "updates the spec run results of the gui viewmodel"
+        <| lazy (x.guiRunnerViewModelMock |> received).UpdateSpecsRunResult specsRunResult
+      
+    ]

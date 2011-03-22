@@ -2,24 +2,10 @@
 
 open System
 
-module utils =
-  let notContainedButShould source = ( fun containedItem -> 
-    source 
-    |> Seq.exists(fun sourceItem -> sourceItem = containedItem) 
-    |> not )  
-  
-  let containedButShouldn't containedItems = ( fun sourceItem -> 
-    containedItems 
-    |> Seq.exists(fun containedItem -> containedItem = sourceItem) 
-    |> not ) 
-
-open utils
+open CommonUtils
 
 type should() = 
   
-  /// Used for mock verifications e.g. (m |> received).Scream "hello" should.pass
-  static member pass () = Passed
-    
   static member equal(actual : obj, expected : obj) = 
     match (actual, expected) with
     | a, e when a = e   -> Passed
@@ -40,9 +26,22 @@ type should() =
                             |> SpecFailedException 
                             |> raise
     
-    
-         
   static member be (actual:bool, expected:bool) = should.equal (actual, expected)
+  
+  static member be (actual: seq<'a>, characteristic:Characteristic) =
+    
+    let testForEmpty source = 
+      match source with
+      | null                    -> (Failed, sprintf "value was expected to be empty but was [null]!")
+      | s when s |> Seq.isEmpty -> (Passed, "")
+      | otherwise               -> (Failed, sprintf "%A was expected to be empty but wasn't!" source)
+    
+    let (result, msg) =
+      match characteristic with
+      | Empty   -> testForEmpty actual
+    
+    evaluate (result, msg)
+    
     
   static member be(actual : obj, expectedType : Type) = 
     match actual with

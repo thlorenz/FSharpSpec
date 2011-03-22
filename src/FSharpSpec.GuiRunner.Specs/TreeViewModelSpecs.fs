@@ -20,7 +20,8 @@ type TreeViewModelSpecs () =
   
   member x.``when the user de-selects it`` =
     x.sut.IsSelected <- false
-    lazy (x.controllerMock |> didNotReceive).Selected x.sut |> verify "doesn't tell the controller that it was selected" 
+    verify "doesn't tell the controller that it was selected" 
+      <| lazy (x.controllerMock |> didNotReceive).Selected x.sut 
      
 
 

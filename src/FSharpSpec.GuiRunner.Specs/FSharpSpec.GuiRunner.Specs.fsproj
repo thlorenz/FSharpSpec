@@ -37,6 +37,7 @@
   <ItemGroup>
     <Compile Include="TreeViewModelSpecs.fs" />
     <Compile Include="GuiControllerSpecs.fs" />
+    <Compile Include="GuiRunnerViewModelSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\FSharp.Interop.NSubstitute\FSharp.Interop.NSubstitute.fsproj">

@@ -1,6 +1,7 @@
 ﻿namespace FSharpSpec
 
 open System
+open CommonUtils
 
 type shouldn't() =
     static member equal (actual : obj, expected : obj) = 
@@ -22,8 +23,23 @@ type shouldn't() =
        
     static member be (actual:bool, expected:bool) = shouldn't.equal (actual, expected)
     
-    static member be(actual, expectedType : Type) = shouldn't.equal (actual.GetType(), expectedType)
+    static member be (actual: seq<'a>, characteristic:Characteristic) =
+      let testForNotEmpty source = 
+        match source with
+        | null                          -> (Failed, 
+                                            sprintf "value was expected to be not empty but was [null]!")
+        | s when not (s |> Seq.isEmpty) -> (Passed, "")
+        | otherwise                     -> (Failed, 
+                                            sprintf "%A was expected to be not empty but wasn't!" source)
     
+      let (result, msg) =
+        match characteristic with
+        | Empty   -> testForNotEmpty actual
+    
+      evaluate (result, msg)
+
+    static member be(actual : obj, expectedType : Type) = shouldn't.equal (actual.GetType(), expectedType)
+
     static member beSameAs<'a when 'a : not struct>(actual : 'a, expected : 'a) =
         match (actual, expected) with
         | a, e when Object.ReferenceEquals(a, e)  -> String.Format("Expected [{1}] to not be the same as [{0}], but it was.", e, a) 

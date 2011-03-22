@@ -24,10 +24,8 @@ open System.Xml
 
 open FSharpSpec.GuiRunner
 
-
-
 module main =
-  let path = @"C:\dev\FSharp\FSharpSpec\src\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
+  let path = @"C:\dev\FSharp\FSharpSpec\src\Specs\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
 
   let asm = path |> getAssembly
   
@@ -39,18 +37,22 @@ module main =
     override this.OnStartup (args:StartupEventArgs) =
       base.OnStartup(args)
       
-      let controller = GuiController() :> IGuiController
+      let controller = GuiController() 
       let specsRunResult = SpecsRunResult()
-      let asmRoot = AssembliesViewModel(new ObservableCollection<Assembly>([asm]), controller)
+      let asmRoot = AssembliesViewModel(new ObservableCollection<Assembly>([asm]), controller :> IGuiController)
      
 
       let loadGuiRunnerView (fileName : string) =
         let reader = XmlReader.Create fileName
         XamlReader.Load reader :?> UserControl
+      
+      let guiRunnerViewModel = GuiRunnerViewModel (asmRoot, controller :> IGuiController)
+      
+      controller.GuiRunnerViewModel <- guiRunnerViewModel :> IGuiRunnerViewModel
 
       let view () = 
         let userControl = loadGuiRunnerView @"C:\dev\FSharp\FSharpSpec\src\Runners\FSharpSpec.GuiRunner\GuiRunnerView.xaml" 
-        userControl.DataContext <- MainViewModel (asmRoot, controller)
+        userControl.DataContext <- guiRunnerViewModel
         userControl
 
       let win = Window( Width=700.0, Height = 600.0, Content = view (), Topmost = false)
