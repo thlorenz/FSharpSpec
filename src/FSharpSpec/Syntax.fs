@@ -39,3 +39,11 @@ module Syntax =
       null
     with
       | excep  ->  excep     
+
+[<AutoOpen>]
+module Shortcuts =
+
+  let watchEvent (event : IObservable<_>) =
+    let eventWasRaised = ref false
+    event.Add ( fun _ -> eventWasRaised := true)
+    eventWasRaised

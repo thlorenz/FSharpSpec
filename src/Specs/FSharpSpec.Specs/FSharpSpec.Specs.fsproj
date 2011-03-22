@@ -58,6 +58,7 @@
     <Compile Include="SpecIndependenceSpecs.fs" />
     <Compile Include="TypeCheckingSpecs.fs" />
     <Compile Include="BeEmptySpecs.fs" />
+    <Compile Include="ShortCutsSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />

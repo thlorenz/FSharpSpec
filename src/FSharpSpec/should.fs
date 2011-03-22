@@ -185,9 +185,9 @@ type should() =
       |> Seq.filter ( containedButShouldn't containedItems)
    
     let notContainedMsg = 
-      sprintf "%A \nshould have contained\n%A\n but didn't" source itemsNotContainedThatShouldHaveBeen
+      sprintf "%A \nshould have contained\n%A\n but didn't!" source itemsNotContainedThatShouldHaveBeen
     let containedButShouldn'dMsg = 
-      sprintf "%A \nshouldn't have contained\n%A\n but did" source itemsContainedThatShouldn'tHaveBeen
+      sprintf "%A \nshouldn't have contained\n%A\n but did!" source itemsContainedThatShouldn'tHaveBeen
    
     let message, result = 
       match (Seq.toList itemsNotContainedThatShouldHaveBeen, Seq.toList itemsContainedThatShouldn'tHaveBeen) with
