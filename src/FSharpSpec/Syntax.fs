@@ -47,3 +47,15 @@ module Shortcuts =
     let eventWasRaised = ref false
     event.Add ( fun _ -> eventWasRaised := true)
     eventWasRaised
+
+  let watchEvent1 (event : IObservable<_>) =
+    let eventWasRaised = ref false
+    let eventArgs = ref null
+    event.Add ( fun e -> eventWasRaised := true; eventArgs := e)
+    (eventWasRaised, eventArgs)
+  
+  let watchEvent2 (event : IObservable<_>) =
+    let eventWasRaised = ref false
+    let eventArgs = ref null
+    event.Add ( fun e -> eventWasRaised := true; eventArgs := box e)
+    (eventWasRaised, eventArgs)
