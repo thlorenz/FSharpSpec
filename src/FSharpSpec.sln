@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec", "FSharpSpec\FSharpSpec.fsproj", "{12D7B460-5020-4D49-8FC0-11692A5E32E3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAE67DBC-0E61-4BA2-BFD0-5EF9DD48390F}"
+	ProjectSection(SolutionItems) = preProject
+		Demo.fsx = Demo.fsx
+	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.FSharpSampleSpecs", "Samples\FSharpSpec.FSharpSampleSpecs\FSharpSpec.FSharpSampleSpecs.fsproj", "{52BDB8F4-B62F-4770-AF64-39DE88707280}"
 EndProject

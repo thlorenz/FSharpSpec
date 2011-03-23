@@ -40,20 +40,44 @@ module Syntax =
     with
       | excep  ->  excep     
 
+  /// Runs spec inline and returns or throws exception immediately
+  /// to be used for scripting specifications.
+  let run actual assertion expected = 
+    printfn "Running specification:"
+    let specDelegate = new SpecDelegate(fun () -> assertion (actual, expected))
+    try 
+      specDelegate.Invoke()
+    with 
+      ex -> printfn "%A" ex
+            Failed
+  let run1 (actual : Lazy<'a>) assertion (expected : 'a) =
+    printfn "Running specification:"
+    let specDelegate = new SpecDelegate(fun () -> assertion (actual.Value, expected))
+    try 
+      specDelegate.Invoke()
+    with 
+      ex -> printfn "%A" ex
+            Failed
+
 [<AutoOpen>]
 module Shortcuts =
-
+  
+  /// Watches an event and returns a reference to the event was raised flag.
   let watchEvent (event : IObservable<_>) =
     let eventWasRaised = ref false
     event.Add ( fun _ -> eventWasRaised := true)
     eventWasRaised
 
+  /// Watches an event and returns a reference to the event was raised flag and to 
+  /// the event args.
   let watchEvent1 (event : IObservable<_>) =
     let eventWasRaised = ref false
     let eventArgs = ref null
     event.Add ( fun e -> eventWasRaised := true; eventArgs := e)
     (eventWasRaised, eventArgs)
   
+  /// Watches an event and returns a reference to the event was raised flag and to 
+  /// the event args.
   let watchEvent2 (event : IObservable<_>) =
     let eventWasRaised = ref false
     let eventArgs = ref null
