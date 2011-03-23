@@ -46,7 +46,7 @@ type TreeViewModel (name, controller : IGuiController) =
       with get() = _isSelected
       and set value = 
         _isSelected <- value 
-        if _isSelected then controller.Selected x.AsITreeViewModel
+        x.refreshResults ()
         x.OnSelected ()
         base.OnPropertyChanged("IsSelected")
   
@@ -58,7 +58,8 @@ type TreeViewModel (name, controller : IGuiController) =
       x.OnExpanded ()
 
   member x.aggregateResults = x.AsITreeViewModel.Children |> Seq.collect(fun c -> c.SpecsRunResult) 
-
+  member x.refreshResults () = if _isSelected then controller.Selected x.AsITreeViewModel
+  
   override x.ToString() = x.AsITreeViewModel.Name
 
   // Need these to ensure proper DataBinding

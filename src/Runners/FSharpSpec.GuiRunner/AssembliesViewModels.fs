@@ -34,7 +34,7 @@ type AssemblyViewModel (asm : Assembly, controller : IGuiController) =
         x.AsITreeViewModel.State <- x.Child.AsITreeViewModel.State)) 
     |> ignore
 
-  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> true))
+  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs; x.IsSelected <- true), (fun _ -> true))
   member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
 
   member x.Child with get () : ContextViewModel = _child

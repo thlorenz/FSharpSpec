@@ -38,7 +38,7 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
     x.AsITreeViewModel.State <- x.aggregateStates
     x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
 
-  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> true))
+  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs; x.IsSelected <- true), (fun _ -> true))
   member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
 
   interface ITreeViewModel with

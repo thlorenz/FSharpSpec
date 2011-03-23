@@ -15,6 +15,7 @@ type Contains () =
       ass "\"hel should.contain hello\" will fail" (it "" hel should.contain hello) will.fail
       ass "\"helllo shouldn't.contain hel\" will fail" (it "" hello shouldn't.contain hel) will.fail
     ]
+
   member x.``Invalid Strings`` = 
     ass "null should.contain \"some string\" will fail" 
       (it "null should.contain \"some string\"" null should.contain "some string") will.fail

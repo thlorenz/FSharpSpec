@@ -38,7 +38,7 @@ type ContextViewModel (node : Node, controller) =
     x.AsITreeViewModel.State <- x.aggregateStates
     x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
 
-  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs), (fun _ -> Seq.length x.AsITreeViewModel.Children > 0))
+  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs; x.IsSelected <- true), (fun _ -> Seq.length x.AsITreeViewModel.Children > 0))
   member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
 
   member x.ChildContexts with get() = _childContexts

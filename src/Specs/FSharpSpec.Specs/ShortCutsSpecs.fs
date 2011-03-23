@@ -16,37 +16,39 @@ type EventRaiser () =
 
 type ``when i watch an event`` () =
   
-  let eventRaiser = EventRaiser()
-  let eventWasRaised = watchEvent eventRaiser.StructEvent 
+  let _eventRaiser = EventRaiser()
+  let eventWasRaised = watchEvent _eventRaiser.StructEvent 
+  
+  member x.eventRaiser = _eventRaiser
 
   member x.initially =
     it "it returns an eventWasRaised reference that is false" !eventWasRaised should.be false
 
   member x.``and i raise it`` =
-    eventRaiser.RaiseStructEvent 0
+    x.eventRaiser.RaiseStructEvent 0
     it "sets the eventWasRaised reference to true" !eventWasRaised should.be true
     
-type ``when i watch an event and want to know about the event args that are struct`` () =
+type ``and want to know about the event args that are struct`` () =
+  inherit ``when i watch an event`` ()
   
   let args = 1
-  let eventRaiser = EventRaiser()
-  let eventWasRaised, eventArgs = watchEvent2 eventRaiser.StructEvent 
+  let eventWasRaised, eventArgs = watchEvent2 base.eventRaiser.StructEvent 
   
   member x.``and i raise it with 1`` =
-    eventRaiser.RaiseStructEvent args
+    x.eventRaiser.RaiseStructEvent args
     [
       it "sets the eventWasRaised reference to true" !eventWasRaised should.be true
       it "sets the eventArgs to 1" !eventArgs should.equal args
     ]  
 
-type ``when i watch an event and want to know about the event args that are reference type`` () =
-  
+type ``and want to know about the event args that are reference type`` () =
+  inherit ``when i watch an event`` ()
+
   let args = "hello"
-  let eventRaiser = EventRaiser()
-  let eventWasRaised, eventArgs = watchEvent1 eventRaiser.ClassEvent
+  let eventWasRaised, eventArgs = watchEvent1 base.eventRaiser.ClassEvent
   
   member x.``and i raise it with 'hello'`` =
-    eventRaiser.RaiseClassEvent args
+    x.eventRaiser.RaiseClassEvent args
     [
       it "sets the eventWasRaised reference to true" !eventWasRaised should.be true
       it "sets the eventArgs to 'hello'" !eventArgs should.equal args

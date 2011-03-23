@@ -15,7 +15,7 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller, buildContext
   let mutable _specRunResult = getFullNameOfSpec (fst specInfo) |> SpecRunResultViewModel.NotRunYet  
   let getResult state = SpecRunResultViewModel (state, getFullNameOfSpec (fst specInfo))
 
-  member private x._runSpecCommand = ActionCommand ((fun _ -> x.runSpec), (fun _ -> true))
+  member private x._runSpecCommand = ActionCommand ((fun _ -> x.runSpec; x.IsSelected <- true), (fun _ -> true))
   member private x._debugSpecCommand = ActionCommand ((fun _ -> x.debugSpec), (fun _ -> true))
  
   member x.runSpec = 
