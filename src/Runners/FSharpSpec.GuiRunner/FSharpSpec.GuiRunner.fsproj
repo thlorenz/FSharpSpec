@@ -47,6 +47,7 @@
     <Compile Include="ContextViewModel.fs" />
     <Compile Include="AssembliesViewModels.fs" />
     <Compile Include="GuiRunnerViewModel.fs" />
+    <Resource Include="ExpressionDark.xaml" />
     <None Include="GuiRunnerView.xaml" />
     <Compile Include="Program.fs" />
     <None Include="GuiRunner.fsx" />

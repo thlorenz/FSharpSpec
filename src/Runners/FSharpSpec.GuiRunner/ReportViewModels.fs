@@ -1,7 +1,13 @@
 ﻿namespace FSharpSpec.GuiRunner
+
 open System.Collections.ObjectModel
+open System
 
 open FSharpSpec
+open FSharpSpec.RunnerUtils
+
+
+open SpecsRunnerUtils
 
 type SpecState = | NotRunYet | Passed | Pending | Failed | Inconclusive 
 
@@ -28,22 +34,23 @@ type SpecRunResultViewModel =
 
   val _state : SpecState
   val _fullSpecName : string
-  val _exceptionMessage : string
+   val _exception : Exception
 
   new () = SpecRunResultViewModel (NotRunYet, null)
 
   new (state, fullSpecName) = SpecRunResultViewModel (state, fullSpecName, null)
   
   /// FullSpecName includes Contexts and Inheritance Chain
-  new  (state, fullSpecName, exceptionMessage) =
-    { _state = state; _fullSpecName = fullSpecName; _exceptionMessage = exceptionMessage }
+  new  (state, fullSpecName, exn : Exception) =
+    { _state = state; _fullSpecName = fullSpecName; _exception = exn }
 
   member x.State with get () = x._state
   
   member x.StateDisplay with get () = toSpecStateDisplay x.State
        
   member x.FullSpecName with get () = x._fullSpecName
-  member x.ExceptionMessage with get () = x._exceptionMessage
+  member x.ExceptionMessage with get () = getExceptionMessage x._exception "\t"
+   
 
   static member NotRunYet fullSpecName = SpecRunResultViewModel(NotRunYet, fullSpecName, null)
 

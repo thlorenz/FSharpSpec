@@ -5,8 +5,6 @@ open System.Windows.Input
 
 open FSharpSpec
 
-
-
 type SpecViewModel (specInfo : (string * SpecDelegate), controller, buildContextAndResolveSpecs : unit -> (string * SpecDelegate) list, getFullNameOfSpec) =
   inherit TreeViewModel (fst specInfo, controller)
 
@@ -14,6 +12,7 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller, buildContext
 
   let mutable _specRunResult = getFullNameOfSpec (fst specInfo) |> SpecRunResultViewModel.NotRunYet  
   let getResult state = SpecRunResultViewModel (state, getFullNameOfSpec (fst specInfo))
+  let getResult1 state exn = SpecRunResultViewModel (state, getFullNameOfSpec (fst specInfo), exn)
 
   member private x._runSpecCommand = ActionCommand ((fun _ -> x.runSpec; x.IsSelected <- true), (fun _ -> true))
   member private x._debugSpecCommand = ActionCommand ((fun _ -> x.debugSpec), (fun _ -> true))
@@ -24,11 +23,15 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller, buildContext
       x.AsITreeViewModel.State <- outcome |> toSpecState
       _specRunResult <- getResult x.AsITreeViewModel.State
       x.AsITreeViewModel.SpecsRunResult <- [_specRunResult]
-      if x.IsSelected then x.OnSelected ()
+      
     with
-      ex              -> 
+      exn              -> 
         x.AsITreeViewModel.State <- SpecState.Failed
-        _specRunResult <- getResult x.AsITreeViewModel.State
+        _specRunResult <- getResult1 x.AsITreeViewModel.State exn
+        x.AsITreeViewModel.SpecsRunResult <- [_specRunResult]
+    
+    if x.IsSelected then x.OnSelected ()
+
 
   /// Re-evaluates the Context after launching the debugger in order to hit all possible breakpoints relevant to the specification
   member x.debugSpec = 

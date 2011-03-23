@@ -24,15 +24,19 @@ module SpecsRunnerUtils =
               | ty when ty = typeof<SpecFailedException> ->  Some(innerEx :?> SpecFailedException)
               | _                                        ->  None
           assertionEx
+  
+  let getExceptionMessage (exn : Exception) indent =
+    match exn with
+    | null    -> ""
+    | exn     ->  match exn.InnerException with
+                    | null  -> indent + exn.Message
+                    | _     ->   
+                        let specFailedException = exn |> getSpecFailedException
+                        match specFailedException with
+                        | excep when excep.IsSome -> indent + specFailedException.Value.Data0
+                        | _                       -> indent + exn.InnerException.Message   
     
-  let getFailureMessage failure = 
-      match failure.Exception.InnerException with
-      | null  -> "\t\t" + failure.Exception.Message
-      | _     ->   
-          let specFailedException = failure.Exception |> getSpecFailedException
-          match specFailedException with
-          | excep when excep.IsSome -> "\t\t" + specFailedException.Value.Data0
-          | _                       -> "\t\t" + failure.Exception.InnerException.Message   
+  let getFailureMessage failure = getExceptionMessage failure.Exception "\t\t"
 
   let getFailureStackTrace failure = 
       match failure.Exception.InnerException with
