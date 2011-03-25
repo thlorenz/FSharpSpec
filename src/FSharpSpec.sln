@@ -74,6 +74,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{D54279B3
 		Demos\Demo.fsx = Demos\Demo.fsx
 	EndProjectSection
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Demos.InteractiveSlides", "Demos\Demos.InteractiveSlides\Demos.InteractiveSlides.fsproj", "{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -237,6 +239,16 @@ Global
 		{E943EFA6-B874-4C9D-96C1-32B6599E1523}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{E943EFA6-B874-4C9D-96C1-32B6599E1523}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{E943EFA6-B874-4C9D-96C1-32B6599E1523}.Release|x86.ActiveCfg = Release|Any CPU
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -256,5 +268,6 @@ Global
 		{F462E889-D291-4EEC-AC26-F0536673CD10} = {3B5F9D09-9404-407A-A681-3AC0F9C17167}
 		{807CFBD4-E1FD-4369-9639-436A582A93EB} = {5428BB56-7F22-4904-8049-B08CB2F4E32D}
 		{106BBA08-99D9-4C62-99FB-D4ED40DF3027} = {5428BB56-7F22-4904-8049-B08CB2F4E32D}
+		{0F4A728D-7172-4DDA-A65D-41BB03AD63BC} = {D54279B3-2840-4BA3-A4BF-502D1159653A}
 	EndGlobalSection
 EndGlobal
