@@ -1,4 +1,4 @@
-﻿#r @"FSharpSpec\bin\Debug\FSharpSpec.dll"
+﻿#r @"..\FSharpSpec\bin\Debug\FSharpSpec.dll"
 open FSharpSpec
 
 run 1 shouldn't.equal 2 

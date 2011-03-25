@@ -4,9 +4,6 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec", "FSharpSpec\FSharpSpec.fsproj", "{12D7B460-5020-4D49-8FC0-11692A5E32E3}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Samples", "Samples", "{EAE67DBC-0E61-4BA2-BFD0-5EF9DD48390F}"
-	ProjectSection(SolutionItems) = preProject
-		Demo.fsx = Demo.fsx
-	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.FSharpSampleSpecs", "Samples\FSharpSpec.FSharpSampleSpecs\FSharpSpec.FSharpSampleSpecs.fsproj", "{52BDB8F4-B62F-4770-AF64-39DE88707280}"
 EndProject
@@ -48,8 +45,6 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "5.1", "5.1", "{C84F89D3-866
 		..\Lib\Resharper\5.1\JetBrains.ReSharper.UnitTestFramework.dll = ..\Lib\Resharper\5.1\JetBrains.ReSharper.UnitTestFramework.dll
 	EndProjectSection
 EndProject
-Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.ResharperRunner.5.1", "Runners\FSharpSpec.ResharperRunner.5.1\FSharpSpec.ResharperRunner.5.1.fsproj", "{E153C860-7203-46E3-93A3-7FE99A1842FF}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Katas", "Katas", "{DFDA1143-B1C2-4F48-8B7B-92BBC1F7425F}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.Katas.StringCalculator", "Samples\Katas\FSharpSpec.Katas.StringCalculator\FSharpSpec.Katas.StringCalculator.fsproj", "{B31E7B0A-9B46-412F-B998-2B84BCE12E34}"
@@ -73,6 +68,11 @@ EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharpSpec.GuiRunner.Specs", "FSharpSpec.GuiRunner.Specs\FSharpSpec.GuiRunner.Specs.fsproj", "{106BBA08-99D9-4C62-99FB-D4ED40DF3027}"
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "FSharp.Interop.NSubstitute", "FSharp.Interop.NSubstitute\FSharp.Interop.NSubstitute.fsproj", "{E943EFA6-B874-4C9D-96C1-32B6599E1523}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{D54279B3-2840-4BA3-A4BF-502D1159653A}"
+	ProjectSection(SolutionItems) = preProject
+		Demos\Demo.fsx = Demos\Demo.fsx
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -139,17 +139,6 @@ Global
 		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B}.Release|x86.ActiveCfg = Release|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|x86.ActiveCfg = Debug|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Debug|x86.Build.0 = Debug|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|Mixed Platforms.Build.0 = Release|Any CPU
-		{E153C860-7203-46E3-93A3-7FE99A1842FF}.Release|x86.ActiveCfg = Release|Any CPU
 		{B31E7B0A-9B46-412F-B998-2B84BCE12E34}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{B31E7B0A-9B46-412F-B998-2B84BCE12E34}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B31E7B0A-9B46-412F-B998-2B84BCE12E34}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
@@ -261,7 +250,6 @@ Global
 		{2513A5BB-A96D-4005-8222-8DEE048BC1F1} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
 		{142ED45B-EBE5-4C00-99A3-534065FCCDB9} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
 		{BEE45FE9-9EBB-4C04-9213-8B884F68B50B} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
-		{E153C860-7203-46E3-93A3-7FE99A1842FF} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
 		{DFDAE481-6837-442C-8EA8-B0CD56B9C4E9} = {C676C969-C818-464A-B6A6-837A9DC44C0F}
 		{C84F89D3-8663-4D85-B9CB-5F882FCA3221} = {AA7A4013-5A1A-4BDA-AB89-32F2A7538B9A}
 		{B31E7B0A-9B46-412F-B998-2B84BCE12E34} = {DFDA1143-B1C2-4F48-8B7B-92BBC1F7425F}

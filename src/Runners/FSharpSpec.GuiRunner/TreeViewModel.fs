@@ -7,7 +7,7 @@ type TreeViewModel (name, controller : IGuiController) =
   let mutable _isExpanded = false
   let mutable _isSelected = false
   let mutable _state = NotRunYet
-  let mutable _specsRunResult = Seq.empty
+  let mutable _specsRunResult = [ SpecRunResultViewModel (NotRunYet, name) ] |> List.toSeq
   member x.AsITreeViewModel with get () = x :> ITreeViewModel
   
   interface ITreeViewModel with
