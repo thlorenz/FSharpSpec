@@ -72,6 +72,8 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{D54279B3-2840-4BA3-A4BF-502D1159653A}"
 	ProjectSection(SolutionItems) = preProject
 		Demos\Demo.fsx = Demos\Demo.fsx
+		DemoWithSlides.fsx = DemoWithSlides.fsx
+		NUnitSample.txt = NUnitSample.txt
 	EndProjectSection
 EndProject
 Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "Demos.InteractiveSlides", "Demos\Demos.InteractiveSlides\Demos.InteractiveSlides.fsproj", "{0F4A728D-7172-4DDA-A65D-41BB03AD63BC}"
