@@ -69,15 +69,15 @@ type SlideShow (slidesPath) =
       ResizeMode = ResizeMode.CanResizeWithGrip,
       Topmost = true,
       Width = 800.0,
-      Height = 500.0,
+      Height = 800.0,
       Left = 800.0,
       Top = 100.0)
   
   let mutable revealStyle = None
   let mutable textStyle = Normal
   let mutable leftMargin = 0
-  let mutable vertAlignment = Middle
-  let mutable horiAlignment = Center
+  let mutable vertAlignment = Top
+  let mutable horiAlignment = Left
   
   let mutable styleSnapShot = 
     { RevealStyle = revealStyle;
@@ -117,8 +117,8 @@ type SlideShow (slidesPath) =
     x.RevealStyle <- None
     x.TextStyle <- Normal
     x.LeftMargin <- 0
-    vertAlignment <- Middle
-    horiAlignment <- Center
+    vertAlignment <- Top
+    horiAlignment <- Left
    
   member x.Transition transition onCompleted =
       match transition with
@@ -186,13 +186,13 @@ type SlideShow (slidesPath) =
     fadeOut (fun _ -> x.Slides.Clear(); nextText |> x.Write; fadeIn onCompleted )
   
 
-let transitionHeadLine (show : SlideShow) text = 
+let transition (show : SlideShow) textStyle text = 
   show.SaveStyle ()
   show.AlignV Middle
   show.AlignH Center
   show.LeftMargin <- 0
   show.RevealStyle <- None
-  show.TextStyle <- Headline
+  show.TextStyle <- textStyle
   show.TransitionText text (fun _ -> show.LoadStyle ())
 
 let expandNormal alignment (show : SlideShow) text = 

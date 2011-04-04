@@ -41,15 +41,16 @@ type should() =
       | Empty   -> testForEmpty actual
     
     evaluate (result, msg)
-    
-    
+ 
   static member be(actual : obj, expectedType : Type) = 
     match actual with
     | null              ->  sprintf "Expected object to be of type [%s] but was [null]!" expectedType.Name
                             |> SpecFailedException
                             |> raise
     | _                 ->  should.equal (actual.GetType(), expectedType)
-    
+  
+  static member be1 (actual: seq<'a>, expectedType : Type) =  should.be ((actual :> obj), expectedType)
+     
   static member beSameAs<'a when 'a : not struct>(actual : 'a, expected : 'a) =
     match (actual, expected) with
     | a, e when Object.ReferenceEquals(a, e)    -> Passed
