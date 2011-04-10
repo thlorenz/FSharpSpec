@@ -29,7 +29,13 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
           hookAssemblyResolve context.Clazz.Assembly
          
           let instantiatedContext = context.Clazz |> instantiate
-          specs.Method.Invoke(instantiatedContext, null) :?> (string * SpecDelegate) list
+          let result = specs.Method.Invoke(instantiatedContext, null) 
+          match result.GetType() with
+          | ty when ty  = typeof<Lazy<(string * SpecDelegate)> list>  -> result :?> Lazy<(string * SpecDelegate)> list
+                                                                         |> List.map(fun (r : Lazy<(string * SpecDelegate)>) -> r.Value) 
+          | ty when ty = typeof<(string * SpecDelegate)>              -> [result :?> (string * SpecDelegate)]
+          | _                                                         ->  result :?> (string * SpecDelegate) list
+
         
         buildContextAndResolveSpecs ()
         |> List.iter (fun spec -> _instantiatedSpecs.Add <| SpecViewModel(spec, controller, buildContextAndResolveSpecs, getFullNameOfSpec)) 

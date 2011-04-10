@@ -30,26 +30,26 @@ module ContextTree =
    
     let runContainedSpecs context (specMethod : MethodInfo) isFirstMethod instantiatedContext (indent : string) = 
         let runSpec specName (specDelegate : SpecDelegate) =
-            let specName = specName |> prettifySpecName
-            let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) specName
+          let specName = specName |> prettifySpecName
+          let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) specName
 
-            try
-                let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
-                match outcome with
-                | Passed        ->    (fullSpecName, indent  + "      »  "  + specName + "\n",
-                                                None, Passed)
+          try
+            let outcome = specDelegate.Method.Invoke(specDelegate.Target, null) :?> AssertionResult
+            match outcome with
+            | Passed        ->    (fullSpecName, indent  + "      »  "  + specName + "\n",
+                                            None, Passed)
 
-                | Pending       ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",
-                                                None, Pending)
+            | Pending       ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Pending >>>" + "\n",
+                                            None, Pending)
 
-                | Failed        ->    (fullSpecName, "Should have thrown exception",
-                                                None, Failed) 
+            | Failed        ->    (fullSpecName, "Should have thrown exception",
+                                            None, Failed) 
                                                      
-                | Inconclusive  ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Inconclusive >>>" + "\n",
-                                                None, Inconclusive) 
-            with
-                    ex              ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Failed >>>" + "\n",
-                                                    Some({ FullSpecName = fullSpecName; Exception = ex }), Failed) 
+            | Inconclusive  ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Inconclusive >>>" + "\n",
+                                            None, Inconclusive) 
+          with
+            ex              ->    (fullSpecName, indent  + "      »  "  + specName + " - <<< Failed >>>" + "\n",
+                                            Some({ FullSpecName = fullSpecName; Exception = ex }), Failed) 
         
         let specs = specMethod.Invoke(instantiatedContext, null) 
 
@@ -58,7 +58,7 @@ module ContextTree =
 
         let rec getSpecResults (specs : (string * SpecDelegate) list) =
             match specs with
-            | []                    -> []
+            | []                                -> []
             | (specName, specDelegate) :: xs    -> [(runSpec specName specDelegate)] @ getSpecResults xs
         
         let rec getLazySpecResults (specs : Lazy<string * SpecDelegate> list) =
