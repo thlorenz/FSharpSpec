@@ -2,18 +2,23 @@
 
 open System
 open System.IO
+open System.Diagnostics
 open System.Reflection
 
 [<AutoOpen>]
 module AppDomainUtils =
+  let printToConsoleAndOutput msg = 
+    printf "%s" msg
+    Debug.Write msg  
+
   let mutable specsAsmFolder = null
 
   let assemblyResolve = ResolveEventHandler(fun _ args -> 
      
     let referencedAssemblyName = args.Name.Split([| ',' |]).[0]  
      
-    printf "*** Trying to resolve %s\n" referencedAssemblyName
-      
+    sprintf "*** Trying to resolve %s\n" referencedAssemblyName |> printToConsoleAndOutput
+   
     let fullPath = 
       let dllFile = sprintf @"%s\%s.dll" specsAsmFolder referencedAssemblyName
       let exeFile = sprintf @"%s\%s.exe" specsAsmFolder referencedAssemblyName
@@ -24,7 +29,8 @@ module AppDomainUtils =
                                            printf "Fatal: %s\n" msg 
                                            failwith msg
                                             
-    printf "Loading %s\n\n" fullPath
+    sprintf "Loading %s\n\n" fullPath |> printToConsoleAndOutput
+
 
     Assembly.LoadFrom(fullPath)
   )

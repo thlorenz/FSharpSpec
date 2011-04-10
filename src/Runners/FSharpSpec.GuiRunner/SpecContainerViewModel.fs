@@ -25,6 +25,9 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
     | otherwise             ->
         _instantiatedSpecs.Clear()
         let buildContextAndResolveSpecs () =
+         
+          hookAssemblyResolve context.Clazz.Assembly
+         
           let instantiatedContext = context.Clazz |> instantiate
           specs.Method.Invoke(instantiatedContext, null) :?> (string * SpecDelegate) list
         

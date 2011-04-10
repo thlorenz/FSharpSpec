@@ -153,15 +153,15 @@ Usage: FsharpSpec.ConsoleRunner [options] [Path1 Path2 ...]
         (logger :?> ConsoleLogger).Report |> printer
 
         match allWarnings with
-        | []    ->  Console.ReadLine() |> ignore
+        | []    ->  // Console.ReadLine() |> ignore
                     0
         | x     ->  sprintf "\nWarnings: \n%A\n\n" x |> printer
-                    Console.ReadLine() |> ignore
+                    // Console.ReadLine() |> ignore
                     1
       with
       | ex    -> ex.Message |> printer
                  "Use -help for more information\n" |> printer 
-                 Console.ReadLine() |> ignore
+                 // Console.ReadLine() |> ignore
                  1
 
       
