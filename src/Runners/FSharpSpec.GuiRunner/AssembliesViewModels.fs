@@ -43,7 +43,11 @@ type AssembliesViewModel (assemblies : ObservableCollection<Assembly>, controlle
   inherit TreeViewModel("", controller)
   
   let _children = 
-    ObservableCollection<AssemblyViewModel>(assemblies |> Seq.map (fun a -> AssemblyViewModel(a, controller)))
+    ObservableCollection<ITreeViewModel>(assemblies |> Seq.map (fun a -> AssemblyViewModel(a, controller) :> ITreeViewModel))
   
   interface ITreeViewModel with  
     override x.Children with get () = _children.AsEnumerable() |> Seq.cast<ITreeViewModel>
+    override x.Add child = 
+      _children.Add child 
+      x.OnPropertyChanged("Children")
+      

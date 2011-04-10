@@ -16,7 +16,7 @@ let expandNormal alignment  = expandNormal alignment show
 
 "FSharpSpec" |> transitionHeadLine
 "Why do we need it?" |> transitionHeadLine
-"What's out there now?" |> transitionHeadLine
+"What's out there?" |> transitionHeadLine
 "XUnit Frameworks" |> transitionHeadLine
 show |> clear; show.ReadFile("NUnitSample.txt") |> expandNormal Middle
 "MSpec" |> transitionHeadLine
@@ -24,8 +24,8 @@ show |> clear; show.ReadFile("NUnitSample.txt") |> expandNormal Middle
 // FSharpSpec Code here
 
 
-"But Seriously !" |> transitionHeadLine
-"Let's Compare!" |> transitionHeadLine
+"But Seriously" |> transitionHeadLine
+"Let's Compare" |> transitionHeadLine
 
 show.ResetStyle()
 show |> clear; show.AlignV Top;  show.AlignH Left;

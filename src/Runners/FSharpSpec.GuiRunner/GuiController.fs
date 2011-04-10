@@ -1,4 +1,5 @@
 ﻿namespace FSharpSpec.GuiRunner
+open System.Diagnostics
 
 type GuiController () =
   
@@ -13,3 +14,8 @@ type GuiController () =
     override x.Selected treeViewModel =
       x.GuiRunnerViewModel.UpdateSpecsRunResult treeViewModel.SpecsRunResult 
 
+    override x.AddAssembly asm =
+      Debug.WriteLine("Adding " + asm)
+     
+    override x.RemoveAssembly asm =
+      Debug.WriteLine("Remove " + asm)

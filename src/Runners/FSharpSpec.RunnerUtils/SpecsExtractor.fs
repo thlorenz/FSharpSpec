@@ -11,6 +11,7 @@ open System.Collections.Generic
 open FSharpSpec
 
 module SpecsExtractor =
+    
     let getAssembly fullPath = 
         let loadAssembly fullPath = Reflection.Assembly.LoadFile fullPath
         loadAssembly fullPath  

@@ -45,6 +45,11 @@
       <Project>{e943efa6-b874-4c9d-96c1-32b6599e1523}</Project>
       <Private>True</Private>
     </ProjectReference>
+    <ProjectReference Include="..\Runners\FSharpSpec.GuiRunner\FSharpSpec.GuiRunner.fsproj">
+      <Name>FSharpSpec.GuiRunner</Name>
+      <Project>{dfdae481-6837-442c-8ea8-b0cd56b9c4e9}</Project>
+      <Private>True</Private>
+    </ProjectReference>
     <ProjectReference Include="..\Runners\FSharpSpec.RunnerUtils\FSharpSpec.RunnerUtils.fsproj">
       <Name>FSharpSpec.RunnerUtils</Name>
       <Project>{bee45fe9-9ebb-4c04-9213-8b884f68b50b}</Project>
@@ -52,16 +57,12 @@
     </ProjectReference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
+    <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <ProjectReference Include="..\FSharpSpec\FSharpSpec.fsproj">
       <Name>FSharpSpec</Name>
       <Project>{12d7b460-5020-4d49-8fc0-11692a5e32e3}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Runners\FSharpSpec.GuiRunner\FSharpSpec.GuiRunner.fsproj">
-      <Name>FSharpSpec.GuiRunner</Name>
-      <Project>{dfdae481-6837-442c-8ea8-b0cd56b9c4e9}</Project>
       <Private>True</Private>
     </ProjectReference>
     <Reference Include="System.Numerics" />

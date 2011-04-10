@@ -1,5 +1,6 @@
 ﻿namespace FSharpSpec.GuiRunner
 open System.Diagnostics
+open System
 
 type TreeViewModel (name, controller : IGuiController) =
   inherit ViewModelBase ()
@@ -27,7 +28,8 @@ type TreeViewModel (name, controller : IGuiController) =
     override x.Reset () = 
       x.AsITreeViewModel.State <- NotRunYet
       x.AsITreeViewModel.Children |> Seq.iter(fun c -> c.Reset ())
-
+    
+    override x.Add child = NotImplementedException("Need to override Add to use it.") |> raise
      
   member x.aggregateStates =
     match x.AsITreeViewModel.Children with

@@ -55,3 +55,7 @@ let win = Window( Topmost = true, Width=800.0, Height = 700.0, Content = view ()
 win.Show()
 
 win.Content <- view ()
+
+
+
+

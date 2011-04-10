@@ -11,6 +11,7 @@
     <AssemblyName>FSharpSpec.RunnerUtils</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <Name>FSharpSpec.RunnerUtils</Name>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -33,7 +34,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
   </ItemGroup>
@@ -46,6 +46,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="PrintUtils.fs" />
+    <Compile Include="AppDomainUtils.fs" />
     <Compile Include="ContextTree.fs" />
     <Compile Include="SpecsExtractor.fs" />
     <Compile Include="SpecsRunnerUtils.fs" />

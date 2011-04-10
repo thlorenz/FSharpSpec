@@ -11,6 +11,7 @@
     <AssemblyName>FSharpSpec.ConsoleRunner</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <Name>FSharpSpec.ConsoleRunner</Name>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -38,10 +39,10 @@
   <ItemGroup>
     <Compile Include="ConsoleLogger.fs" />
     <Compile Include="Program.fs" />
+    <None Include="ConsoleRunnerRepl.fsx" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
-    <Reference Include="FSharp.Core" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <ProjectReference Include="..\..\FSharpSpec\FSharpSpec.fsproj">

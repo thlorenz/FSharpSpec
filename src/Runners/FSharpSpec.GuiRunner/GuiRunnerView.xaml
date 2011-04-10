@@ -44,73 +44,80 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            
+
             <Style x:Key="TextBlock_SpecName" TargetType="TextBlock">
                 <Setter Property="Text" Value="{Binding Name}" />
             </Style>
         </ResourceDictionary>
     </UserControl.Resources>
-    <Grid>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="Auto" MinWidth="200" />
-            <ColumnDefinition Width="5" />
-            <ColumnDefinition Width="*" />
-        </Grid.ColumnDefinitions>
-      
-        <Border Grid.Column="0" Padding="5" BorderBrush="Gray" BorderThickness="2">
-            <TreeView DataContext="{Binding Root}" ItemsSource="{Binding Children}">
-                <TreeView.Resources>
-                   
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:AssembliesViewModel}" />
+    <DockPanel LastChildFill="True">
+        <Menu DockPanel.Dock="Top">
+            <MenuItem Header="File">
+                <MenuItem Header="Add Assembly" Command="{Binding AddAssemblyCommand}"/>
+            </MenuItem>
+        </Menu>
 
-                    <HierarchicalDataTemplate ItemsSource="{Binding Child.Children}" DataType="{x:Type local:AssemblyViewModel}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource Image_SpecState}" />
-                            <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecsCommand}" />
-                            <TextBlock Style="{StaticResource TextBlock_SpecName}" />
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MinWidth="200" />
+                <ColumnDefinition Width="5" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
 
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:ContextViewModel}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource Image_SpecState}" />
-                            <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecsCommand}" />
-                            <TextBlock Style="{StaticResource TextBlock_SpecName}" />
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
+            <Border Grid.Column="0" Padding="5" BorderBrush="Gray" BorderThickness="2">
+                <TreeView DataContext="{Binding Root}" ItemsSource="{Binding Children}">
+                    <TreeView.Resources>
 
-                    <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:SpecContainerViewModel}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource Image_SpecState}" />
-                            <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecsCommand}" />
-                            <TextBlock Style="{StaticResource TextBlock_SpecName}" />
-                         </StackPanel>
-                    </HierarchicalDataTemplate>
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:AssembliesViewModel}" />
 
-                    <HierarchicalDataTemplate DataType="{x:Type local:SpecViewModel}">
-                        <StackPanel Orientation="Horizontal">
-                            <Image Style="{StaticResource Image_SpecState}" />
-                            <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecCommand}" />
-                            <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding DebugSpecCommand}">
-                                <Button.Template>
-                                    <ControlTemplate>
-                                        <Image Source="Debug.png" Width="15" Height="15" />
-                                    </ControlTemplate>
-                                </Button.Template>
-                            </Button>
-                            <TextBlock Style="{StaticResource TextBlock_SpecName}" />
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </TreeView.Resources>
-            </TreeView>
-        </Border>
-        <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-        <ListBox Grid.Column="2" ItemsSource="{Binding SpecsRunResults}" ScrollViewer.CanContentScroll="False">
-            <ListBox.ItemTemplate>
-                <DataTemplate>
-                    <StackPanel>
-                        <TextBlock Text="{Binding FullSpecName}" TextWrapping="Wrap" FontWeight="Bold" FontSize="12" Foreground="Yellow" />
-                        <TextBlock Text="{Binding StateDisplay}">
+                        <HierarchicalDataTemplate ItemsSource="{Binding Child.Children}" DataType="{x:Type local:AssemblyViewModel}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Style="{StaticResource Image_SpecState}" />
+                                <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecsCommand}" />
+                                <TextBlock Style="{StaticResource TextBlock_SpecName}" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:ContextViewModel}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Style="{StaticResource Image_SpecState}" />
+                                <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecsCommand}" />
+                                <TextBlock Style="{StaticResource TextBlock_SpecName}" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate ItemsSource="{Binding Children}" DataType="{x:Type local:SpecContainerViewModel}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Style="{StaticResource Image_SpecState}" />
+                                <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecsCommand}" />
+                                <TextBlock Style="{StaticResource TextBlock_SpecName}" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+
+                        <HierarchicalDataTemplate DataType="{x:Type local:SpecViewModel}">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Style="{StaticResource Image_SpecState}" />
+                                <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding RunSpecCommand}" />
+                                <Button Style="{StaticResource Button_RunSpecs}" Command="{Binding DebugSpecCommand}">
+                                    <Button.Template>
+                                        <ControlTemplate>
+                                            <Image Source="Debug.png" Width="15" Height="15" />
+                                        </ControlTemplate>
+                                    </Button.Template>
+                                </Button>
+                                <TextBlock Style="{StaticResource TextBlock_SpecName}" />
+                            </StackPanel>
+                        </HierarchicalDataTemplate>
+                    </TreeView.Resources>
+                </TreeView>
+            </Border>
+            <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+            <ListBox Grid.Column="2" ItemsSource="{Binding SpecsRunResults}" ScrollViewer.CanContentScroll="False">
+                <ListBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel>
+                            <TextBlock Text="{Binding FullSpecName}" TextWrapping="Wrap" FontWeight="Bold" FontSize="12" Foreground="Yellow" />
+                            <TextBlock Text="{Binding StateDisplay}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                     <Setter Property="FontWeight" Value="Normal" />
@@ -133,12 +140,13 @@
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
-                        </TextBlock>
-                        <TextBlock Text="{Binding ExceptionMessage}" TextWrapping="Wrap" FontSize="12" Foreground="White" />
-                    </StackPanel>
-                </DataTemplate>
-            </ListBox.ItemTemplate>
-        </ListBox>
-    </Grid>
+                            </TextBlock>
+                            <TextBlock Text="{Binding ExceptionMessage}" TextWrapping="Wrap" FontSize="12" Foreground="White" />
+                        </StackPanel>
+                    </DataTemplate>
+                </ListBox.ItemTemplate>
+            </ListBox>
+        </Grid>
+    </DockPanel>
 </UserControl>
 

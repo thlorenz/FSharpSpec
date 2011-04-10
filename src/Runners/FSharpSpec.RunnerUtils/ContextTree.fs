@@ -145,7 +145,7 @@ module ContextTree =
             let sb = new StringBuilder()
             let mutable results = []
             let mutable addedType = []
-        
+           
             if context.SpecLists.Length = 0 then
                 let addEmptyContextToResults = function
                   | ctx when ctx.Clazz = typeof<obj>  -> []
@@ -154,6 +154,8 @@ module ContextTree =
                 results <- (addEmptyContextToResults context)
             else
               try
+                hookAssemblyResolve context.Clazz.Assembly
+                
                 let specMethods = x.Context.SpecLists
                 for specMethod in specMethods do 
                     let instantiatedContext = context.Clazz |> instantiate
@@ -195,20 +197,3 @@ module ContextTree =
                     | 0   -> ""
                     | ply -> "|      " + getIndentFor (ply - 1)
               getIndentFor _ply   
-
-//        override x.ToString() = 
-//            let sb = new StringBuilder()
-//            sb.AppendLine(x.Indent + "+ " + x.Context.Clazz.Name) |> ignore
-//        
-//            for specMethod in x.Context.SpecLists do 
-//                sb.AppendLine(x.Indent + "|") |> ignore
-//                sb.AppendLine(x.Indent + "|   » " + specMethod.Name) |> ignore
-//        
-//            for childNode in x.Children do
-//                sb.AppendLine(x.Indent + "|") |> ignore
-//                sb.Append(childNode.ToString()) |> ignore
-//        
-//            sb.ToString()
-
-
-
