@@ -39,20 +39,34 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
         
         buildContextAndResolveSpecs ()
         |> List.iter (fun spec -> _instantiatedSpecs.Add <| SpecViewModel(spec, controller, buildContextAndResolveSpecs, getFullNameOfSpec)) 
+    
 
-  member x.runSpecs = 
-    x.AsITreeViewModel.Children |> Seq.iter (fun c -> c.State <- NotRunYet)
+
+  let runSpecs () = _instantiatedSpecs |> Seq.iter (fun s -> s.runSpec)
+    
+  member x.resolveAndRunSpecs = 
+    // Resolve Specs
     extractSpecs ()
-    _instantiatedSpecs |> Seq.iter (fun s -> s.runSpec)
-    x.AsITreeViewModel.State <- x.aggregateStates
-    x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
-
-  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs; x.IsSelected <- true), (fun _ -> true))
+    // RunSpecs
+    runSpecs ()
+  
+  
+  member private x._runSpecsCommand = 
+    ActionCommand ((fun _ -> 
+      x.AsITreeViewModel |> resetResolveAndRunSpecs 
+      x.IsSelected <- true), 
+      (fun _ -> true))
+  
   member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
 
   interface ITreeViewModel with
     override x.Name with get() =  specs.Name |> removeLeadingGet
     override x.Children with get() = _instantiatedSpecs.AsEnumerable() |> Seq.cast<ITreeViewModel>
+    override x.ResolveSpecs () = extractSpecs ()
+    override x.RunSpecs () = 
+      runSpecs ()
+      x.AsITreeViewModel.State <- x.aggregateStates
+      x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
 
   override x.OnExpanded () = extractSpecs ()
 

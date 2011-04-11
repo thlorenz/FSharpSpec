@@ -25,11 +25,15 @@ type TreeViewModel (name, controller : IGuiController) =
       with get () :  SpecRunResultViewModel seq = _specsRunResult 
       and set (value) = _specsRunResult <- value
   
-    override x.Reset () = 
+    override x.ResetResults () = 
       x.AsITreeViewModel.State <- NotRunYet
-      x.AsITreeViewModel.Children |> Seq.iter(fun c -> c.Reset ())
+      x.AsITreeViewModel.Children |> Seq.iter(fun c -> c.ResetResults ())
     
+    override x.ResolveSpecs () = ()
+    override x.RunSpecs () = ()
+
     override x.Add child = NotImplementedException("Need to override Add to use it.") |> raise
+
      
   member x.aggregateStates =
     match x.AsITreeViewModel.Children with
@@ -37,7 +41,7 @@ type TreeViewModel (name, controller : IGuiController) =
     | xs when xs |> Seq.exists (fun s -> s.State = SpecState.Inconclusive)  -> SpecState.Inconclusive
     | xs when xs |> Seq.exists (fun s -> s.State = SpecState.NotRunYet)     -> SpecState.NotRunYet
     | otherwise                                                             -> SpecState.Passed
- 
+  
   abstract member OnExpanded : unit -> unit
   default x.OnExpanded () = () 
   

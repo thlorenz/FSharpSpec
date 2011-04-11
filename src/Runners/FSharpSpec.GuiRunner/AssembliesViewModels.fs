@@ -23,22 +23,27 @@ type AssemblyViewModel (asm : Assembly, controller : IGuiController) =
   let _child =  ContextViewModel(node, controller)
   let mutable count = 0
 
-  member x.runSpecs = 
-    x.Child.AsITreeViewModel.Reset ()
-    x.AsITreeViewModel.State <- x.Child.AsITreeViewModel.State
-    
-    Dispatcher.CurrentDispatcher.BeginInvoke(
-      DispatcherPriority.SystemIdle, 
-      action(fun () ->
-        x.Child.runSpecs
-        x.AsITreeViewModel.State <- x.Child.AsITreeViewModel.State)) 
-    |> ignore
-
-  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs; x.IsSelected <- true), (fun _ -> true))
+  member private x._runSpecsCommand = 
+     ActionCommand ((fun _ ->
+      x.AsITreeViewModel |> resetResolveAndRunSpecs
+      x.IsSelected <- true), 
+      (fun _ -> true))
+ 
   member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
 
   member x.Child with get () : ContextViewModel = _child
+  
+  interface ITreeViewModel with
+    override x.ResetResults () = 
+      x.Child.AsITreeViewModel.ResetResults ()
+      x.AsITreeViewModel.State <- x.Child.AsITreeViewModel.State
 
+    override x.ResolveSpecs () = x.Child.AsITreeViewModel.ResolveSpecs ()
+   
+    override x.RunSpecs () = 
+      x.Child.AsITreeViewModel.RunSpecs ()
+      x.AsITreeViewModel.State <- x.Child.AsITreeViewModel.State
+   
 type AssembliesViewModel (assemblies : ObservableCollection<Assembly>, controller) =
   inherit TreeViewModel("", controller)
   

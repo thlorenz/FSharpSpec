@@ -30,15 +30,12 @@ type ContextViewModel (node : Node, controller) =
 
   let _children = Seq.cast<ITreeViewModel>(_childContexts) |> Seq.append(Seq.cast<ITreeViewModel>(_specContainers))
     
-  member x.runSpecs = 
-    x.AsITreeViewModel.Reset ()
-    x.ChildContexts |> Seq.iter (fun (c : ContextViewModel) -> c.runSpecs)
-    x.SpecContainers |> Seq.iter (fun (c : SpecContainerViewModel) -> c.runSpecs)
-    
-    x.AsITreeViewModel.State <- x.aggregateStates
-    x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
+  member private x._runSpecsCommand = 
+    ActionCommand ((fun _ ->
+      x.AsITreeViewModel |> resetResolveAndRunSpecs
+      x.IsSelected <- true), 
+      (fun _ -> Seq.length x.AsITreeViewModel.Children > 0))
 
-  member private x._runSpecsCommand = ActionCommand ((fun _ -> x.runSpecs; x.IsSelected <- true), (fun _ -> Seq.length x.AsITreeViewModel.Children > 0))
   member x.RunSpecsCommand with get () = x._runSpecsCommand :> ICommand
 
   member x.ChildContexts with get() = _childContexts
@@ -46,6 +43,12 @@ type ContextViewModel (node : Node, controller) =
   
   interface ITreeViewModel with
     override x.Children with get () = _children
-      
+    
+    override x.ResolveSpecs () = x.Children |> Seq.iter(fun c -> c.ResolveSpecs ())
+   
+    override x.RunSpecs () = 
+      x.Children |> Seq.iter(fun c -> c.RunSpecs ()) 
+      x.AsITreeViewModel.State <- x.aggregateStates
+      x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults 
 
   
