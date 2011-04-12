@@ -27,7 +27,7 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
         let buildContextAndResolveSpecs () =
          
           hookAssemblyResolve context.Clazz.Assembly
-         
+          
           let instantiatedContext = context.Clazz |> instantiate
           let result = specs.Method.Invoke(instantiatedContext, null) 
           match result.GetType() with
@@ -44,13 +44,6 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
 
   let runSpecs () = _instantiatedSpecs |> Seq.iter (fun s -> s.runSpec)
     
-  member x.resolveAndRunSpecs = 
-    // Resolve Specs
-    extractSpecs ()
-    // RunSpecs
-    runSpecs ()
-  
-  
   member private x._runSpecsCommand = 
     ActionCommand ((fun _ -> 
       x.AsITreeViewModel |> resetResolveAndRunSpecs 

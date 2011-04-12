@@ -92,30 +92,30 @@ open System
 
 "Comparisons" |> transitionHeadLine
 show.Hide()
-run (1 + 1) should.equal 2
-run (1 + 1) shouldn't.equal 2               // fails
+"1 + 1 = 2" |> run (1 + 1) should.equal 2
+"1 + 1 <> 2" |> run (1 + 1) shouldn't.equal 2               // fails
 
-run 1 should.beGreaterThan 0
-run 1 should.beGreaterThan 2                // fails
+"1 > 0" |> run 1 should.beGreaterThan 0
+"1 > 2" |> run 1 should.beGreaterThan 2                // fails
 
 show.Show(); "should.be" |> transitionHeadLine
 show.Hide()
-run "" should.be Empty
-run 1 should.be typeof<int>
-run "a string" should.be1 typeof<string>
+"'' is empty" |> run "" should.be Empty
+"1 is an int" |> run 1 should.be typeof<int>
+"'a string' is a string" |> run "a string" should.be1 typeof<string>
 
 show.Show(); "Lists and Strings" |> transitionHeadLine
 show.Hide()
 
-run "Content" should.be Empty               //fails
-run [1] shouldn't.be Empty
-run [] shouldn't.be Empty                   // fails
+run2 "Content" should.be Empty               //fails
+run2 [1] shouldn't.be Empty
+run2 [] shouldn't.be Empty                   // fails
 
-run "Hello World" should.contain "Hello"
-run "Hello" should.contain "Hello World"    // fails
-run [1;2] should.contain 1
-run [1;2] should.contain 3                  // fails
-run [1;2] should.contain1 [1;2]  
+run2 "Hello World" should.contain "Hello"
+run2 "Hello" should.contain "Hello World"    // fails
+run2 [1;2] should.contain 1
+run2 [1;2] should.contain 3                  // fails
+run2 [1;2] should.contain1 [1;2]  
 
 show.Show(); "Exceptions" |> transitionHeadLine
 show.Hide()

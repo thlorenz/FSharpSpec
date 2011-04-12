@@ -42,22 +42,29 @@ module Syntax =
 
   /// Runs spec inline and returns or throws exception immediately
   /// to be used for scripting specifications.
-  let run actual assertion expected = 
-    printfn "Running specification:"
+  let run actual assertion expected specName = 
+    printf "%s" specName
     let specDelegate = new SpecDelegate(fun () -> assertion (actual, expected))
     try 
-      specDelegate.Invoke()
+      let result = specDelegate.Invoke()
+      printfn " - OK" 
+      result
     with 
-      ex -> printfn "%A" ex
+      ex -> printfn "\n --- %A" ex
             Failed
-  let run1 (actual : Lazy<'a>) assertion (expected : 'a) =
-    printfn "Running specification:"
+
+  let run1 (actual : Lazy<'a>) assertion (expected : 'a) specName =
+    printfn "%s" specName
     let specDelegate = new SpecDelegate(fun () -> assertion (actual.Value, expected))
     try 
-      specDelegate.Invoke()
+      let result = specDelegate.Invoke()
+      printfn " - OK" 
+      result
     with 
-      ex -> printfn "%A" ex
+      ex -> printfn "\n --- %A" ex
             Failed
+  
+  let run2 actual assertion expected = "Running Spec" |> run actual assertion expected
 
 [<AutoOpen>]
 module Shortcuts =
