@@ -92,11 +92,12 @@ open System
 
 "Comparisons" |> transitionHeadLine
 show.Hide()
-"1 + 1 = 2" |> run (1 + 1) should.equal 2
-"1 + 1 <> 2" |> run (1 + 1) shouldn't.equal 2               // fails
 
-"1 > 0" |> run 1 should.beGreaterThan 0
-"1 > 2" |> run 1 should.beGreaterThan 2                // fails
+"1 + 1 = 2"   |> run (1 + 1) should.equal 2
+"1 + 1 <> 2"  |> run (1 + 1) shouldn't.equal 2               // fails
+
+"1 > 0"       |> run 1 should.beGreaterThan 0
+"1 > 2"       |> run 1 should.beGreaterThan 2                // fails
 
 show.Show(); "should.be" |> transitionHeadLine
 show.Hide()
@@ -123,10 +124,9 @@ let exn = catch (fun () -> 1 / 0)
 run exn should.be typeof<DivideByZeroException>
 run exn.Message should.contain "divide by zero"          
 
-run (fun () -> 1 /0) should.failWith typeof<DivideByZeroException>
-run (fun () -> 1 /0) should.failWithMessageContaining "divide by zero"
-run (fun () -> 1 /0) should.failWithMessageNotContaining "argument"
+"1 / 0 fails with DivideByZero"             |> run (fun () -> 1 /0) should.failWith typeof<DivideByZeroException>
+"failure message contains 'divide by zero'" |> run (fun () -> 1 /0) should.failWithMessageContaining "divide by zero"
+"failure message doesn't contain 'argument'"|> run (fun () -> 1 /0) should.failWithMessageNotContaining "argument"
 
 show.Show(); "Multiple Assertions" |> transitionHeadLine
 show.Hide()
-
