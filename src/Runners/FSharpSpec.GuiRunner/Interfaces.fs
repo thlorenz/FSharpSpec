@@ -1,6 +1,8 @@
 ﻿namespace FSharpSpec.GuiRunner
+
 open System
 open System.Windows.Threading
+open FSharpSpec
 
 type ITreeViewModel =
   abstract member Name : string
@@ -16,6 +18,9 @@ type IGuiController =
   abstract member Selected : ITreeViewModel -> unit
   abstract member AddAssembly : string -> unit
   abstract member RemoveAssembly : string -> unit
+  abstract member ResetResults : unit -> unit
+  abstract member RegisterSpecs : seq<(string * SpecDelegate)> -> unit
+  abstract member ReportResult : AssertionResult -> unit
    
 
 type IGuiRunnerViewModel =

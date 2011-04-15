@@ -121,8 +121,8 @@ run2 [1;2] should.contain1 [1;2]
 show.Show(); "Exceptions" |> transitionHeadLine
 show.Hide()
 let exn = catch (fun () -> 1 / 0)
-run exn should.be typeof<DivideByZeroException>
-run exn.Message should.contain "divide by zero"          
+run2 exn should.be typeof<DivideByZeroException>
+run2 exn.Message should.contain "divide by zero"          
 
 "1 / 0 fails with DivideByZero"             |> run (fun () -> 1 /0) should.failWith typeof<DivideByZeroException>
 "failure message contains 'divide by zero'" |> run (fun () -> 1 /0) should.failWithMessageContaining "divide by zero"

@@ -5,7 +5,7 @@ open System.Windows.Input
 
 open FSharpSpec
 
-type SpecViewModel (specInfo : (string * SpecDelegate), controller, buildContextAndResolveSpecs : unit -> (string * SpecDelegate) list, getFullNameOfSpec) =
+type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiController, buildContextAndResolveSpecs : unit -> (string * SpecDelegate) list, getFullNameOfSpec) =
   inherit TreeViewModel (fst specInfo, controller)
 
   let _spec = snd specInfo
@@ -17,18 +17,22 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller, buildContext
   member private x._runSpecCommand = ActionCommand ((fun _ -> x.runSpec; x.IsSelected <- true), (fun _ -> true))
   member private x._debugSpecCommand = ActionCommand ((fun _ -> x.debugSpec), (fun _ -> true))
  
+  member x.Spec with get () = specInfo
+
   member x.runSpec = 
     try
       let outcome = _spec.Method.Invoke(_spec.Target, null) :?> AssertionResult  
       x.AsITreeViewModel.State <- outcome |> toSpecState
       _specRunResult <- getResult x.AsITreeViewModel.State
       x.AsITreeViewModel.SpecsRunResult <- [_specRunResult]
+      controller.ReportResult outcome
       
     with
       exn              -> 
         x.AsITreeViewModel.State <- SpecState.Failed
         _specRunResult <- getResult1 x.AsITreeViewModel.State exn
         x.AsITreeViewModel.SpecsRunResult <- [_specRunResult]
+        controller.ReportResult Failed
     
     if x.IsSelected then x.OnSelected ()
 

@@ -12,7 +12,8 @@ type TreeViewModelSpecs () =
  
   member x.name with get () = _name 
   member x.controllerMock with get () = _controllerMock
-  member x.sut with get () = _sut
+  member x.sut with get () = _sut 
+  member x.suti with get () = _sut :> ITreeViewModel
 
   member x.``when the user selects it`` = 
     x.sut.IsSelected <- true
@@ -23,7 +24,9 @@ type TreeViewModelSpecs () =
     verify "doesn't tell the controller that it was selected" 
       <| lazy (x.controllerMock |> didNotReceive).Selected x.sut 
      
-
+  member x.``when told to reset the results`` =
+    x.suti.ResetResults ()
+    verify "resets the controller" <| lazy (x.controllerMock |> received).ResetResults ()
 
 
 

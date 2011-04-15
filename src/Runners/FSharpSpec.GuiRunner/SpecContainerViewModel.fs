@@ -55,7 +55,10 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
   interface ITreeViewModel with
     override x.Name with get() =  specs.Name |> removeLeadingGet
     override x.Children with get() = _instantiatedSpecs.AsEnumerable() |> Seq.cast<ITreeViewModel>
-    override x.ResolveSpecs () = extractSpecs ()
+    override x.ResolveSpecs () = 
+      extractSpecs ()
+      _instantiatedSpecs |> Seq.map (fun vm -> vm.Spec) |> controller.RegisterSpecs
+
     override x.RunSpecs () = 
       runSpecs ()
       x.AsITreeViewModel.State <- x.aggregateStates

@@ -19,3 +19,12 @@ type GuiController () =
      
     override x.RemoveAssembly asm =
       Debug.WriteLine("Remove " + asm)
+
+    override x.ResetResults () = 
+      Debug.WriteLine "Resetting" 
+
+    override x.RegisterSpecs specs = 
+      Debug.WriteLine ("Registering {0} specs", Seq.length specs)
+
+    override x.ReportResult result = 
+      Debug.WriteLine (sprintf "Reporting Result %A" result)
