@@ -37,8 +37,9 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
       x.FinishedSpecs       <- 0
 
     override x.RegisterSpecs specs  = x.RegisteredSpecs <- x.RegisteredSpecs + specs
-
+                                      Debug.WriteLine (sprintf "Registered %d" x.RegisteredSpecs)
     override x.PassedSpec          () = x.PassedSpecs <- x.PassedSpecs + 1 
+                                        Debug.WriteLine (sprintf "Passed %d" x.PassedSpecs)
                                         x.FinishedSpecs <- x.GetFinishedSpecs ()
 
     override x.InconclusiveSpec    () = x.InconclusiveSpecs <- x.InconclusiveSpecs + 1 

@@ -1,9 +1,9 @@
 ﻿<UserControl xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:local="clr-namespace:FSharpSpec.GuiRunner;assembly=FSharpSpec.GuiRunner">
     <UserControl.Resources>
         <ResourceDictionary>
-            <!--<ResourceDictionary.MergedDictionaries>
+            <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary Source="ExpressionDark.xaml" />
-            </ResourceDictionary.MergedDictionaries>-->
+            </ResourceDictionary.MergedDictionaries>
 
             <BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter" />
             <Style TargetType="{x:Type TreeViewItem}" BasedOn="{StaticResource {x:Type TreeViewItem}}">
@@ -66,13 +66,17 @@
                 <ProgressBar Minimum="0" Maximum="{Binding RegisteredSpecs}" Value="{Binding FinishedSpecs}" HorizontalAlignment="Stretch" Foreground="Yellow" Height="20" />
                 <UniformGrid Columns="5">
                     <TextBlock Grid.Column="0">
-                    <TextBlock.Text>
-                        <MultiBinding StringFormat="Finished {0}/{1}">
-                            <Binding Path="FinishedSpecs" />
-                            <Binding Path="RegisteredSpecs" />
-                        </MultiBinding>
-                    </TextBlock.Text>
+                        <TextBlock.Text>
+                            <MultiBinding StringFormat="Finished: {0}/{1}">
+                                <Binding Path="FinishedSpecs" />
+                                <Binding Path="RegisteredSpecs" />
+                            </MultiBinding>
+                        </TextBlock.Text>
                     </TextBlock>
+                    <TextBlock Grid.Column="1" Text="{Binding PassedSpecs, StringFormat=Passed: {0}}" />
+                    <TextBlock Grid.Column="2" Text="{Binding PendingSpecs, StringFormat=Pending: {0}}" />
+                    <TextBlock Grid.Column="3" Text="{Binding InconclusiveSpecs, StringFormat=Inclonclusive: {0}}" />
+                    <TextBlock Grid.Column="4" Text="{Binding FailedSpecs, StringFormat=Failed: {0}}" />
                 </UniformGrid>
             </StackPanel>
         </Grid>

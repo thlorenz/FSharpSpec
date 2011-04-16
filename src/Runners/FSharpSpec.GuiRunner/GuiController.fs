@@ -27,6 +27,7 @@ type GuiController () =
       specs |> Seq.length |> x.GuiRunnerViewModel.RegisterSpecs
 
     override x.ReportResult result = 
+      Debug.WriteLine (sprintf "Reporting %A" result)
       match result with
       | Passed        -> x.GuiRunnerViewModel.PassedSpec ()
       | Pending       -> x.GuiRunnerViewModel.PendingSpec ()

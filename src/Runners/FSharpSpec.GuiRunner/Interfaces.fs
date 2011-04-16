@@ -37,11 +37,12 @@ type IGuiRunnerViewModel =
 module ITreeViewModelFunctions =
   let resetResolveAndRunSpecs (x : ITreeViewModel) =    
     x.ResetResults ()
-    
+   
     Dispatcher.CurrentDispatcher.BeginInvoke(
-      DispatcherPriority.SystemIdle, 
-      (Action(fun () ->
+      DispatcherPriority.DataBind, 
+      (Action(fun () ->  
         x.ResolveSpecs () 
-        x.RunSpecs ())))
+        x.RunSpecs () 
+         )) )
     |> ignore
     
