@@ -26,6 +26,12 @@ type IGuiController =
 type IGuiRunnerViewModel =
   abstract UpdateSpecsRunResult : seq<SpecRunResultViewModel> -> unit
   abstract member Root : ITreeViewModel with get
+  abstract member ResetSpecs : unit -> unit
+  abstract member RegisterSpecs : int -> unit
+  abstract member PassedSpec : unit -> unit
+  abstract member InconclusiveSpec : unit -> unit
+  abstract member PendingSpec : unit -> unit
+  abstract member FailedSpec : unit -> unit
 
 [<AutoOpen>]
 module ITreeViewModelFunctions =

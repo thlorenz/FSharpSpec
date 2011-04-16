@@ -1,14 +1,14 @@
 ﻿namespace FSharpSpec.GuiRunner
 open System.Diagnostics
+open FSharpSpec
 
 type GuiController () =
   
-  [<DefaultValue>]
-  val mutable guiRunnerViewModel : IGuiRunnerViewModel
+  let mutable _guiRunnerViewModel : IGuiRunnerViewModel = Unchecked.defaultof<IGuiRunnerViewModel>
   
   member x.GuiRunnerViewModel  
-    with get () = x.guiRunnerViewModel 
-    and set (value) = x.guiRunnerViewModel <- value
+    with get () = _guiRunnerViewModel 
+    and set (v) = _guiRunnerViewModel <- v
 
   interface IGuiController with
     override x.Selected treeViewModel =
@@ -21,10 +21,14 @@ type GuiController () =
       Debug.WriteLine("Remove " + asm)
 
     override x.ResetResults () = 
-      Debug.WriteLine "Resetting" 
+      x.GuiRunnerViewModel.ResetSpecs ()
 
     override x.RegisterSpecs specs = 
-      Debug.WriteLine ("Registering {0} specs", Seq.length specs)
+      specs |> Seq.length |> x.GuiRunnerViewModel.RegisterSpecs
 
     override x.ReportResult result = 
-      Debug.WriteLine (sprintf "Reporting Result %A" result)
+      match result with
+      | Passed        -> x.GuiRunnerViewModel.PassedSpec ()
+      | Pending       -> x.GuiRunnerViewModel.PendingSpec ()
+      | Inconclusive  -> x.GuiRunnerViewModel.InconclusiveSpec ()
+      | Failed        -> x.GuiRunnerViewModel.FailedSpec ()

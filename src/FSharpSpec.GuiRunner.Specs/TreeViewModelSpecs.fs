@@ -27,7 +27,3 @@ type TreeViewModelSpecs () =
   member x.``when told to reset the results`` =
     x.suti.ResetResults ()
     verify "resets the controller" <| lazy (x.controllerMock |> received).ResetResults ()
-
-
-
-

@@ -28,7 +28,10 @@ type TreeViewModel (name, controller : IGuiController) =
     override x.ResetResults () = 
       x.AsITreeViewModel.State <- NotRunYet
       x.AsITreeViewModel.Children |> Seq.iter(fun c -> c.ResetResults ())
-      controller.ResetResults ()
+      
+      match controller with
+      | c when c = Unchecked.defaultof<IGuiController>    -> ()
+      | c                                                 -> c.ResetResults ()
     
     override x.ResolveSpecs () = ()
     override x.RunSpecs () = ()

@@ -40,15 +40,13 @@ module main =
       let controller = GuiController() 
       let specsRunResult = SpecsRunResult()
       let asmRoot = AssembliesViewModel(new ObservableCollection<Assembly>([asm]), controller :> IGuiController)
-     
+      
+      let guiRunnerViewModel = GuiRunnerViewModel (asmRoot, controller :> IGuiController)
+      controller.GuiRunnerViewModel <- guiRunnerViewModel :> IGuiRunnerViewModel
 
       let loadGuiRunnerView (fileName : string) =
         let reader = XmlReader.Create fileName
         XamlReader.Load reader :?> UserControl
-      
-      let guiRunnerViewModel = GuiRunnerViewModel (asmRoot, controller :> IGuiController)
-      
-      controller.GuiRunnerViewModel <- guiRunnerViewModel :> IGuiRunnerViewModel
 
       let view () = 
         let userControl = loadGuiRunnerView @"C:\dev\FSharp\FSharpSpec\src\Runners\FSharpSpec.GuiRunner\GuiRunnerView.xaml" 

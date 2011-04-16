@@ -14,6 +14,7 @@ type GuiRunnerViewModelSpecs () =
   member x.controllerMock with get () = _controllerMock
   member x.rootViewModelStub with get () = _rootViewModelStub
   member x.sut with get () = _sut
+  member x.suti with get () = _sut.AsIGuiRunnerViewModel
 
   member x.initially = [
     it "has no specs run results" x.sut.SpecsRunResults should.be Empty
@@ -36,3 +37,35 @@ type ``when there are two specs run results`` () =
         x.sut.SpecsRunResults should.containOnly specsRunResults
       it "lets me know that its results changed" !raisedResultsChanged should.be true
     ]
+
+type ``when i register 8 specs`` () =
+  inherit GuiRunnerViewModelSpecs ()
+  
+  let showsProgress registered passed pending inconclusive failed finished (sut : GuiRunnerViewModel) = 
+    [
+      it (sprintf "has %d registered spec(s)" registered)           sut.RegisteredSpecs should.equal registered
+      it (sprintf "has %d passed spec(s)" passed)                   sut.PassedSpecs should.equal passed
+      it (sprintf "has %d pending spec(s)" pending)                 sut.PendingSpecs should.equal pending
+      it (sprintf "has %d inconclusive spec(s)" inconclusive)       sut.InconclusiveSpecs should.equal inconclusive
+      it (sprintf "has %d failed spec(s)" failed)                   sut.FailedSpecs should.equal failed
+      it (sprintf "has %d finished spec(s)" finished)               sut.FinishedSpecs should.equal finished
+    ]
+
+  do
+    base.suti.RegisterSpecs 8
+
+  member x.initially = x.sut |> showsProgress 8 0 0 0 0 0
+  
+  member x.``and i reset the specs`` = 
+    x.suti.ResetSpecs ()
+    x.sut |> showsProgress 0 0 0 0 0 0
+
+  member x.``and 1 spec passes`` =
+    x.suti.PassedSpec ()
+    x.sut |> showsProgress 8 1 0 0 0 1
+
+  member x.``and 1 spec was pending, 3 were inconclusive and 2 specs fail`` =
+    x.suti.PendingSpec ()
+    x.suti.InconclusiveSpec (); x.suti.InconclusiveSpec (); x.suti.InconclusiveSpec ()
+    x.suti.FailedSpec (); x.suti.FailedSpec ()
+    x.sut |> showsProgress 8 0 1 3 2 6

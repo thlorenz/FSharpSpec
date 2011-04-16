@@ -49,4 +49,4 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
   member x.IsDummySpec = x.AsITreeViewModel.Name = SpecViewModel.DummySpecName
   
   static member DummySpecName = "___DummySpecToShowTreeExpander___GUID:0D46D658-A328-466C-873F-B4BA1E394E5D"
-  static member Dummy = SpecViewModel ((SpecViewModel.DummySpecName, SpecDelegate(fun () -> AssertionResult.Inconclusive)), GuiController() :> IGuiController , (fun () -> []), (fun _ -> null))
+  static member Dummy = SpecViewModel ((SpecViewModel.DummySpecName, SpecDelegate(fun () -> AssertionResult.Inconclusive)), Unchecked.defaultof<IGuiController> , (fun () -> []), (fun _ -> null))
