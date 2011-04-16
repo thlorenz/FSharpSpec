@@ -34,7 +34,7 @@ type TreeViewModel (name, controller : IGuiController) =
       | c                                                 -> c.ResetResults ()
     
     override x.ResolveSpecs () = ()
-    override x.RunSpecs () = ()
+    override x.RunSpecs completed = completed ()
 
     override x.Add child = NotImplementedException("Need to override Add to use it.") |> raise
 

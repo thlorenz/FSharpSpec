@@ -12,7 +12,7 @@ type ITreeViewModel =
   abstract member Add : ITreeViewModel -> unit
   abstract member ResetResults : unit -> unit
   abstract member ResolveSpecs : unit -> unit
-  abstract member RunSpecs : unit -> unit
+  abstract member RunSpecs : (unit -> unit) -> unit
 
 type IGuiController =
   abstract member Selected : ITreeViewModel -> unit
@@ -42,7 +42,7 @@ module ITreeViewModelFunctions =
       DispatcherPriority.DataBind, 
       (Action(fun () ->  
         x.ResolveSpecs () 
-        x.RunSpecs () 
+        x.RunSpecs (fun () -> ()) 
          )) )
     |> ignore
     

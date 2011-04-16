@@ -36,16 +36,18 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
     if x.IsSelected then x.OnSelected ()
 
 
-  member private x._runSpecCommand = ActionCommand ((fun _ -> x.runSpec; x.IsSelected <- true), (fun _ -> true))
+  member private x._runSpecCommand = ActionCommand ((fun _ -> x.runSpec (fun () -> ()); x.IsSelected <- true), (fun _ -> true))
   member private x._debugSpecCommand = ActionCommand ((fun _ -> x.debugSpec), (fun _ -> true))
  
   member x.Spec with get () = specInfo
 
-  member x.runSpec = 
+  member x.runSpec completed = 
       use wkr = new BackgroundWorker()
      
       wkr.DoWork.Add (fun args -> args.Result <- runSpecification ())
-      wkr.RunWorkerCompleted.Add(fun args -> x.reportRunResult (args.Result :?> AssertionResult * exn))
+      wkr.RunWorkerCompleted.Add(fun args -> 
+        x.reportRunResult (args.Result :?> AssertionResult * exn)
+        completed ())
       wkr.RunWorkerAsync() 
 
 
@@ -53,7 +55,7 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
   member x.debugSpec = 
     Debugger.Launch() |> ignore
     buildContextAndResolveSpecs () |> ignore
-    x.runSpec
+    x.runSpec (fun () -> ())
  
   member x.RunSpecCommand with get () = x._runSpecCommand :> ICommand
   member x.DebugSpecCommand with get () = x._debugSpecCommand :> ICommand

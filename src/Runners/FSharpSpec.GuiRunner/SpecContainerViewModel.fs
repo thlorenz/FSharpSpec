@@ -42,7 +42,7 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
     
 
 
-  let runSpecs () = _instantiatedSpecs |> Seq.iter (fun s -> s.runSpec)
+  let runSpecs completed = _instantiatedSpecs |> Seq.iter (fun s -> s.runSpec completed)
     
   member private x._runSpecsCommand = 
     ActionCommand ((fun _ -> 
@@ -59,10 +59,11 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
       extractSpecs ()
       _instantiatedSpecs |> Seq.map (fun vm -> vm.Spec) |> controller.RegisterSpecs
 
-    override x.RunSpecs () = 
-      runSpecs ()
-      x.AsITreeViewModel.State <- x.aggregateStates
-      x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
+    override x.RunSpecs completed = 
+      runSpecs (fun () ->
+        x.AsITreeViewModel.State <- x.aggregateStates
+        x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
+        completed ())
 
   override x.OnExpanded () = extractSpecs ()
 

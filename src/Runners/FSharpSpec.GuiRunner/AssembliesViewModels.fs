@@ -40,9 +40,10 @@ type AssemblyViewModel (asm : Assembly, controller : IGuiController) =
 
     override x.ResolveSpecs () = x.Child.AsITreeViewModel.ResolveSpecs ()
    
-    override x.RunSpecs () = 
-      x.Child.AsITreeViewModel.RunSpecs ()
-      x.AsITreeViewModel.State <- x.Child.AsITreeViewModel.State
+    override x.RunSpecs completed = 
+      x.Child.AsITreeViewModel.RunSpecs (fun () ->
+        x.AsITreeViewModel.State <- x.Child.AsITreeViewModel.State
+        completed ())
    
 type AssembliesViewModel (assemblies : ObservableCollection<Assembly>, controller) =
   inherit TreeViewModel("", controller)
