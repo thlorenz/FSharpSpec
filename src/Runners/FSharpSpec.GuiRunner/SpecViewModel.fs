@@ -13,6 +13,9 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
   let mutable _specRunResult = getFullNameOfSpec (fst specInfo) |> SpecRunResultViewModel.NotRunYet  
   let getResult state = SpecRunResultViewModel (state, getFullNameOfSpec (fst specInfo))
   let getResult1 state exn = SpecRunResultViewModel (state, getFullNameOfSpec (fst specInfo), exn)
+  let resetAndRegisterSpec () = 
+    controller.ResetResults ()
+    controller.RegisterSpecs [specInfo]
 
   let runSpecification () = 
     try
@@ -36,8 +39,19 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
     if x.IsSelected then x.OnSelected ()
 
 
-  member private x._runSpecCommand = ActionCommand ((fun _ -> x.runSpec (fun () -> ()); x.IsSelected <- true), (fun _ -> true))
-  member private x._debugSpecCommand = ActionCommand ((fun _ -> x.debugSpec), (fun _ -> true))
+  member private x._runSpecCommand = 
+    ActionCommand ((fun _ -> 
+      resetAndRegisterSpec ()
+      x.runSpec (fun () -> ())
+      x.IsSelected <- true), 
+      (fun _ -> true))
+
+  member private x._debugSpecCommand = 
+    ActionCommand ((fun _ -> 
+      resetAndRegisterSpec ()
+      x.debugSpec
+      x.IsSelected <- true), 
+      (fun _ -> true))
  
   member x.Spec with get () = specInfo
 
@@ -48,6 +62,7 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
       wkr.RunWorkerCompleted.Add(fun args -> 
         x.reportRunResult (args.Result :?> AssertionResult * exn)
         completed ())
+      
       wkr.RunWorkerAsync() 
 
 

@@ -20,6 +20,7 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
   let mutable _pendingSpecs = 0
   let mutable _failedSpecs = 0
   let mutable _finishedSpecs = 0
+  let mutable _overallState = NotRunYet
 
   
   interface IGuiRunnerViewModel with 
@@ -37,19 +38,17 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
       x.FinishedSpecs       <- 0
 
     override x.RegisterSpecs specs  = x.RegisteredSpecs <- x.RegisteredSpecs + specs
-                                      Debug.WriteLine (sprintf "Registered %d" x.RegisteredSpecs)
     override x.PassedSpec          () = x.PassedSpecs <- x.PassedSpecs + 1 
-                                        Debug.WriteLine (sprintf "Passed %d" x.PassedSpecs)
-                                        x.FinishedSpecs <- x.GetFinishedSpecs ()
+                                        x.UpdateProgress ()
 
     override x.InconclusiveSpec    () = x.InconclusiveSpecs <- x.InconclusiveSpecs + 1 
-                                        x.FinishedSpecs <- x.GetFinishedSpecs ()
+                                        x.UpdateProgress ()
 
     override x.PendingSpec         () = x.PendingSpecs <- x.PendingSpecs + 1 
-                                        x.FinishedSpecs <- x.GetFinishedSpecs ()
+                                        x.UpdateProgress ()
 
     override x.FailedSpec          () = x.FailedSpecs <- x.FailedSpecs + 1 
-                                        x.FinishedSpecs <- x.GetFinishedSpecs ()
+                                        x.UpdateProgress ()
       
   member private x._addAssemblyCommand = ActionCommand ((fun _ -> x.addAssembly ()), (fun _ -> true))
   member private x.addAssembly () = x.loadAssembly
@@ -65,7 +64,6 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
   member x.RegisteredSpecs 
     with get () = _registeredSpecs 
     and set (v) = _registeredSpecs <- v; 
-                  Debug.WriteLine (sprintf "Registered %d" _registeredSpecs)
                   x.OnPropertyChanged("RegisteredSpecs")
 
   member x.PassedSpecs 
@@ -93,8 +91,24 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
     and set (v) = _finishedSpecs <- v
                   x.OnPropertyChanged("FinishedSpecs")
 
+  member x.OverallState
+    with get () = _overallState
+    and set (v) = _overallState <- v
+                  x.OnPropertyChanged("OverallState")
+
   member private x.GetFinishedSpecs () = 
     _passedSpecs + _pendingSpecs + _inconclusiveSpecs + _failedSpecs
+  
+  member private x.GetOverallState () =
+    match (x.PassedSpecs, x.InconclusiveSpecs, x.FailedSpecs) with
+    | p, i, f when f > 0  -> Failed
+    | p, i, f when i > 0  -> Inconclusive
+    | p, i, f when p > 0  -> Passed
+    | _                   -> NotRunYet
+  
+  member private x.UpdateProgress () =
+    x.FinishedSpecs <- x.GetFinishedSpecs ()
+    x.OverallState <- x.GetOverallState ()
 
   member private x.loadAssembly  = 
   

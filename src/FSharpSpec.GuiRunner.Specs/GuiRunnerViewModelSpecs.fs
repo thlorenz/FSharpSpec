@@ -62,10 +62,18 @@ type ``when i register 8 specs`` () =
 
   member x.``and 1 spec passes`` =
     x.suti.PassedSpec ()
-    x.sut |> showsProgress 8 1 0 0 0 1
-
+    (it "overall state is passed" x.sut.OverallState should.equal Passed) :: 
+    (x.sut |> showsProgress 8 1 0 0 0 1)
+    
   member x.``and 1 spec was pending, 3 were inconclusive and 2 specs fail`` =
     x.suti.PendingSpec ()
     x.suti.InconclusiveSpec (); x.suti.InconclusiveSpec (); x.suti.InconclusiveSpec ()
     x.suti.FailedSpec (); x.suti.FailedSpec ()
-    x.sut |> showsProgress 8 0 1 3 2 6
+    (it "overall state is failed" x.sut.OverallState should.equal Failed) :: 
+    (x.sut |> showsProgress 8 0 1 3 2 6)
+ 
+  member x.``and 1 spec passed and 1 was inconclusive`` =
+    x.suti.PassedSpec ()
+    x.suti.InconclusiveSpec ()
+    (it "overall state is inconclusive" x.sut.OverallState should.equal Inconclusive) :: 
+    (x.sut |> showsProgress 8 1 0 1 0 2)
