@@ -1,6 +1,7 @@
 ﻿namespace FSharpSpec.GuiRunner
 
 open System
+open System.Collections.ObjectModel
 open System.Windows.Threading
 open FSharpSpec
 
@@ -8,7 +9,7 @@ type ITreeViewModel =
   abstract member Name : string
   abstract member Children : seq<ITreeViewModel>
   abstract member State : SpecState with get, set
-  abstract member SpecsRunResult : seq<SpecRunResultViewModel> with get, set
+  abstract member SpecsRunResult : ObservableCollection<SpecRunResultViewModel> with get
   abstract member Add : ITreeViewModel -> unit
   abstract member ResetResults : unit -> unit
   abstract member ResolveSpecs : unit -> unit

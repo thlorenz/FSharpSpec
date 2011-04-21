@@ -1,6 +1,7 @@
 ﻿namespace FSharpSpec.GuiRunner
 open System.Diagnostics
 open System
+open System.Collections.ObjectModel
 
 type TreeViewModel (name, controller : IGuiController) =
   inherit ViewModelBase ()
@@ -8,22 +9,17 @@ type TreeViewModel (name, controller : IGuiController) =
   let mutable _isExpanded = false
   let mutable _isSelected = false
   let mutable _state = NotRunYet
-  let mutable _specsRunResult = [ SpecRunResultViewModel (NotRunYet, name) ] |> List.toSeq
+  let mutable _specsRunResult = ObservableCollection ([ SpecRunResultViewModel (NotRunYet, name) ])
   member x.AsITreeViewModel with get () = x :> ITreeViewModel
   
   interface ITreeViewModel with
     override x.Name with get () = name
     override x.Children with get () : seq<ITreeViewModel> = Seq.empty
     
-    override x.State 
-      with get ()       = _state
-      and  set (value : SpecState)  = 
-        _state <- value
-        x.OnPropertyChanged("State")
+    override x.State with get () = x.State and set (v : SpecState) = x.State <- v
 
     override x.SpecsRunResult 
-      with get () :  SpecRunResultViewModel seq = _specsRunResult 
-      and set (value) = _specsRunResult <- value
+      with get () = _specsRunResult
   
     override x.ResetResults () = 
       x.AsITreeViewModel.State <- NotRunYet
@@ -75,6 +71,10 @@ type TreeViewModel (name, controller : IGuiController) =
   // Need these to ensure proper DataBinding
   member x.Children with get () = x.AsITreeViewModel.Children 
   member x.Name with get () = x.AsITreeViewModel.Name 
-  member x.State with get () = x.AsITreeViewModel.State
+  member x.State 
+    with get ()               = _state
+    and  set (v : SpecState)  = 
+      _state <- v
+      x.OnPropertyChanged("State")
   
 

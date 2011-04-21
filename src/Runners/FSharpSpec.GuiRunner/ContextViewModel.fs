@@ -49,7 +49,8 @@ type ContextViewModel (node : Node, controller) =
     override x.RunSpecs completed = 
       x.Children |> Seq.iter(fun c -> c.RunSpecs (fun () ->
         x.AsITreeViewModel.State <- x.aggregateStates
-        x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
+        x.AsITreeViewModel.SpecsRunResult.Clear()
+        x.aggregateResults |> Seq.iter(fun r -> x.AsITreeViewModel.SpecsRunResult.Add r)
         completed ())) 
 
   

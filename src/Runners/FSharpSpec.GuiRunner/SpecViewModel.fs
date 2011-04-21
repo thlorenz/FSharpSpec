@@ -13,26 +13,29 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
   let mutable _specRunResult = getFullNameOfSpec (fst specInfo) |> SpecRunResultViewModel.NotRunYet  
   let getResult state = SpecRunResultViewModel (state, getFullNameOfSpec (fst specInfo))
   let getResult1 state exn = SpecRunResultViewModel (state, getFullNameOfSpec (fst specInfo), exn)
+ 
   let resetAndRegisterSpec () = 
     controller.ResetResults ()
     controller.RegisterSpecs [specInfo]
 
   let runSpecification () = 
     try
-      System.Threading.Thread.Sleep(50)
+      //// System.Threading.Thread.Sleep(50)
       (_spec.Method.Invoke(_spec.Target, null) :?> AssertionResult, null :> exn )
     with
       ex               -> (Failed, ex)
   
   member private x.reportRunResult result =
     let outcome, excep =  result
-       
+  
+    x.AsITreeViewModel.State <- outcome |> toSpecState
+  
     match excep with
     | ex when ex = null       -> _specRunResult <- getResult x.AsITreeViewModel.State 
     | ex                      -> _specRunResult <- getResult1 x.AsITreeViewModel.State ex
 
-    x.AsITreeViewModel.State <- outcome |> toSpecState
-    x.AsITreeViewModel.SpecsRunResult <- [_specRunResult]
+    x.AsITreeViewModel.SpecsRunResult.Clear()
+    x.AsITreeViewModel.SpecsRunResult.Add _specRunResult
 
     controller.ReportResult outcome
     
@@ -60,7 +63,8 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
      
       wkr.DoWork.Add (fun args -> args.Result <- runSpecification ())
       wkr.RunWorkerCompleted.Add(fun args -> 
-        x.reportRunResult (args.Result :?> AssertionResult * exn)
+        let runResult = args.Result :?> AssertionResult * exn
+        x.reportRunResult runResult
         completed ())
       
       wkr.RunWorkerAsync() 

@@ -62,7 +62,8 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
     override x.RunSpecs completed = 
       runSpecs (fun () ->
         x.AsITreeViewModel.State <- x.aggregateStates
-        x.AsITreeViewModel.SpecsRunResult <- x.aggregateResults
+        x.AsITreeViewModel.SpecsRunResult.Clear()
+        x.aggregateResults |> Seq.iter(fun r -> x.AsITreeViewModel.SpecsRunResult.Add r)
         completed ())
 
   override x.OnExpanded () = extractSpecs ()

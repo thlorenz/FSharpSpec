@@ -1,6 +1,7 @@
 ﻿module GuiControllerSpecs
 
 open System
+open System.Collections.ObjectModel
 open FSharpSpec
 open FSharpSpec.GuiRunner
 open FSharp.Interop
@@ -19,7 +20,7 @@ type ``when a tree viewmodel has specs run results`` () =
   let firstResult = SpecRunResultViewModel(Passed, "some spec name")
   let secondResult = SpecRunResultViewModel(Failed, "some other spec name")
 
-  let specsRunResult = [ firstResult; secondResult ] |> List.toSeq
+  let specsRunResult = ObservableCollection([ firstResult; secondResult ])
   do base.treeViewModelStub.SpecsRunResult |> returns specsRunResult
 
   member x.``and the user selects it`` =
