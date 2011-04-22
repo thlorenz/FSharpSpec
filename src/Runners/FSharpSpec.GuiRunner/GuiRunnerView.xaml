@@ -114,7 +114,15 @@
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
-            <StackPanel Grid.Column="1">
+            <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button Command="{Binding RunAllSpecsCommand}" Height="30" Margin="2">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="Run All" Margin="5,2" VerticalAlignment="Center"/>
+                        <Image Source="Run.png" Width="25" Height="25" Margin="5,2"/>
+                    </StackPanel>
+                </Button>
+            </StackPanel>
+            <StackPanel Grid.Column="1" Margin="5,2">
                 <ProgressBar Style="{DynamicResource SpecsRunProgressBar}" Margin="5" Minimum="0" Maximum="{Binding RegisteredSpecs}" Value="{Binding FinishedSpecs}" HorizontalAlignment="Stretch" Height="15" />
                 <UniformGrid Columns="5">
                     <TextBlock Grid.Column="0">

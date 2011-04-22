@@ -96,6 +96,15 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
     and set (v) = _overallState <- v
                   x.OnPropertyChanged("OverallState")
 
+
+  member x.RunAllSpecsCommand with get () = x._runAllSpecsCommand
+    
+  member private x._runAllSpecsCommand = 
+    ActionCommand((fun _ -> 
+      contextRoot.Children 
+      |> Seq.iter (fun child -> child |> resetResolveAndRunSpecs)),
+      (fun _ -> Seq.length contextRoot.Children  > 0))
+
   member private x.GetFinishedSpecs () = 
     _passedSpecs + _pendingSpecs + _inconclusiveSpecs + _failedSpecs
   

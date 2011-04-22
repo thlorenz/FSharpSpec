@@ -20,7 +20,7 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
 
   let runSpecification () = 
     try
-      //// System.Threading.Thread.Sleep(50)
+      System.Threading.Thread.Sleep(50)
       (_spec.Method.Invoke(_spec.Target, null) :?> AssertionResult, null :> exn )
     with
       ex               -> (Failed, ex)
