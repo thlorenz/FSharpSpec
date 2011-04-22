@@ -9,12 +9,12 @@ type ViewModelBase () =
   let propertyChanged = new Event<PropertyChangedEventHandler,PropertyChangedEventArgs>()
  
   interface INotifyPropertyChanged with
-      [<CLIEvent>]
-      member x.PropertyChanged = propertyChanged.Publish
+    [<CLIEvent>]
+    member x.PropertyChanged = propertyChanged.Publish
  
   member x.OnPropertyChanged(name)=
-      propertyChanged.Trigger (x, new PropertyChangedEventArgs(name))
-
+    propertyChanged.Trigger (x, new PropertyChangedEventArgs(name))
+     
 
 type ActionCommand (action : Action, canExecute : Func<bool>) = 
   let _action = action

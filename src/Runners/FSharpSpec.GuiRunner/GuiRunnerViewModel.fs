@@ -120,7 +120,7 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
       | _                             -> None 
 
     match openAssembly with
-    | Some(path)   -> contextRoot.Add (AssemblyViewModel(path |> getAssembly, controller))
+    | Some(path)   -> contextRoot.Children.Add (AssemblyViewModel(path |> getAssembly, controller))
     | None        ->  Debug.WriteLine("Canceled") |> ignore
 
     

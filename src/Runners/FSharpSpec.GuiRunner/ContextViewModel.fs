@@ -19,6 +19,7 @@ type ContextViewModel (node : Node, controller) =
   let _childContexts = List<ContextViewModel>()
   let _specContainers = List<SpecContainerViewModel>()
   let mutable _isExpanded = false
+  let children = base.Children
 
   do
     node.Children
@@ -28,7 +29,9 @@ type ContextViewModel (node : Node, controller) =
     |> Seq.map (fun mi -> { Name = mi.Name; Method = mi }) 
     |> Seq.iter (fun si -> _specContainers.Add <| SpecContainerViewModel(si, node.Context, controller))
 
-  let _children = Seq.cast<ITreeViewModel>(_childContexts) |> Seq.append(Seq.cast<ITreeViewModel>(_specContainers))
+    Seq.cast<ITreeViewModel>(_childContexts) 
+    |> Seq.append(Seq.cast<ITreeViewModel>(_specContainers))
+    |> Seq.iter (fun child -> children.Add child)
     
   member private x._runSpecsCommand = 
     ActionCommand ((fun _ ->
@@ -42,8 +45,6 @@ type ContextViewModel (node : Node, controller) =
   member x.SpecContainers with get() = _specContainers
   
   interface ITreeViewModel with
-    override x.Children with get () = _children
-    
     override x.ResolveSpecs () = x.Children |> Seq.iter(fun c -> c.ResolveSpecs ())
    
     override x.RunSpecs completed = 

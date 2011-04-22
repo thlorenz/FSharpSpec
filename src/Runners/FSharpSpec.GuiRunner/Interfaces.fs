@@ -7,10 +7,9 @@ open FSharpSpec
 
 type ITreeViewModel =
   abstract member Name : string
-  abstract member Children : seq<ITreeViewModel>
+  abstract member Children : ObservableCollection<ITreeViewModel> 
   abstract member State : SpecState with get, set
   abstract member SpecsRunResult : ObservableCollection<SpecRunResultViewModel> with get
-  abstract member Add : ITreeViewModel -> unit
   abstract member ResetResults : unit -> unit
   abstract member ResolveSpecs : unit -> unit
   abstract member RunSpecs : (unit -> unit) -> unit

@@ -10,11 +10,12 @@ type TreeViewModel (name, controller : IGuiController) =
   let mutable _isSelected = false
   let mutable _state = NotRunYet
   let mutable _specsRunResult = ObservableCollection ([ SpecRunResultViewModel (NotRunYet, name) ])
+  let mutable _children = ObservableCollection()
   member x.AsITreeViewModel with get () = x :> ITreeViewModel
   
   interface ITreeViewModel with
     override x.Name with get () = name
-    override x.Children with get () : seq<ITreeViewModel> = Seq.empty
+    override x.Children with get () = _children
     
     override x.State with get () = x.State and set (v : SpecState) = x.State <- v
 
@@ -31,9 +32,6 @@ type TreeViewModel (name, controller : IGuiController) =
     
     override x.ResolveSpecs () = ()
     override x.RunSpecs completed = completed ()
-
-    override x.Add child = NotImplementedException("Need to override Add to use it.") |> raise
-
      
   member x.aggregateStates =
     match x.AsITreeViewModel.Children with
