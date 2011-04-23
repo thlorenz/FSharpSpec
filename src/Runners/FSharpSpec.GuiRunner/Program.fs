@@ -62,7 +62,7 @@ module main =
         userControl.DataContext <- guiRunnerViewModel
         userControl
 
-      let win = Window( Width=700.0, Height = 600.0, Content = view (), Topmost = false)
+      let win = Window( Width=700.0, Height = 600.0, Content = view (), Topmost = false, Title = "FSharpSpec Gui Runner")
       win.Show()
       
     end

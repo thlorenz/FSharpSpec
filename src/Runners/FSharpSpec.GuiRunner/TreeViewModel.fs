@@ -51,7 +51,7 @@ type TreeViewModel (name, controller : IGuiController) =
       and set value = 
         _isSelected <- value 
         x.refreshResults ()
-        x.OnSelected ()
+        if (x.IsSelected) then x.OnSelected ()
         base.OnPropertyChanged("IsSelected")
   
   member x.IsExpanded 

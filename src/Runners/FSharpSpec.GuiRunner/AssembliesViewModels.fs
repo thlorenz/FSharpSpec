@@ -44,6 +44,8 @@ type AssemblyViewModel (asm : Assembly, controller : IGuiController) =
       x.Child.AsITreeViewModel.RunSpecs (fun () ->
         x.AsITreeViewModel.State <- x.Child.AsITreeViewModel.State
         completed ())
+
+  override x.OnSelected () = x.Child.IsSelected <- true
    
 type AssembliesViewModel (assemblies : ObservableCollection<Assembly>, controller) =
   inherit TreeViewModel("", controller)
