@@ -25,7 +25,6 @@ module SpecsExtractor =
             match mi.ReturnType with
             | ty when ty  = typeof<(string * SpecDelegate)>             -> true    
             | ty when ty  = typeof<(string * SpecDelegate) list>        -> true
-            | ty when ty  = typeof<Lazy<string * SpecDelegate> list>    -> true
             | _                                                         -> false 
         
         let isDeclaredDirectlyOnThisType(mi : MethodInfo) = mi.DeclaringType = ty

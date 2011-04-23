@@ -9,24 +9,12 @@ open FSharpSpec
 // If an error occurs at that point no specifications can be resolved from the
 type MultipleAssertions () =
   
-  /// (1 / 0) is evaluated once spec2 is resolved, which allows FSharpSpec to handle the exception and still run the other specs.
-  /// By using lazy, we delay the creation of the specification delegate and thus they can be resolved separately.
-  /// Since spec2 cannot be resolved, FSharpSpec will be unable to resolve its name.
-  member x.``Isolating specifications via 'lazy' keyword`` = [
-    lazy(it "spec1" (0 + 1) should.equal 1)
-          
-    // This specification fails, but the other specs can be evaluated before the failing code runs
-    lazy(it "spec2" (1 /0) should.equal 1)
-          
-    lazy(it "spec3" (2 - 1) should.equal 1)
-  ]
-    
   /// By placing (1 / 0) inside a lambda, we delay its evaluation to a point, were FSharpSpec can deal with it
   /// without affecting the execution of the other specifications.
   member x.``Isolating specifications by placing 'risky' code inside a lambda`` = [
     it "spec1" (0 + 1) should.equal 1
           
-    // This specification fails, but the other specs and the spec name can be evaluated before the failing code runs
+    // This specification fails, but the other specs and the spec name can be evaluated before the failing code rusn
     it "spec2" (fun () -> 1/0) should.equal 1
          
     it "spec3" (2 - 1) should.equal 1

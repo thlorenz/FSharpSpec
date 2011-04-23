@@ -61,23 +61,9 @@ module ContextTree =
             | []                                -> []
             | (specName, specDelegate) :: xs    -> [(runSpec specName specDelegate)] @ getSpecResults xs
         
-        let rec getLazySpecResults (specs : Lazy<string * SpecDelegate> list) =
-            match specs with
-            | []                    -> []
-            | x :: xs    ->
-                try
-                    [(runSpec (fst x.Value) (snd x.Value))] @ getLazySpecResults xs 
-                with
-                    ex              ->    
-                        let fullSpecName = getFullSpecName context (removeLeadingGet specMethod.Name) "(Specification name could not be resolved)"
-
-                        [("Unable to resolve spec", indent  + "      »  "  + "Unresolvable" + " - <<< Threw Exception >>>" + "\n",
-                                                    Some({ FullSpecName = fullSpecName ; Exception = ex }), Failed) ] @ getLazySpecResults xs 
-
         let specResults =         
             match specs.GetType() with
             | ty when ty  = typeof<(string * SpecDelegate)>             -> getSingleSpecResult (specs :?> (string * SpecDelegate))
-            | ty when ty  = typeof<Lazy<string * SpecDelegate> list>    -> getLazySpecResults (specs :?> Lazy<string * SpecDelegate> list)
             | _                                                         -> getSpecResults (specs :?> (string * SpecDelegate) list)
         
         let rec getFailures = function

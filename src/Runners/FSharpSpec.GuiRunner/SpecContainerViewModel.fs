@@ -34,9 +34,8 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
       let result = methodInfo.Invoke(instantiatedContext, null) 
       (Some(result), null)
     with 
-    | ex -> 
-            (None, ex)
- 
+    | ex -> (None, ex)
+  
   let buildContextAndResolveSpecs () =
          
     hookAssemblyResolve context.Clazz.Assembly
@@ -52,8 +51,6 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
         let specList = specListOpt.Value
         let resolvedSpecs = 
           match specList.GetType() with
-          | ty when ty  = typeof<Lazy<(string * SpecDelegate)> list>  -> specList :?> Lazy<(string * SpecDelegate)> list
-                                                                         |> List.map(fun (r : Lazy<(string * SpecDelegate)>) -> r.Value) 
           | ty when ty = typeof<(string * SpecDelegate)>              -> [specList :?> (string * SpecDelegate)]
           | _                                                         ->  specList :?> (string * SpecDelegate) list
       
