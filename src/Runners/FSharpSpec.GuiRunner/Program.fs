@@ -25,6 +25,15 @@ open System.Xml
 open FSharpSpec.GuiRunner
 
 module main =
+  
+  let loadEmbeddedFile resourcePath =
+    let asm = Assembly.GetExecutingAssembly()
+    let stream = asm.GetManifestResourceStream(resourcePath)
+    match stream with
+    | null        -> failwith "Unable to find resource %s" resourcePath
+    | s           -> use sr = new StreamReader(s)
+                     sr.ReadToEnd()
+  
   let path = @"C:\dev\FSharp\FSharpSpec\src\Specs\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
 
   let asm = path |> getAssembly
@@ -44,12 +53,12 @@ module main =
       let guiRunnerViewModel = GuiRunnerViewModel (asmRoot, controller :> IGuiController)
       controller.GuiRunnerViewModel <- guiRunnerViewModel :> IGuiRunnerViewModel
 
-      let loadGuiRunnerView (fileName : string) =
-        let reader = XmlReader.Create fileName
-        XamlReader.Load reader :?> UserControl
+      let loadGuiRunnerView (resourcePath : string) =
+        let xamlDoc = loadEmbeddedFile resourcePath
+        XamlReader.Parse (xamlDoc.ToString()) :?> UserControl
 
       let view () = 
-        let userControl = loadGuiRunnerView @"C:\dev\FSharp\FSharpSpec\src\Runners\FSharpSpec.GuiRunner\GuiRunnerView.xaml" 
+        let userControl = loadGuiRunnerView "GuiRunnerView.xaml" 
         userControl.DataContext <- guiRunnerViewModel
         userControl
 

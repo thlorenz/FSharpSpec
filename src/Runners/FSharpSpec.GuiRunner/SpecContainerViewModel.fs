@@ -67,6 +67,7 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
         
         match buildContextAndResolveSpecs () with
         | (None, ex)              -> Debug.WriteLine(sprintf "%A" ex)
+                                    // children.Add SpecViewModel 
         | (resolvedSpecs, _)      -> resolvedSpecs.Value
                                      |> List.iter (fun spec -> children.Add <| SpecViewModel(spec, controller, buildContextAndResolveSpecs, getFullNameOfSpec)) 
     

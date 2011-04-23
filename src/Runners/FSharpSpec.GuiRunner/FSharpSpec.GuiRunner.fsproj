@@ -48,7 +48,7 @@
     <Compile Include="AssembliesViewModels.fs" />
     <Compile Include="GuiRunnerViewModel.fs" />
     <Resource Include="ExpressionDark.xaml" />
-    <None Include="GuiRunnerView.xaml" />
+    <EmbeddedResource Include="GuiRunnerView.xaml" />
     <Compile Include="Program.fs" />
     <None Include="GuiRunner.fsx" />
     <None Include="DirectTreeViewGui.fsx" />
