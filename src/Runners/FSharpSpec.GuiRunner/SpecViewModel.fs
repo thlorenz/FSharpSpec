@@ -5,7 +5,7 @@ open System.Windows.Input
 open System.ComponentModel
 open FSharpSpec
 
-type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiController, buildContextAndResolveSpecs : unit -> (string * SpecDelegate) list option * exn, getFullNameOfSpec) =
+type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiController, buildContextAndResolveSpecs : unit -> (string * SpecDelegate) list option * exn * string, getFullNameOfSpec) =
   inherit TreeViewModel (fst specInfo, controller)
 
   let _spec = snd specInfo
@@ -20,7 +20,7 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
 
   let runSpecification () = 
     try
-      System.Threading.Thread.Sleep(50)
+      // System.Threading.Thread.Sleep(50)
       (_spec.Method.Invoke(_spec.Target, null) :?> AssertionResult, null :> exn )
     with
       ex               -> (Failed, ex)
@@ -82,4 +82,5 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
   member x.IsDummySpec = x.AsITreeViewModel.Name = SpecViewModel.DummySpecName
   
   static member DummySpecName = "___DummySpecToShowTreeExpander___GUID:0D46D658-A328-466C-873F-B4BA1E394E5D"
-  static member Dummy = SpecViewModel ((SpecViewModel.DummySpecName, SpecDelegate(fun () -> AssertionResult.Inconclusive)), Unchecked.defaultof<IGuiController> , (fun () -> (None, null)), (fun _ -> null))
+  static member Dummy = SpecViewModel ((SpecViewModel.DummySpecName, SpecDelegate(fun () -> AssertionResult.Inconclusive)), Unchecked.defaultof<IGuiController> , (fun () -> (None, null, null)), (fun _ -> null))
+  static member Inconclusive controller msg excep = SpecViewModel((msg, SpecDelegate(fun () -> AssertionResult.Inconclusive)), controller , (fun () -> (None, excep, msg)), (fun _ -> msg))

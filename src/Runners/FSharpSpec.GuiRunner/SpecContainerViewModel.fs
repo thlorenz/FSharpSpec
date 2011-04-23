@@ -42,11 +42,11 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
     hookAssemblyResolve context.Clazz.Assembly
           
     match tryGetInstantiatedContext context with
-    | (None, ex)      -> (None, ex)
+    | (None, ex)      -> (None, ex, "Error when setting up context")
     | (ictx, _)       -> 
           
       match tryExtractSpecs ictx.Value specs.Method with
-      | (None, ex)      -> (None, ex)
+      | (None, ex)      -> (None, ex, "Error when resolving specifications")
       | (specListOpt, _)   ->
               
         let specList = specListOpt.Value
@@ -57,7 +57,7 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
           | ty when ty = typeof<(string * SpecDelegate)>              -> [specList :?> (string * SpecDelegate)]
           | _                                                         ->  specList :?> (string * SpecDelegate) list
       
-        (Some(resolvedSpecs), null)
+        (Some(resolvedSpecs), null, "")
 
   let extractSpecs () = 
     match children with
@@ -66,10 +66,10 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
         children.Clear()
         
         match buildContextAndResolveSpecs () with
-        | (None, ex)              -> Debug.WriteLine(sprintf "%A" ex)
-                                    // children.Add SpecViewModel 
-        | (resolvedSpecs, _)      -> resolvedSpecs.Value
-                                     |> List.iter (fun spec -> children.Add <| SpecViewModel(spec, controller, buildContextAndResolveSpecs, getFullNameOfSpec)) 
+        | (None, ex, msg)                -> Debug.WriteLine(sprintf "%A" ex)
+                                            children.Add ((SpecViewModel.Inconclusive controller msg ex) :> ITreeViewModel)
+        | (resolvedSpecs, _, __)         -> resolvedSpecs.Value
+                                            |> List.iter (fun spec -> children.Add <| SpecViewModel(spec, controller, buildContextAndResolveSpecs, getFullNameOfSpec)) 
     
   let runSpecs completed = children |> Seq.iter (fun s -> (s :?> SpecViewModel).runSpec completed)
     
