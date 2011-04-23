@@ -7,35 +7,12 @@ open FSharp.Interop
 open System.ComponentModel
 open NSubstitute
 
-type ClimbedTreeEventArgs (meters : int) =
-  inherit EventArgs ()
-  member x.Meters with get () = meters
-type ClimbedTreeDelegate = delegate of obj * ClimbedTreeEventArgs -> unit
-
 type IMonkey =
   abstract Scream : string -> unit
   abstract Name : string with get 
   abstract Age : int with get, set
   abstract Eat : int -> string -> unit
   abstract Count : string -> int
-  [<CLIEvent>]
-  abstract ClimbedTree : IEvent<ClimbedTreeDelegate, ClimbedTreeEventArgs>
-
-type MyEventArgs(msg:string) =
-    inherit EventArgs()
-    member this.Message = msg
-
-type MyEventDelegate = delegate of obj * MyEventArgs -> unit
-
-type Foo() = 
-    let ev = new Event<MyEventDelegate, MyEventArgs>()
-
-    member this.Ping(msg) =
-        ev.Trigger(this, new MyEventArgs(msg))
-
-    [<CLIEvent>]
-    member this.GotPinged = ev.Publish
-
 
 let m = fake<IMonkey>
 
@@ -61,16 +38,3 @@ m.Eat 3 "bananas"
 
 m.Age <- 3
 (m |> received).Age <- 3
-
-let npc = fake<INotifyPropertyChanged>
-let sender = new obj()
-let args = PropertyChangedEventArgs("hello")
-let raise = Raise.EventWith(sender, args)
-//// npc.PropertyChanged.AddHandler ( PropertyChangedEventHandler(fun se -> -> o -> raise |> ignore ))
-
-
-
-
-
-
-
