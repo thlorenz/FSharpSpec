@@ -36,10 +36,10 @@ type ``that has been incremented`` () =
     
   do 
     base.sut.IncrementValue() |> ignore
-    printfn "%A" <| 1/0
         
   member x.initially = 
       [
+          
           it "should have name ContextName" x.sut.Name should.equal "ContextName"
           it "should have Value 1" x.sut.Value should.equal 1
       ]

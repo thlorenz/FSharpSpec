@@ -11,8 +11,11 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
   let _spec = snd specInfo
 
   let mutable _specRunResult = getFullNameOfSpec (fst specInfo) |> SpecRunResultViewModel.NotRunYet  
+  let mutable _inconclusiveException = null
+
   let getResult state = SpecRunResultViewModel (state, getFullNameOfSpec (fst specInfo))
   let getResult1 state exn = SpecRunResultViewModel (state, getFullNameOfSpec (fst specInfo), exn)
+  let getInconclusiveResult excep = SpecRunResultViewModel(SpecState.Inconclusive, getFullNameOfSpec (fst specInfo), excep)
  
   let resetAndRegisterSpec () = 
     controller.ResetResults ()
@@ -29,10 +32,13 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
     let outcome, excep =  result
   
     x.AsITreeViewModel.State <- outcome |> toSpecState
-  
-    match excep with
-    | ex when ex = null       -> _specRunResult <- getResult x.AsITreeViewModel.State 
-    | ex                      -> _specRunResult <- getResult1 x.AsITreeViewModel.State ex
+    
+    match outcome with
+    | Inconclusive -> _specRunResult <- getInconclusiveResult x.InconclusiveException
+    | _            -> 
+      match excep with
+      | ex when ex = null       -> _specRunResult <- getResult x.AsITreeViewModel.State 
+      | ex                      -> _specRunResult <- getResult1 x.AsITreeViewModel.State ex
 
     x.AsITreeViewModel.SpecsRunResult.Clear()
     x.AsITreeViewModel.SpecsRunResult.Add _specRunResult
@@ -80,7 +86,11 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
   member x.DebugSpecCommand with get () = x._debugSpecCommand :> ICommand
   
   member x.IsDummySpec = x.AsITreeViewModel.Name = SpecViewModel.DummySpecName
+  member x.InconclusiveException with get () = _inconclusiveException and set (v) = _inconclusiveException <- v
   
   static member DummySpecName = "___DummySpecToShowTreeExpander___GUID:0D46D658-A328-466C-873F-B4BA1E394E5D"
   static member Dummy = SpecViewModel ((SpecViewModel.DummySpecName, SpecDelegate(fun () -> AssertionResult.Inconclusive)), Unchecked.defaultof<IGuiController> , (fun () -> (None, null, null)), (fun _ -> null))
-  static member Inconclusive controller msg excep = SpecViewModel((msg, SpecDelegate(fun () -> AssertionResult.Inconclusive)), controller , (fun () -> (None, excep, msg)), (fun _ -> msg))
+  static member Inconclusive controller msg excep = 
+    let specVm = SpecViewModel((msg, SpecDelegate(fun () -> AssertionResult.Inconclusive)), controller , (fun () -> (None, excep, msg)), (fun _ -> msg))
+    specVm.InconclusiveException <- excep
+    specVm

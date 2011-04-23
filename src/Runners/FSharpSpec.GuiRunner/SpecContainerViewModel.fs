@@ -42,11 +42,11 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
     hookAssemblyResolve context.Clazz.Assembly
           
     match tryGetInstantiatedContext context with
-    | (None, ex)      -> (None, ex, "Error when setting up context")
+    | (None, ex)      -> (None, ex, "Error when setting up context" |> getFullNameOfSpec)
     | (ictx, _)       -> 
           
       match tryExtractSpecs ictx.Value specs.Method with
-      | (None, ex)      -> (None, ex, "Error when resolving specifications")
+      | (None, ex)      -> (None, ex, "Error when resolving specifications" |> getFullNameOfSpec )
       | (specListOpt, _)   ->
               
         let specList = specListOpt.Value
@@ -66,9 +66,8 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
         children.Clear()
         
         match buildContextAndResolveSpecs () with
-        | (None, ex, msg)                -> Debug.WriteLine(sprintf "%A" ex)
-                                            children.Add ((SpecViewModel.Inconclusive controller msg ex) :> ITreeViewModel)
-        | (resolvedSpecs, _, __)         -> resolvedSpecs.Value
+        | (None, ex, msg)                -> children.Add ((SpecViewModel.Inconclusive controller msg ex) :> ITreeViewModel)
+        | (resolvedSpecs, _, _)          -> resolvedSpecs.Value
                                             |> List.iter (fun spec -> children.Add <| SpecViewModel(spec, controller, buildContextAndResolveSpecs, getFullNameOfSpec)) 
     
   let runSpecs completed = children |> Seq.iter (fun s -> (s :?> SpecViewModel).runSpec completed)
