@@ -74,6 +74,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Demos", "Demos", "{D54279B3
 	ProjectSection(SolutionItems) = preProject
 		Demos\Demo.fsx = Demos\Demo.fsx
 		DemoWithSlides.fsx = DemoWithSlides.fsx
+		FSharpSpecSample.txt = FSharpSpecSample.txt
+		MSpecSample.txt = MSpecSample.txt
 		NUnitSample.txt = NUnitSample.txt
 	EndProjectSection
 EndProject

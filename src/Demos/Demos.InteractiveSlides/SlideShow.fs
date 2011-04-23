@@ -48,6 +48,27 @@ let expand toValue (elem : FrameworkElement) =
   elem.BeginAnimation(FrameworkElement.HeightProperty, animation)
 
 
+(*
+<LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+	<GradientStop Color="#FF111111" Offset="1"/>
+	<GradientStop Color="#FF555555" Offset="0.5"/>
+	<GradientStop Color="#FF333333" Offset="0.8"/>
+	<GradientStop Color="#FF111111" Offset="0"/> 
+</LinearGradientBrush> 
+*)
+
+let gradientBrush = 
+  let stops = 
+    GradientStopCollection(
+      [
+        GradientStop(Color.FromRgb(11uy,11uy,11uy), 0.0)
+        GradientStop(Color.FromRgb(55uy,55uy,55uy), 0.5)
+        GradientStop(Color.FromRgb(33uy,33uy,33uy), 0.8)
+        GradientStop(Color.FromRgb(11uy,11uy,11uy), 1.0)
+      ])
+
+  LinearGradientBrush(stops, Point(0.5, 1.0), Point(0.5, 0.0))
+
 type SlideShow (slidesPath) =
   let panel = 
     StackPanel(Orientation = Orientation.Vertical)
@@ -55,7 +76,7 @@ type SlideShow (slidesPath) =
   let border = 
     Border(
       Child = panel, 
-      Background = Brushes.DarkBlue,
+      Background = gradientBrush,
       BorderBrush = Brushes.Blue,
       CornerRadius = CornerRadius(5.0))
 

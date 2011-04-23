@@ -1,0 +1,22 @@
+[Subject(typeof(LiveTrackerSettingsViewModel), "Saving Settings")]
+public class when_the_user_executes_SaveComand : LiveTrackerSettingsViewModelSpecs
+{
+    static XDocument expectedDocument;
+
+    static bool settingsChangedWasRaised;
+
+    static ILiveTrackerSettingsViewModel passedPayload;
+
+    Establish context = () =>
+    {
+        _sut.HandHistoryFilesPaths = new[] { "somePath" };
+        expectedDocument = LiveTrackerSettingsViewModel.CreateXDocumentFor(_sut);
+    };
+
+    Because of = () => _sut.SaveSettingsCommand.Execute(null);
+
+    It should_save_the_settings = () => _xDocumentHandler_Mock.DocumentWasSaved.ShouldBeTrue();
+
+    It the_saved_xDocument_should_contain_the_correct_settings
+        = () => _xDocumentHandler_Mock.SavedDocument.ToString().ShouldEqual(expectedDocument.ToString());
+}

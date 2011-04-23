@@ -20,8 +20,9 @@ let expandNormal alignment  = expandNormal alignment show
 "XUnit Frameworks" |> transitionHeadLine
 show |> clear; show.ReadFile("NUnitSample.txt") |> expandNormal Middle
 "MSpec" |> transitionHeadLine
-// MSpec Code here
-// FSharpSpec Code here
+show |> clear; show.ReadFile("MSpecSample.txt") |> expandNormal Middle
+"FSharpSpec" |> transitionHeadLine
+show |> clear; show.ReadFile("FSharpSpecSample.txt") |> expandNormal Middle
 
 
 "But Seriously" |> transitionHeadLine
@@ -81,9 +82,10 @@ show |> clear; "FSharpSpec"          |> show.WriteUsing 20 Headline
 "● run assertions interactively" |> show.Write
 
 "Writing a specification" |> transitionHeadLine
-"it \"adds 1 + 1 to 2\" (1 + 1) should.equal 2" |> transitionMediumLarge
+"it \"adds 1 + 1 to 2\"         (1 + 1) should.equal 2" |> transitionMediumLarge
 "Or interactively:" |> show.WriteUsing 0 MediumLarge
-"run (1 + 1) should.equal 2" |> show.WriteUsing 265 MediumLarge
+"\"adds 1 + 1 to 2\" |> run  (1 + 1) should.equal 2" |> show.WriteUsing 0 MediumLarge
+"run2  (1 + 1) should.equal 2" |> show.WriteUsing 320 MediumLarge
 
 
 #r @"FSharpSpec\bin\Debug\FSharpSpec.dll"

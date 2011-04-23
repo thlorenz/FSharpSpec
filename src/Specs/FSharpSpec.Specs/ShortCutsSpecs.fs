@@ -22,7 +22,7 @@ type ``when i watch an event`` () =
   member x.eventRaiser = _eventRaiser
 
   member x.initially =
-    it "it returns an eventWasRaised reference that is false" !eventWasRaised should.be false
+    it "returns an eventWasRaised reference that is false" !eventWasRaised should.be false
 
   member x.``and i raise it`` =
     x.eventRaiser.RaiseStructEvent 0

@@ -40,32 +40,34 @@
     <Compile Include="GuiRunnerViewModelSpecs.fs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FSharp.Interop.NSubstitute\FSharp.Interop.NSubstitute.fsproj">
-      <Name>FSharp.Interop.NSubstitute</Name>
-      <Project>{e943efa6-b874-4c9d-96c1-32b6599e1523}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Runners\FSharpSpec.GuiRunner\FSharpSpec.GuiRunner.fsproj">
-      <Name>FSharpSpec.GuiRunner</Name>
-      <Project>{dfdae481-6837-442c-8ea8-b0cd56b9c4e9}</Project>
-      <Private>True</Private>
-    </ProjectReference>
-    <ProjectReference Include="..\Runners\FSharpSpec.RunnerUtils\FSharpSpec.RunnerUtils.fsproj">
-      <Name>FSharpSpec.RunnerUtils</Name>
-      <Project>{bee45fe9-9ebb-4c04-9213-8b884f68b50b}</Project>
-      <Private>True</Private>
-    </ProjectReference>
     <Reference Include="mscorlib" />
     <Reference Include="FSharp.Core" />
     <Reference Include="PresentationCore" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <ProjectReference Include="..\FSharpSpec\FSharpSpec.fsproj">
+    <Reference Include="System.Numerics" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\FSharp.Interop.NSubstitute\FSharp.Interop.NSubstitute.fsproj">
+      <Name>FSharp.Interop.NSubstitute</Name>
+      <Project>{e943efa6-b874-4c9d-96c1-32b6599e1523}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FSharp.Interop\FSharp.Interop.fsproj">
+      <Name>FSharp.Interop</Name>
+      <Project>{ad93a1f7-178a-4ba6-8cf9-2e3945c4dc35}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+    <ProjectReference Include="..\..\FSharpSpec\FSharpSpec.fsproj">
       <Name>FSharpSpec</Name>
       <Project>{12d7b460-5020-4d49-8fc0-11692a5e32e3}</Project>
       <Private>True</Private>
     </ProjectReference>
-    <Reference Include="System.Numerics" />
+    <ProjectReference Include="..\..\Runners\FSharpSpec.GuiRunner\FSharpSpec.GuiRunner.fsproj">
+      <Name>FSharpSpec.GuiRunner</Name>
+      <Project>{dfdae481-6837-442c-8ea8-b0cd56b9c4e9}</Project>
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 	     Other similar extension points exist, see Microsoft.Common.targets.

@@ -1,0 +1,26 @@
+type ``when i watch an event`` () =
+  
+	let _eventRaiser = EventRaiser()
+	let eventWasRaised = watchEvent _eventRaiser.StructEvent 
+  
+	member x.eventRaiser = _eventRaiser
+
+	member x.initially =
+		it "returns an eventWasRaised reference that is false" !eventWasRaised should.be false
+
+	member x.``and i raise it`` =
+		x.eventRaiser.RaiseStructEvent 0
+		it "sets the eventWasRaised reference to true" !eventWasRaised should.be true
+
+type ``and want to know about the event args that are reference type`` () =
+	inherit ``when i watch an event`` ()
+
+	let args = "hello"
+	let eventWasRaised, eventArgs = watchEvent1 base.eventRaiser.ClassEvent
+  
+	member x.``and i raise it with 'hello'`` =
+		x.eventRaiser.RaiseClassEvent args
+		[
+			it "sets the eventWasRaised reference to true" !eventWasRaised should.be true
+			it "sets the eventArgs to 'hello'" !eventArgs should.equal args
+		]  
