@@ -4,6 +4,7 @@ open System.Collections.ObjectModel
 open Microsoft.Win32
 open System.Windows.Input
 open System.Diagnostics
+open System.Collections.Generic
 
 open FSharpSpec.RunnerUtils
 open SpecsExtractor
@@ -22,6 +23,8 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
   let mutable _failedSpecs = 0
   let mutable _finishedSpecs = 0
   let mutable _overallState = NotRunYet
+
+  let mutable _loadedAssemblies = List<string>()
 
   
   interface IGuiRunnerViewModel with 
@@ -110,6 +113,11 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
       |> Seq.iter (fun child -> child |> resetResolveAndRunSpecs)),
       (fun _ -> Seq.length contextRoot.Children  > 0))
 
+  member x.ReloadAssembliesCommand with get () = x._reloadAssembliesCommand
+
+  member private x._reloadAssembliesCommand =
+    ActionCommand((fun _ -> x.ReloadAssemblies ()), (fun _ -> Seq.length _loadedAssemblies > 0))
+
   member private x.GetFinishedSpecs () = 
     _passedSpecs + _pendingSpecs + _inconclusiveSpecs + _failedSpecs
   
@@ -135,6 +143,12 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
 
     match openAssembly with
     | Some(path)   -> contextRoot.Children.Add (AssemblyViewModel(path |> getAssembly, controller))
+                      _loadedAssemblies.Add path
     | None        ->  Debug.WriteLine("Canceled") |> ignore
 
+  member private x.ReloadAssemblies () =
+    contextRoot.Children.Clear()
+    _loadedAssemblies
+    |> Seq.iter(fun path -> contextRoot.Children.Add (AssemblyViewModel(path |> getAssembly, controller)))
+    
     

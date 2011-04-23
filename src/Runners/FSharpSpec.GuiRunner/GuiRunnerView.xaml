@@ -17,7 +17,6 @@
                 </Setter>
             </Style>
 
-
             <Style x:Key="Vertical_GridSplitter" TargetType="{x:Type GridSplitter}">
                 <Setter Property="Background" Value="LightGray" />
                 <Setter Property="BorderBrush" Value="Gray" />
@@ -182,6 +181,7 @@
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <StackPanel Grid.Column="0" Orientation="Horizontal">
+                <Button Command="{Binding ReloadAssembliesCommand}" Content="Reload Assemblies" Height="30" Margin="2" Padding="2"/>
                 <Button Command="{Binding RunAllSpecsCommand}" Height="30" Margin="2">
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="Run All" Margin="5,2" VerticalAlignment="Center" />

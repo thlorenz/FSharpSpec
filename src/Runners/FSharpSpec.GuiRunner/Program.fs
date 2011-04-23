@@ -34,9 +34,8 @@ module main =
     | s           -> use sr = new StreamReader(s)
                      sr.ReadToEnd()
   
-  let path = @"C:\dev\FSharp\FSharpSpec\src\Samples\FSharpSpec.FSharpSampleSpecs\bin\Debug\FSharpSpec.FSharpSampleSpecs.dll"
-
-  let asm = path |> getAssembly
+//  let path = @"C:\dev\FSharp\FSharpSpec\src\Samples\FSharpSpec.FSharpSampleSpecs\bin\Debug\FSharpSpec.FSharpSampleSpecs.dll"
+//  let asm = path |> getAssembly
   
   type App = class
     inherit Application
@@ -48,7 +47,7 @@ module main =
       
       let controller = GuiController() 
       let specsRunResult = SpecsRunResult()
-      let asmRoot = AssembliesViewModel(new ObservableCollection<Assembly>([asm]), controller :> IGuiController)
+      let asmRoot = AssembliesViewModel(new ObservableCollection<Assembly>(), controller :> IGuiController)
       
       let guiRunnerViewModel = GuiRunnerViewModel (asmRoot, controller :> IGuiController)
       controller.GuiRunnerViewModel <- guiRunnerViewModel :> IGuiRunnerViewModel

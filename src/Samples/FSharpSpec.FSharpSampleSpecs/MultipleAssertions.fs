@@ -2,7 +2,7 @@
 
 open FSharpSpec
 
-// Demonstrates three ways to achieve specfication independence
+// Demonstrates two ways to achieve specfication independence
 // In both cases spec1 and spec3 will still be run even though resolving (1 / 0) inside spec2 throws an exception
 // Delaying these 'risky' codeblocks is necessary, because otherwise they get resolved, whenever FSharpSpec
 // tries to resolve the list of specs inside the property.
