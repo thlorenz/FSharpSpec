@@ -1,10 +1,12 @@
 ﻿namespace FSharpSpec.GuiRunner
 
+open System
 open System.Collections.ObjectModel
 open Microsoft.Win32
 open System.Windows.Input
 open System.Diagnostics
 open System.Collections.Generic
+open System.IO
 
 open FSharpSpec.RunnerUtils
 open SpecsExtractor
@@ -40,6 +42,7 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
       x.PendingSpecs        <- 0
       x.FailedSpecs         <- 0 
       x.FinishedSpecs       <- 0
+      x.UpdateProgress ()
 
     override x.RegisterSpecs specs  = x.RegisteredSpecs <- x.RegisteredSpecs + specs
     override x.PassedSpec          () = x.PassedSpecs <- x.PassedSpecs + 1 
@@ -132,6 +135,41 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
     x.FinishedSpecs <- x.GetFinishedSpecs ()
     x.OverallState <- x.GetOverallState ()
 
+  /// Copies the specs dlls folder recursively to a temp folder and returns the path to the copied specs dll
+  member private x.makeShadowCopy path =
+    let destination file targetDir = 
+        let name = Path.GetFileName file
+        Path.Combine (targetDir, name)
+
+    let rec copyFolder sourceDir targetDir =
+     
+      Directory.GetFiles(sourceDir)
+      |> Array.iter (fun file -> 
+        let dest = destination file targetDir
+        File.Copy(file, dest))
+     
+      Directory.GetDirectories(sourceDir)
+      |> Array.iter(fun dir ->
+        let dest = destination dir targetDir
+        copyFolder sourceDir dest)
+    
+    let tempPath = Path.GetTempPath()
+    let fileInfo = FileInfo(path)
+    let sourceDir = fileInfo.DirectoryName
+    let targetDir = Path.Combine(tempPath, sprintf "FSharpSpec.GuiRunner_%s" <| Guid.NewGuid().ToString())
+    
+    let target = Directory.CreateDirectory targetDir
+   
+    copyFolder sourceDir targetDir
+
+    Debug.WriteLine (sprintf "Copied from %s to %s" sourceDir targetDir)
+
+    Path.Combine(targetDir, fileInfo.Name)
+
+  member private x.loadAndAddAssembly path = 
+    let copiedSpecsDll = x.makeShadowCopy path
+    contextRoot.Children.Add (AssemblyViewModel(copiedSpecsDll |> getAssembly, controller))
+
   member private x.loadAssembly  = 
   
     let openAssembly = 
@@ -142,13 +180,17 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
       | _                             -> None 
 
     match openAssembly with
-    | Some(path)   -> contextRoot.Children.Add (AssemblyViewModel(path |> getAssembly, controller))
+    | Some(path)   -> x.loadAndAddAssembly path
                       _loadedAssemblies.Add path
+                      
     | None        ->  Debug.WriteLine("Canceled") |> ignore
+  
+
 
   member private x.ReloadAssemblies () =
+    controller.ResetResults ()
     contextRoot.Children.Clear()
     _loadedAssemblies
-    |> Seq.iter(fun path -> contextRoot.Children.Add (AssemblyViewModel(path |> getAssembly, controller)))
+    |> Seq.iter(fun path -> x.loadAndAddAssembly path)
     
     
