@@ -34,7 +34,7 @@ module main =
     | s           -> use sr = new StreamReader(s)
                      sr.ReadToEnd()
   
-  let path = @"C:\dev\FSharp\FSharpSpec\src\Specs\FSharpSpec.Specs\bin\Debug\FSharpSpec.Specs.dll"
+  let path = @"C:\dev\FSharp\FSharpSpec\src\Samples\FSharpSpec.FSharpSampleSpecs\bin\Debug\FSharpSpec.FSharpSampleSpecs.dll"
 
   let asm = path |> getAssembly
   

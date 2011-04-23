@@ -37,6 +37,7 @@ type TreeViewModel (name, controller : IGuiController) =
     match x.AsITreeViewModel.Children with
     | xs when xs |> Seq.exists (fun s -> s.State = SpecState.Failed)        -> SpecState.Failed
     | xs when xs |> Seq.exists (fun s -> s.State = SpecState.Inconclusive)  -> SpecState.Inconclusive
+    | xs when xs |> Seq.exists (fun s -> s.State = SpecState.Pending)       -> SpecState.Pending
     | xs when xs |> Seq.exists (fun s -> s.State = SpecState.NotRunYet)     -> SpecState.NotRunYet
     | otherwise                                                             -> SpecState.Passed
   
