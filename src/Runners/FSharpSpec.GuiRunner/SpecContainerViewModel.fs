@@ -1,6 +1,7 @@
 ﻿namespace FSharpSpec.GuiRunner
 
 open System.Diagnostics
+open System.Reflection
 open System.Windows.Input
 
 open System.Collections.ObjectModel
@@ -20,29 +21,55 @@ type SpecContainerViewModel (specs : SpecInfo, context, controller) =
   let getFullNameOfSpec = getFullSpecName context specs.Method.Name
   let children = base.Children
 
+  let tryGetInstantiatedContext context =
+    try
+      let instantiatedContext = context.Clazz |> instantiate
+      (Some(instantiatedContext), null)
+    with
+    | ex -> printfn "%A" ex
+            (None, ex)
+  
+  let tryExtractSpecs instantiatedContext (methodInfo : MethodInfo) =
+    try
+      let result = methodInfo.Invoke(instantiatedContext, null) 
+      (Some(result), null)
+    with 
+    | ex -> 
+            (None, ex)
+ 
+  let buildContextAndResolveSpecs () =
+         
+    hookAssemblyResolve context.Clazz.Assembly
+          
+    match tryGetInstantiatedContext context with
+    | (None, ex)      -> (None, ex)
+    | (ictx, _)       -> 
+          
+      match tryExtractSpecs ictx.Value specs.Method with
+      | (None, ex)      -> (None, ex)
+      | (specListOpt, _)   ->
+              
+        let specList = specListOpt.Value
+        let resolvedSpecs = 
+          match specList.GetType() with
+          | ty when ty  = typeof<Lazy<(string * SpecDelegate)> list>  -> specList :?> Lazy<(string * SpecDelegate)> list
+                                                                         |> List.map(fun (r : Lazy<(string * SpecDelegate)>) -> r.Value) 
+          | ty when ty = typeof<(string * SpecDelegate)>              -> [specList :?> (string * SpecDelegate)]
+          | _                                                         ->  specList :?> (string * SpecDelegate) list
+      
+        (Some(resolvedSpecs), null)
+
   let extractSpecs () = 
     match children with
     | xs when xs.Count > 0 && (not (children.[0] :?> SpecViewModel).IsDummySpec)  -> ()
     | otherwise             ->
         children.Clear()
-        let buildContextAndResolveSpecs () =
-         
-          hookAssemblyResolve context.Clazz.Assembly
-          
-          let instantiatedContext = context.Clazz |> instantiate
-          let result = specs.Method.Invoke(instantiatedContext, null) 
-          match result.GetType() with
-          | ty when ty  = typeof<Lazy<(string * SpecDelegate)> list>  -> result :?> Lazy<(string * SpecDelegate)> list
-                                                                         |> List.map(fun (r : Lazy<(string * SpecDelegate)>) -> r.Value) 
-          | ty when ty = typeof<(string * SpecDelegate)>              -> [result :?> (string * SpecDelegate)]
-          | _                                                         ->  result :?> (string * SpecDelegate) list
-
         
-        buildContextAndResolveSpecs ()
-        |> List.iter (fun spec -> children.Add <| SpecViewModel(spec, controller, buildContextAndResolveSpecs, getFullNameOfSpec)) 
+        match buildContextAndResolveSpecs () with
+        | (None, ex)              -> Debug.WriteLine(sprintf "%A" ex)
+        | (resolvedSpecs, _)      -> resolvedSpecs.Value
+                                     |> List.iter (fun spec -> children.Add <| SpecViewModel(spec, controller, buildContextAndResolveSpecs, getFullNameOfSpec)) 
     
-
-
   let runSpecs completed = children |> Seq.iter (fun s -> (s :?> SpecViewModel).runSpec completed)
     
   member private x._runSpecsCommand = 

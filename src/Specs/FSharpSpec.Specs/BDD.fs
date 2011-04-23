@@ -36,6 +36,7 @@ type ``that has been incremented`` () =
     
   do 
     base.sut.IncrementValue() |> ignore
+    printfn "%A" <| 1/0
         
   member x.initially = 
       [

@@ -5,7 +5,7 @@ open System.Windows.Input
 open System.ComponentModel
 open FSharpSpec
 
-type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiController, buildContextAndResolveSpecs : unit -> (string * SpecDelegate) list, getFullNameOfSpec) =
+type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiController, buildContextAndResolveSpecs : unit -> (string * SpecDelegate) list option * exn, getFullNameOfSpec) =
   inherit TreeViewModel (fst specInfo, controller)
 
   let _spec = snd specInfo
@@ -82,4 +82,4 @@ type SpecViewModel (specInfo : (string * SpecDelegate), controller : IGuiControl
   member x.IsDummySpec = x.AsITreeViewModel.Name = SpecViewModel.DummySpecName
   
   static member DummySpecName = "___DummySpecToShowTreeExpander___GUID:0D46D658-A328-466C-873F-B4BA1E394E5D"
-  static member Dummy = SpecViewModel ((SpecViewModel.DummySpecName, SpecDelegate(fun () -> AssertionResult.Inconclusive)), Unchecked.defaultof<IGuiController> , (fun () -> []), (fun _ -> null))
+  static member Dummy = SpecViewModel ((SpecViewModel.DummySpecName, SpecDelegate(fun () -> AssertionResult.Inconclusive)), Unchecked.defaultof<IGuiController> , (fun () -> (None, null)), (fun _ -> null))
