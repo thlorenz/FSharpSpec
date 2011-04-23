@@ -117,8 +117,8 @@
             <StackPanel Grid.Column="0" Orientation="Horizontal">
                 <Button Command="{Binding RunAllSpecsCommand}" Height="30" Margin="2">
                     <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Run All" Margin="5,2" VerticalAlignment="Center"/>
-                        <Image Source="Run.png" Width="25" Height="25" Margin="5,2"/>
+                        <TextBlock Text="Run All" Margin="5,2" VerticalAlignment="Center" />
+                        <Image Source="Run.png" Width="25" Height="25" Margin="5,2" />
                     </StackPanel>
                 </Button>
             </StackPanel>
@@ -196,12 +196,19 @@
                 </TreeView>
             </Border>
             <GridSplitter Grid.Column="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
-            <ListBox Grid.Column="2" ItemsSource="{Binding SpecsRunResults}" ScrollViewer.CanContentScroll="False">
-                <ListBox.ItemTemplate>
-                    <DataTemplate>
-                        <StackPanel>
-                            <TextBlock Text="{Binding FullSpecName}" TextWrapping="Wrap" FontWeight="Bold" FontSize="12" Foreground="Yellow" />
-                            <TextBlock Text="{Binding StateDisplay}">
+            <Grid Grid.Column="2">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="4*" />
+                    <RowDefinition Height="5" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+
+                <ListBox Grid.Row="0" ItemsSource="{Binding SpecsRunResults}" SelectedItem="{Binding SelectedResult}" ScrollViewer.CanContentScroll="False">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding FullSpecName}" TextWrapping="Wrap" FontWeight="Bold" FontSize="12" Foreground="Yellow" />
+                                <TextBlock Text="{Binding StateDisplay}">
                             <TextBlock.Style>
                                 <Style TargetType="TextBlock" BasedOn="{StaticResource {x:Type TextBlock}}">
                                     <Setter Property="FontWeight" Value="Normal" />
@@ -224,12 +231,36 @@
                                     </Style.Triggers>
                                 </Style>
                             </TextBlock.Style>
-                            </TextBlock>
-                            <TextBlock Text="{Binding ExceptionMessage}" TextWrapping="Wrap" FontSize="12" Foreground="White" />
-                        </StackPanel>
-                    </DataTemplate>
-                </ListBox.ItemTemplate>
-            </ListBox>
+                                </TextBlock>
+                                <TextBlock Text="{Binding ExceptionMessage}" TextWrapping="Wrap" FontSize="12" Foreground="White" />
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <GridSplitter Grid.Row="1" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" />
+                <ScrollViewer Grid.Row="2">
+                    <StackPanel DataContext="{Binding SelectedResult}">
+                        <TextBlock Text="{Binding FullSpecName}" FontWeight="Bold" TextWrapping="Wrap" />
+                        <TextBlock Text="{Binding StateDisplay, StringFormat=Result: {0}}" FontStyle="Italic" />
+                        <TextBlock Text="{Binding ExceptionMessage, StringFormat=Exception: {0}}" FontWeight="Bold" Margin="0,5,0,0">
+                            <TextBlock.Style>
+                               <Style TargetType="TextBlock">
+                                    <Setter Property="Visibility" Value="Hidden" />
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static local:SpecState.Inconclusive}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                        <DataTrigger Binding="{Binding State}" Value="{x:Static local:SpecState.Failed}">
+                                            <Setter Property="Visibility" Value="Visible" />
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </TextBlock.Style>
+                        </TextBlock>
+                        <TextBlock Text="{Binding FullException}" TextWrapping="Wrap" />
+                    </StackPanel>
+                </ScrollViewer>
+            </Grid>
         </Grid>
     </DockPanel>
 </UserControl>

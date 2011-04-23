@@ -13,6 +13,7 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
   inherit ViewModelBase()
 
   let mutable _specsRunResults = ObservableCollection<SpecRunResultViewModel>()
+  let mutable _selectedResult = null
   let mutable _registeredSpecs = 0
   let mutable _finishedSpecs = 0
   let mutable _passedSpecs = 0
@@ -96,7 +97,11 @@ type GuiRunnerViewModel (contextRoot : ITreeViewModel, controller : IGuiControll
     and set (v) = _overallState <- v
                   x.OnPropertyChanged("OverallState")
 
-
+  member x.SelectedResult 
+    with get () = _selectedResult 
+    and set (v) = _selectedResult <- v
+                  x.OnPropertyChanged("SelectedResult")
+ 
   member x.RunAllSpecsCommand with get () = x._runAllSpecsCommand
     
   member private x._runAllSpecsCommand = 

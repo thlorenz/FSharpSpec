@@ -50,7 +50,11 @@ type SpecRunResultViewModel =
        
   member x.FullSpecName with get () = x._fullSpecName
   member x.ExceptionMessage with get () = getExceptionMessage x._exception "\t"
-   
+  member x.FullException 
+    with get () = 
+      match x._exception with
+      | null    -> ""
+      | excep   -> excep.ToString()
 
   static member NotRunYet fullSpecName = SpecRunResultViewModel(NotRunYet, fullSpecName, null)
 
