@@ -24,7 +24,6 @@ show |> clear; show.ReadFile("MSpecSample.txt") |> expandNormal Middle
 "FSharpSpec" |> transitionHeadLine
 show |> clear; show.ReadFile("FSharpSpecSample.txt") |> expandNormal Middle
 
-
 "But Seriously" |> transitionHeadLine
 "Let's Compare" |> transitionHeadLine
 
@@ -119,6 +118,7 @@ run2 "Hello" should.contain "Hello World"    // fails
 run2 [1;2] should.contain 1
 run2 [1;2] should.contain 3                  // fails
 run2 [1;2] should.contain1 [1;2]  
+run2 [1;2;3] should.contain1 [1;2;4]        // fails
 
 show.Show(); "Exceptions" |> transitionHeadLine
 show.Hide()
@@ -126,9 +126,12 @@ let exn = catch (fun () -> 1 / 0)
 run2 exn should.be typeof<DivideByZeroException>
 run2 exn.Message should.contain "divide by zero"          
 
-"1 / 0 fails with DivideByZero"             |> run (fun () -> 1 /0) should.failWith typeof<DivideByZeroException>
-"failure message contains 'divide by zero'" |> run (fun () -> 1 /0) should.failWithMessageContaining "divide by zero"
-"failure message doesn't contain 'argument'"|> run (fun () -> 1 /0) should.failWithMessageNotContaining "argument"
+"1 / 0 fails with DivideByZero"             
+|> run (fun () -> 1 /0) should.failWith typeof<DivideByZeroException>
+"failure message contains 'divide by zero'" 
+|> run (fun () -> 1 /0) should.failWithMessageContaining "divide by zero"
+"failure message doesn't contain 'argument'"
+|> run (fun () -> 1 /0) should.failWithMessageNotContaining "argument"
 
 show.Show(); "Multiple Assertions" |> transitionHeadLine
 show.Hide()

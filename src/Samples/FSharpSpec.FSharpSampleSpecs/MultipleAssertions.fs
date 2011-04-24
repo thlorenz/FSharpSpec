@@ -38,11 +38,12 @@ type MultipleAssertions () =
   /// When FSharpSpec tries to obtain the list of specifications of the below property, the
   /// (1 / 0) is evaluated right away and throws an exception.
   /// Thus FSharpSpec is unable to obtain any specifications at all from the list.
-  member x.``If specifications were not isolated, none can be resolved if one of them throws during property access`` = [
-    it "spec1" (0 + 1) should.equal 1
+  member x.``If specifications were not isolated, none can be resolved if one of them throws during property access`` = 
+    [
+      it "spec1" (0 + 1) should.equal 1
           
-    /// This specification fails, and the other specs and spec name can NOT be evaluated before the failing code runs
-    it "spec2" (1 /0) should.equal 1
+      /// This specification fails, and the other specs and spec name can NOT be evaluated before the failing code runs
+      it "spec2" (1 /0) should.equal 1
           
-    it "spec3" (2 - 1) should.equal 1
-  ]
+      it "spec3" (2 - 1) should.equal 1
+    ]

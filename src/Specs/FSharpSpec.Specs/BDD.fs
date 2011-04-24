@@ -13,11 +13,10 @@ type ``named ContextName`` () =
     
     do 
       base.sut.Name <- "ContextName"
-        
+              
     member x.``when I increment by 1`` = 
         
         x.sut.IncrementValue() |> ignore
-        
         [
             it "should have name ContextName" x.sut.Name should.equal "ContextName"
             it "should have Value 1" x.sut.Value should.equal 1
@@ -39,7 +38,6 @@ type ``that has been incremented`` () =
         
   member x.initially = 
       [
-          
           it "should have name ContextName" x.sut.Name should.equal "ContextName"
           it "should have Value 1" x.sut.Value should.equal 1
       ]

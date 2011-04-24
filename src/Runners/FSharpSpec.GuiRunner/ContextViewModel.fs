@@ -31,7 +31,11 @@ type ContextViewModel (node : Node, controller) =
 
     Seq.cast<ITreeViewModel>(_childContexts) 
     |> Seq.append(Seq.cast<ITreeViewModel>(_specContainers))
-    |> Seq.iter (fun child -> children.Add child)
+    |> Seq.iter (fun child -> 
+        match children |> Seq.filter (fun (c : ITreeViewModel) -> c.Name.Equals(child.Name)) with
+        | dups when Seq.isEmpty dups      -> children.Add child
+        | dups                            -> child.Children |> Seq.iter (fun c -> dups.First().Children.Add c)
+        ) 
     
   member private x._runSpecsCommand = 
     ActionCommand ((fun _ ->
