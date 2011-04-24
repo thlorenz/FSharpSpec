@@ -31,15 +31,15 @@ show.ResetStyle()
 show |> clear; show.AlignV Top;  show.AlignH Left;
 show.RevealStyle <- FromLeft; show.TextStyle <- MediumLarge; show.LeftMargin <- 100
 
-"XUnit"               |> show.WriteUsing 20 Headline
+"XUnit Frameworks"    |> show.WriteUsing 20 Headline
 "Advantages"          |> show.WriteUsing 50 Large
 "● can write tests"             |> show.Write
 "Disadvantages"       |> show.WriteUsing 50 Large
-"● verbose"                     |> show.Write
+"● only safe to have ONE assertion PER test" |> show.Write
 "● lots of noise"               |> show.Write
+"● verbose"                     |> show.Write
 "● hard to inherit contexts"    |> show.Write
 "● hard to re-use assertions"   |> show.Write
-"● only safe to have ONE assertion PER test" |> show.Write
 
 show |> clear; "MSpec"               |> show.WriteUsing 20 Headline
 "Advantages"          |> show.WriteUsing 50 Large
@@ -126,12 +126,12 @@ let exn = catch (fun () -> 1 / 0)
 run2 exn should.be typeof<DivideByZeroException>
 run2 exn.Message should.contain "divide by zero"          
 
-"1 / 0 fails with DivideByZero"             
-|> run (fun () -> 1 /0) should.failWith typeof<DivideByZeroException>
-"failure message contains 'divide by zero'" 
-|> run (fun () -> 1 /0) should.failWithMessageContaining "divide by zero"
-"failure message doesn't contain 'argument'"
-|> run (fun () -> 1 /0) should.failWithMessageNotContaining "argument"
+run2 (fun () -> 1 /0) should.failWith typeof<DivideByZeroException>
+run2 (fun () -> 1 /0) should.failWithMessageContaining "divide by zero"
+run2 (fun () -> 1 /0) should.failWithMessageNotContaining "argument"
+
+show.Show(); "Contexts" |> transitionHeadLine
+show.Hide()
 
 show.Show(); "Multiple Assertions" |> transitionHeadLine
 show.Hide()
