@@ -18,7 +18,7 @@ type ``when applying Math_Abs`` () =
 type ``when calculating Math_Sqrt`` () =  
   member x.``of positive numbers`` =
         
-      [1.0, 1.0; 
+      [ 1.0, 1.0; 
         4.0, 2.0;
         9.0, 3.0 ]
       |> List.map (fun (square, expectedRoot) ->

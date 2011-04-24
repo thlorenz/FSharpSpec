@@ -44,12 +44,12 @@ show.RevealStyle <- FromLeft; show.TextStyle <- MediumLarge; show.LeftMargin <- 
 show |> clear; "MSpec"               |> show.WriteUsing 20 Headline
 "Advantages"          |> show.WriteUsing 50 Large
 "● less noise"                  |> show.Write
-"● easier to inherit contexts"  |> show.Write
 "● multiple assertions per test" |> show.Write
+"● easier to inherit contexts"  |> show.Write
 "Disadvantages"       |> show.WriteUsing 50 Large
 "● everything is static"                                            |> show.Write
+"● only limited assertion re-use via behaviors"                   |> show.Write
 "● limited by C# language"                                          |> show.Write
-"● behaviors allow only limited assertion re-use"                   |> show.Write
 "● structure of result output doesn't reflect context inheritance"  |> show.Write
 
 show |> clear; "FSharpSpec"          |> show.WriteUsing 20 Headline
@@ -63,6 +63,7 @@ show |> clear; "FSharpSpec"          |> show.WriteUsing 20 Headline
 "Disadvantages"       |> show.WriteUsing 50 Large
 "● need some familiarity with F#"                           |> show.Write
 "● failure of assertion setup affects other assertions" |> show.Write
+"● cannot nest types in F#" |> show.Write
 
 "Why F#?"           |> transitionHeadLine
 "Super succinct"    |> transitionHeadLine
@@ -74,7 +75,7 @@ show |> clear; "FSharpSpec"          |> show.WriteUsing 20 Headline
 "● Refactoring Support" |> show.Write
 
 "FSharpSpec Features" |> transitionHeadLine
-"● TD.Net support (on type level)" |> show.Write
+"● TestDriven.Net support (on type level)" |> show.Write
 "● Console Runner" |> show.Write
 "● Gui Runner" |> show.Write
 "● Debugging Support" |> show.Write
@@ -115,10 +116,15 @@ run2 [] shouldn't.be Empty                   // fails
 
 run2 "Hello World" should.contain "Hello"
 run2 "Hello" should.contain "Hello World"    // fails
+
 run2 [1;2] should.contain 1
 run2 [1;2] should.contain 3                  // fails
+
 run2 [1;2] should.contain1 [1;2]  
 run2 [1;2;3] should.contain1 [1;2;4]        // fails
+
+run2 [1;2;3] should.containOnly [1;2;3]
+run2 [1;2;3] should.containOnly [1;2]       // fail
 
 show.Show(); "Exceptions" |> transitionHeadLine
 show.Hide()
@@ -131,7 +137,19 @@ run2 (fun () -> 1 /0) should.failWithMessageContaining "divide by zero"
 run2 (fun () -> 1 /0) should.failWithMessageNotContaining "argument"
 
 show.Show(); "Contexts" |> transitionHeadLine
-show.Hide()
+show.Hide() // FSharpSpec.FSharpSampleSpecs/BDD.fs
+
+show.Show(); "Specifications via Functions" |> transitionHeadLine
+show.Hide()   // FSharpSpec.FSharpSampleSpecs/RowTests.fs
+              // FSharpSpec.Katas.StringCalculator/StringCalculatorSpecs.fs
+              // FSharpSpec.GuiRunner.Specs/GuiRunnerViewModelSpecs.fs
 
 show.Show(); "Multiple Assertions" |> transitionHeadLine
-show.Hide()
+show.Hide() // FSharpSpec.FSharpSampleSpecs/MultipleAssertions.fs
+
+show.Show(); "Mocking with FSharpSpec" |> transitionHeadLine
+show.Hide()  // FSharp.Interop.NSubstitute/NSubstitute.fsx
+
+show.Show(); "Scripting with FSharpSpec" |> transitionHeadLine
+show.Hide()  // FSharpSpec.FSharpSampleSpecs/SpecScript.fsx
+

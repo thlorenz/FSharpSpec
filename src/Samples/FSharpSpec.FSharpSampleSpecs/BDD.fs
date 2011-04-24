@@ -30,7 +30,8 @@ type ``named ContextName`` () =
         it "should have name ContextName" x.sut.Name should.equal "ContextName"
         it "should have Value 2" x.sut.Value should.equal 2
     ]
- 
+
+// Given a TestType(0) 
 type ``that has been incremented`` () = 
   inherit ``named ContextName`` ()
     
@@ -49,7 +50,8 @@ type ``that has been incremented`` () =
         it "should have name ContextName" x.sut.Name should.equal "ContextName"
         it "should have Value 2" x.sut.Value should.equal 2
     ]
- 
+
+// Given a TestType(0) named ContextName
 type ``and was incremented again`` () = 
   inherit ``that has been incremented`` ()
     
@@ -63,7 +65,7 @@ type ``and was incremented again`` () =
       ]
 
   member x.``when I increment by 1`` = 
-      x.sut.IncrementValue() |>ignore
+      x.sut.IncrementValue() |> ignore
       [
           it "should have name ContextName" x.sut.Name should.equal "ContextName"
           it "should have Value 3" x.sut.Value should.equal 3

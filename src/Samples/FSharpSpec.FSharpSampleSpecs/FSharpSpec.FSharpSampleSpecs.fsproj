@@ -36,12 +36,12 @@
   <Import Project="$(MSBuildExtensionsPath32)\..\Microsoft F#\v4.0\Microsoft.FSharp.Targets" Condition=" Exists('$(MSBuildBinPath)\Microsoft.Build.Tasks.v4.0.dll')" />
   <ItemGroup>
     <Compile Include="TestTypes.fs" />
+    <Compile Include="BDD.fs" />
     <Compile Include="RowTests.fs" />
     <Compile Include="PendingSpecs.fs" />
     <Compile Include="MultipleAssertions.fs" />
     <Compile Include="WritingSpecs.fs" />
     <None Include="SpecScript.fsx" />
-    <Compile Include="BDD.fs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="mscorlib" />
